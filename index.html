@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cut">
+<meta name="theme-color" content="#1b0f3b">
+<title>الدخيل - مين برا السالفة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Lalezar&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg1:#1b0f3b;--bg2:#3d1166;--card:#2a1a55;--card2:#3a2672;--text:#fff7ea;--muted:#cbbcff;
+  --pri:#ffcc00;--pri-ink:#2a1300;--pink:#ff4fa3;--cyan:#30e3ca;--green:#4ade80;--red:#ff5d5d;
+  --line:rgba(255,255,255,.14);--shadow:0 8px 0 rgba(0,0,0,.25);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg1:#1b0f3b;--bg2:#3d1166;--card:#2a1a55;--text:#fff7ea}}
+:root[data-theme="dark"]{--bg1:#1b0f3b;--bg2:#3d1166}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+html{background:#1b0f3b}
+body{min-height:100dvh;color:var(--text);font-family:'Cairo',system-ui,sans-serif;
+  background:radial-gradient(circle at 20% 10%,rgba(255,79,163,.25),transparent 40%),radial-gradient(circle at 85% 90%,rgba(48,227,202,.18),transparent 45%),linear-gradient(160deg,var(--bg1),var(--bg2));
+  background-attachment:fixed;overflow-x:hidden;user-select:none;-webkit-user-select:none}
+input,textarea{user-select:text;-webkit-user-select:text}
+#app{max-width:520px;margin:0 auto;padding:12px 16px 40px;min-height:100dvh;display:flex;flex-direction:column}
+header.top{display:flex;justify-content:space-between;align-items:center;min-height:44px;margin-bottom:6px}
+.icon-btn{background:rgba(255,255,255,.1);border:1px solid var(--line);color:var(--text);border-radius:14px;width:44px;height:44px;font-size:20px;cursor:pointer}
+.top-title{font-family:'Lalezar',cursive;font-size:22px;letter-spacing:.5px;opacity:.9}
+main.screen{flex:1;display:flex;flex-direction:column;gap:14px;animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+h1,h2,h3{font-family:'Lalezar',cursive;font-weight:400;margin:0}
+h2{font-size:30px;text-align:center}
+h3{font-size:22px}
+p{margin:0;line-height:1.7}
+.muted{color:var(--muted)}
+.center{text-align:center}
+.btn{font-family:'Cairo',sans-serif;font-weight:800;font-size:18px;border:0;border-radius:18px;padding:14px 18px;cursor:pointer;
+  background:var(--card2);color:var(--text);box-shadow:var(--shadow);transition:transform .08s, box-shadow .08s;width:100%}
+.btn:active{transform:translateY(5px);box-shadow:0 3px 0 rgba(0,0,0,.25)}
+.btn.primary{background:var(--pri);color:var(--pri-ink)}
+.btn.pink{background:var(--pink);color:#fff}
+.btn.cyan{background:var(--cyan);color:#06302a}
+.btn.green{background:var(--green);color:#063014}
+.btn.red{background:var(--red);color:#fff}
+.btn.ghost{background:transparent;box-shadow:none;border:2px dashed var(--line)}
+.btn.big{font-size:24px;padding:18px}
+.btn.small{font-size:15px;padding:10px 12px;border-radius:14px}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.row{display:flex;gap:10px}
+.row>*{flex:1}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:var(--shadow)}
+.pill{display:inline-block;background:rgba(255,255,255,.1);border:1px solid var(--line);border-radius:99px;padding:4px 12px;font-size:14px;font-weight:600}
+
+/* home */
+.logo{text-align:center;margin:18px 0 8px}
+.logo-emoji{font-size:84px;display:inline-block;animation:wobble 2.6s ease-in-out infinite}
+@keyframes wobble{0%,100%{transform:rotate(-8deg) scale(1)}50%{transform:rotate(8deg) scale(1.08)}}
+.logo h1{font-size:68px;line-height:1;background:linear-gradient(90deg,var(--pri),var(--pink),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 0 rgba(0,0,0,.3))}
+.logo .sub{font-family:'Lalezar';font-size:22px;color:var(--pri);margin-top:2px}
+.tag{min-height:56px;margin-top:8px;color:var(--muted);font-weight:600}
+.floaters{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+.floaters span{position:absolute;font-size:30px;opacity:.18;animation:float 14s linear infinite}
+@keyframes float{from{transform:translateY(110vh) rotate(0)}to{transform:translateY(-20vh) rotate(360deg)}}
+
+/* players */
+.plist{display:flex;flex-direction:column;gap:8px}
+.pitem{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:8px 10px;animation:in .25s}
+.av{font-size:30px;width:50px;height:50px;border-radius:16px;background:rgba(255,255,255,.1);border:0;cursor:pointer;display:grid;place-items:center;flex:none}
+.pname{flex:1;font-weight:800;font-size:18px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pscore{font-weight:800;color:var(--pri)}
+.del{background:none;border:0;color:var(--red);font-size:22px;cursor:pointer;padding:6px}
+.addrow{display:flex;gap:8px}
+.addrow input{flex:1;min-width:0;font:inherit;font-weight:700;font-size:18px;padding:12px 14px;border-radius:16px;border:2px solid var(--line);background:rgba(0,0,0,.25);color:var(--text);outline:none}
+.addrow input:focus{border-color:var(--pri)}
+.addrow .btn{width:auto;flex:none}
+
+/* categories */
+.cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.cat{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:10px 4px;text-align:center;cursor:pointer;font-weight:800;font-size:14px;transition:.15s;position:relative;color:var(--text);font-family:inherit}
+.cat .e{font-size:32px;display:block}
+.cat.on{border-color:var(--pri);background:linear-gradient(160deg,#5b3a00,#3a2672);transform:scale(1.03)}
+.cat.on::after{content:'✓';position:absolute;top:4px;left:8px;color:var(--pri)}
+.seg{display:flex;background:rgba(0,0,0,.25);border-radius:16px;padding:4px;gap:4px}
+.seg button{flex:1;border:0;background:transparent;color:var(--text);font:inherit;font-weight:800;padding:10px 6px;border-radius:12px;cursor:pointer;font-size:15px}
+.seg button.on{background:var(--pri);color:var(--pri-ink)}
+.opt{display:flex;flex-direction:column;gap:8px}
+.opt label{font-weight:800}
+.opt small{color:var(--muted)}
+.stepper{display:flex;align-items:center;gap:12px;justify-content:center}
+.stepper button{width:46px;height:46px;border-radius:14px;border:0;background:var(--card2);color:var(--text);font-size:24px;font-weight:800;cursor:pointer}
+.stepper b{font-size:28px;min-width:40px;text-align:center}
+
+/* reveal card */
+.pass{text-align:center}
+.pass .bigav{font-size:90px;animation:bounce 1.2s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.flip{perspective:1200px;height:360px;cursor:pointer}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .7s cubic-bezier(.3,1.6,.5,1);transform-style:preserve-3d}
+.flip.on .flip-inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:28px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;text-align:center;box-shadow:0 12px 0 rgba(0,0,0,.3)}
+.face.back{background:repeating-linear-gradient(45deg,#ff4fa3 0 20px,#e03b8c 20px 40px);font-family:'Lalezar';font-size:30px}
+.face.back .q{font-size:110px;line-height:1}
+.face.front{transform:rotateY(180deg);background:linear-gradient(160deg,#fff7ea,#ffe08a);color:#2a1300}
+.face.front.out{background:linear-gradient(160deg,#ff5d5d,#a3164f);color:#fff}
+.face .word{font-family:'Lalezar';font-size:52px;line-height:1.1}
+.face .emo{font-size:76px}
+
+/* questions */
+.qpair{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:8px}
+.qp{text-align:center;width:120px}
+.qp .a{font-size:62px}
+.qp .n{font-weight:800;font-size:18px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.arrow{font-size:40px;animation:pulse 1s infinite}
+@keyframes pulse{50%{transform:scale(1.25)}}
+.hint{background:rgba(255,204,0,.12);border:2px dashed var(--pri);border-radius:18px;padding:12px;text-align:center;font-weight:700}
+.ring{position:relative;width:120px;height:120px;margin:0 auto}
+.ring svg{transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:36px;font-family:'Lalezar'}
+.ring.warn b{color:var(--red);animation:pulse .5s infinite}
+.progress{height:10px;border-radius:9px;background:rgba(0,0,0,.3);overflow:hidden}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--pri));transition:width .3s}
+
+/* voting */
+.vgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.vbtn{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:12px;color:var(--text);font:inherit;font-weight:800;font-size:17px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+.vbtn .a{font-size:44px}
+.vbtn:active,.vbtn.on{border-color:var(--pink);background:#4a1f5e}
+.bar{display:flex;align-items:center;gap:8px}
+.bar .n{width:110px;font-weight:800;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.bar .t{flex:1;height:26px;background:rgba(0,0,0,.3);border-radius:10px;overflow:hidden}
+.bar .t i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--pri));border-radius:10px;transition:width 1s cubic-bezier(.2,1.4,.4,1)}
+.bar .c{width:28px;text-align:center;font-weight:800}
+.drum{font-size:110px;text-align:center;animation:shake .15s infinite}
+@keyframes shake{0%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}100%{transform:rotate(-6deg)}}
+.unmask{text-align:center}
+.unmask .who{font-size:120px;animation:pop .6s cubic-bezier(.3,1.8,.5,1)}
+@keyframes pop{from{transform:scale(0) rotate(-180deg)}to{transform:scale(1) rotate(0)}}
+.verdict{font-family:'Lalezar';font-size:34px;line-height:1.3}
+.verdict.good{color:var(--green)}.verdict.bad{color:var(--red)}
+
+/* guess */
+.ggrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.gbtn{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:14px 4px;color:var(--text);font:inherit;font-weight:800;font-size:15px;cursor:pointer;min-height:64px}
+.gbtn.right{background:var(--green);color:#063014;border-color:#fff}
+.gbtn.wrong{background:var(--red);color:#fff}
+.gbtn[disabled]{cursor:default}
+
+/* results */
+.lb{display:flex;flex-direction:column;gap:6px}
+.lbi{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:16px;padding:8px 12px;border:1px solid var(--line)}
+.lbi .r{font-family:'Lalezar';font-size:22px;width:30px;text-align:center}
+.lbi .a{font-size:30px}
+.lbi .n{flex:1;font-weight:800}
+.lbi .d{font-weight:800;color:var(--green);font-size:14px}
+.lbi .s{font-family:'Lalezar';font-size:24px;color:var(--pri)}
+.lbi.first{background:linear-gradient(90deg,#6b4a00,var(--card));border-color:var(--pri)}
+.secret{text-align:center;background:linear-gradient(160deg,#fff7ea,#ffe08a);color:#2a1300;border-radius:22px;padding:14px}
+.secret .word{font-family:'Lalezar';font-size:40px}
+
+/* minis */
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mini{border:0;border-radius:24px;padding:18px 10px;color:#fff;font:inherit;cursor:pointer;text-align:center;box-shadow:var(--shadow)}
+.mini .e{font-size:50px;display:block}
+.mini b{font-family:'Lalezar';font-size:24px;font-weight:400;display:block}
+.mini small{opacity:.9;font-weight:600}
+.wheelwrap{position:relative;width:min(340px,86vw);margin:0 auto}
+.wheelwrap canvas{width:100%;height:auto;display:block;filter:drop-shadow(0 10px 0 rgba(0,0,0,.3))}
+.pointer{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:44px;z-index:2;filter:drop-shadow(0 3px 0 rgba(0,0,0,.4))}
+.bigcard{min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;font-size:24px;font-weight:800;line-height:1.6}
+.count{font-family:'Lalezar';font-size:150px;text-align:center;line-height:1;animation:pop .4s}
+.charword{font-family:'Lalezar';font-size:56px;text-align:center;line-height:1.2;min-height:140px;display:grid;place-items:center;background:linear-gradient(160deg,#fff7ea,#ffe08a);color:#2a1300;border-radius:26px;padding:10px}
+
+/* modal/toast */
+.overlay{position:fixed;inset:0;background:rgba(10,4,30,.75);backdrop-filter:blur(4px);display:grid;place-items:center;z-index:50;padding:16px;animation:in .2s}
+.modal{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:20px;width:100%;max-width:440px;display:flex;flex-direction:column;gap:12px;max-height:90dvh;overflow:auto}
+.modal textarea,.modal input{font:inherit;font-weight:600;font-size:16px;padding:12px;border-radius:14px;border:2px solid var(--line);background:rgba(0,0,0,.25);color:var(--text);width:100%;outline:none}
+.modal textarea{min-height:120px;resize:vertical}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--pri);color:var(--pri-ink);font-weight:800;padding:12px 20px;border-radius:99px;z-index:60;box-shadow:var(--shadow);animation:toast 2.6s forwards;max-width:90vw;text-align:center}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,30px)}10%,85%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,30px)}}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:70}
+.rules li{margin-bottom:8px;line-height:1.7}
+.stat{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-weight:700}
+.stat:last-child{border:0}
+.badge{display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.06);border-radius:16px;padding:10px;font-weight:700}
+.badge .e{font-size:34px}
+.toggle{display:flex;justify-content:space-between;align-items:center;font-weight:800;padding:6px 0}
+.sw{width:58px;height:32px;border-radius:99px;background:rgba(0,0,0,.35);border:0;position:relative;cursor:pointer;flex:none}
+.sw::after{content:'';position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;background:#fff;transition:.2s}
+.sw.on{background:var(--green)}
+.sw.on::after{right:30px}
+@media (max-width:360px){.cgrid{grid-template-columns:repeat(2,1fr)}.ggrid{grid-template-columns:repeat(2,1fr)}.logo h1{font-size:56px}}
+</style>
+</head>
+<body>
+<div class="floaters" aria-hidden="true"></div>
+<div id="app"></div>
+<canvas id="fx"></canvas>
+
+<script>
+/* ============================ DATA ============================ */
+const CATS = [
+ {id:'food',name:'أكلات',emoji:'🍔',words:['بيتزا','برغر','شاورما','فلافل','كباب','سوشي','معكرونة','برياني','كبسة','مقلوبة','منسف','سمك مشوي','دجاج مقلي','شوربة عدس','بيض مقلي','سندويش جبن','هوت دوك','تاكو','فطيرة','مشاوي','كنتاكي','ستيك','فاهيتا','لازانيا','بطاطا مقلية','سلطة','ناجتس','حمص']},
+ {id:'iraqi',name:'أكلات شعبية',emoji:'🍲',words:['دولمة','باجة','تشريب','قوزي','سمك مسكوف','كبة','كاهي وقيمر','لبلبي','عروق','تبسي باذنجان','فاصوليا وتمن','باميا','مرق قيمة','كليجة','تمن عنبر','مطبق','جريش','هريس','مندي','مضغوط','كشري','ملوخية','محشي','فول','فتة','مجبوس','قيمة','طرشي']},
+ {id:'animals',name:'حيوانات',emoji:'🐪',words:['جمل','أسد','قطة','كلب','زرافة','فيل','قرد','بطريق','تمساح','دجاجة','بقرة','خروف','حمار','حصان','دب','ذيب','ثعلب','أرنب','سلحفاة','حمامة','نسر','بومة','دولفين','قرش','أخطبوط','نملة','صرصور','ضفدع','كنغر','باندا']},
+ {id:'countries',name:'دول',emoji:'🌍',words:['العراق','السعودية','الكويت','الإمارات','قطر','مصر','الأردن','لبنان','سوريا','المغرب','تونس','الجزائر','تركيا','إيران','الهند','الصين','اليابان','روسيا','أمريكا','كندا','البرازيل','الأرجنتين','فرنسا','ألمانيا','إيطاليا','إسبانيا','بريطانيا','أستراليا','ماليزيا','عُمان']},
+ {id:'cities',name:'مدن',emoji:'🏙️',words:['بغداد','البصرة','أربيل','الموصل','كربلاء','النجف','دبي','الرياض','جدة','مكة','الدوحة','الكويت','القاهرة','الإسكندرية','عمّان','بيروت','دمشق','إسطنبول','باريس','لندن','نيويورك','طوكيو','موسكو','روما','مدريد','برشلونة','كوالالمبور','مسقط','المنامة','مراكش']},
+ {id:'jobs',name:'مهن',emoji:'👷',words:['طبيب','مهندس','معلم','شرطي','طباخ','حلاق','نجار','حداد','سائق تكسي','طيار','مضيف طيران','محامي','قاضي','ممرض','صيدلاني','مبرمج','مصور','ممثل','مغني','لاعب كرة','رسام','خياط','فلاح','صياد','رجل إطفاء','عامل نظافة','بائع خضرة','ميكانيكي','يوتيوبر','مذيع']},
+ {id:'places',name:'أماكن',emoji:'📍',words:['مستشفى','مطار','مدرسة','جامعة','مول','سينما','ملعب','مسبح','مطعم','مقهى','عرس','حديقة حيوان','شاطئ','مخبز','صالون حلاقة','سوق','جامع','مكتبة','بنك','مركز شرطة','محطة بنزين','فندق','صحراء','غابة','مدينة ألعاب','سجن','حمام','مطبخ','قاعة امتحان','عيادة أسنان']},
+ {id:'home',name:'أغراض البيت',emoji:'🛋️',words:['ثلاجة','غسالة','مكنسة','تلفزيون','قنفة','سرير','مخدة','بطانية','مكيف','مروحة','فرن','مايكرويف','خلاط','مرآة','دولاب','ستارة','سجادة','مصباح','ريموت','شماعة','مكوى','طباخ','كتلي','صحن','ملعقة','قدر','سطل','مقص','ساعة حائط','جرس الباب']},
+ {id:'sports',name:'رياضة',emoji:'⚽',words:['كرة قدم','كرة سلة','كرة طائرة','تنس','سباحة','ملاكمة','مصارعة','كاراتيه','جودو','رفع أثقال','ركض','ماراثون','دراجات','تزلج','غولف','بولينغ','بلياردو','شطرنج','تنس طاولة','كرة يد','فروسية','رماية','غطس','تسلق','كمال أجسام','يوغا','ركبي','هوكي','سباق سيارات','بادل']},
+ {id:'fruits',name:'فواكه وخضار',emoji:'🍉',words:['رقي','بطيخ','تفاح','موز','برتقال','عنب','فراولة','مانجو','أناناس','رمان','تين','تمر','خوخ','مشمش','كيوي','ليمون','طماطة','خيار','بصل','ثوم','جزر','بطاطا','باذنجان','شجر','فلفل','خس','قرنابيط','لهانة','ذرة','فطر']},
+ {id:'clothes',name:'ملابس',emoji:'👕',words:['دشداشة','عباية','قميص','بنطرون','تيشيرت','جاكيت','بدلة','ربطة','حزام','قبعة','شماغ','عقال','نظارة','ساعة','جوارب','حذاء رياضي','نعال','قمصلة','بيجامة','فستان','تنورة','وشاح','كفوف','شورت','بلوزة','حجاب','خاتم','قلادة','شنطة','سترة']},
+ {id:'transport',name:'وسائل نقل',emoji:'🚗',words:['سيارة','تكسي','باص','قطار','مترو','طيارة','هليكوبتر','سفينة','قارب','دراجة','دراجة نارية','تكتك','شاحنة','إسعاف','سيارة إطفاء','سيارة شرطة','صاروخ','منطاد','سكوتر','عربانة','حصان','جمل','تلفريك','غواصة','يخت','لوري','بايسكل','كرفان','تراكتور','زورق']},
+ {id:'tech',name:'أجهزة وتكنولوجيا',emoji:'📱',words:['موبايل','لابتوب','آيباد','سماعات','شاحن','باوربانك','كاميرا','بلايستيشن','ريموت','راوتر','فلاشة','ماوس','كيبورد','شاشة','طابعة','ساعة ذكية','درون','روبوت','سبيكر','مايكروفون','تلفزيون ذكي','نظارة VR','بطارية','سيلفي ستيك','كيبل','آلة حاسبة','واي فاي','بلوتوث','ميموري','جهاز بصمة']},
+ {id:'drinks',name:'مشروبات',emoji:'☕',words:['شاي','قهوة','عصير برتقال','لبن','حليب','بيبسي','ماي','عصير رمان','كرك','نسكافيه','كابتشينو','لاتيه','شاي كجرات','دارسين','ميلك شيك','سموذي','ليمون بالنعناع','تمر هندي','عرق سوس','قمر الدين','سحلب','شوكولاتة ساخنة','آيس تي','مشروب طاقة','صودا','عصير جزر','زنجبيل','بابونج','شاي أخضر','كوكتيل فواكه']},
+ {id:'sweets',name:'حلويات',emoji:'🍰',words:['كيك','بقلاوة','كنافة','زلابية','بسبوسة','دونات','آيس كريم','شوكولاتة','مهلبية','كاستر','من السما','حلاوة','كليجة','معمول','تشيز كيك','كب كيك','بان كيك','وافل','كريب','بوظة','جلي','لقيمات','غزل البنات','ملبس','علك','حلاوة طحينية','أم علي','تيراميسو','مارشميلو','زنود الست']},
+ {id:'school',name:'المدرسة',emoji:'🎒',words:['سبورة','طباشير','قلم','ممحاة','مسطرة','مبراة','دفتر','كتاب','حقيبة','مدير','معلمة','فرصة','امتحان','واجب','شهادة','كانتين','رحلة مدرسية','اصطفاف','حصة رياضة','مختبر','جرس','غياب','نشيد','عقوبة','درجة','كرسي','رحلة','دوام','عطلة','تخرج']},
+ {id:'events',name:'مناسبات',emoji:'🎉',words:['عرس','عيد ميلاد','العيد','رمضان','خطوبة','تخرج','حفلة','سفرة','عزيمة','مولد طفل','رأس السنة','ختان','نجاح','ترقية','سحور','فطور رمضان','حنة','شهر العسل','يوم الجمعة','كشتة','زيارة الأهل','حفلة مفاجأة','مباراة نهائي','افتتاح محل','سباق','مهرجان','معرض','حفلة توديع','ذكرى زواج','الشتاء']},
+ {id:'body',name:'جسم الإنسان',emoji:'🫀',words:['عين','أذن','خشم','حلق','سن','لسان','شعر','حاجب','رقبة','كتف','إيد','إصبع','ظفر','ركبة','رجل','كعب','قلب','معدة','كبد','رئة','دماغ','ظهر','بطن','شارب','لحية','جبهة','خد','كف','سرة','ضرس']},
+ {id:'nature',name:'طبيعة وطقس',emoji:'🌦️',words:['شمس','قمر','نجمة','مطر','ثلج','عاصفة','رعد','برق','غيمة','قوس قزح','بحر','نهر','جبل','وادي','بركان','زلزال','صحراء','واحة','شلال','بحيرة','غابة','وردة','نخلة','شجرة','رمل','ريح','ضباب','غبار','موج','كهف']},
+];
+
+const TAGLINES = [
+ 'واحد منكم ما يدري شنو السالفة... اكشفوه قبل لا يضحك عليكم! 🕵️',
+ 'اللعبة اللي تخرّب الصداقات وتصلّحها بنفس الليلة 😂',
+ 'لا تثق بأحد... حتى بنفسك 🤨',
+ 'اسأل بذكاء، جاوب بدهاء، واتّهم ببرود 😎',
+ 'الدخيل بيناتكم وهو مبتسم هسه 😏',
+ 'إذا محد شكّ بيك، فانت يا عبقري يا ... دخيل 🤡',
+];
+const PASS_LINES = ['لا أحد يبحلق بالشاشة! 👀','غمّضوا عيونكم يا جماعة 🙈','المرة الجاية اللي يبصبص يصير هو العقاب 😤','خلّي التلفون قريب من وجهك 📱','ابتسم ابتسامة بريئة 😇'];
+const CAUGHT_ROASTS = ['انكشفت يا حبيبي 😂 وجهك فضحك!','وين رايح؟ امسكووه! 🚓','كان واضح من أول سؤال 🙄','تمثيلك يحتاج كورس 🎭','حتى القطة عرفتك 🐱','انت برّا السالفة وبرّا الجو كله 😂'];
+const ESCAPED_ROASTS = ['الشلة كلها نايمة 😴 الدخيل فلت!','أوسكار أفضل ممثل يروح لـ ... الدخيل 🏆','ضحك عليكم واحد واحد 🦊','تحتاجون نظارات يا جماعة 👓','هذا مو دخيل، هذا جاسوس محترف 🕶️'];
+const WRONG_ACCUSE = ['ظلمتوا {n} المسكين 😭','{n} بريء وانتو ظالمين 🥲','اعتذروا من {n} هسه! 🙇'];
+const GUESS_RIGHT = ['يا ثعلب! عرفها 🦊','عبقري الجيل 🧠','شلون عرفتها؟ 😳'];
+const GUESS_WRONG = ['ولا قريب 😂','خيّبت ظن أمك 🥲','حتى التخمين ما عرفته 🤦'];
+const Q_HINTS = ['وين نلقاه عادةً؟','تحبه لو لا؟ وليش؟','شكد حجمه تقريباً؟','ينفع هدية؟','غالي لو رخيص؟','شوكت آخر مرة شفته؟','لونه شنو عادةً؟','أمك تحبه؟ 😅','تكدر تعيش بدونه؟','الأطفال يحبونه؟','ينلبس، ينأكل، لو ينشاف؟','تاخذه وياك للسفرة؟','يرتبط بالصيف لو بالشتاء؟','لو صار شخص، شنو شخصيته؟','شنو أول كلمة تجي ببالك؟','تستخدمه كل يوم؟','يسوي صوت؟','موجود بالبيت؟','ريحته حلوة؟ 👃','تنطيه درجة من ١٠ شكد؟','شنو أكثر شي يضوجك بيه؟','ينفع بالعرس؟ 💍'];
+const MOST_LIKELY = ['ينام بنص العزيمة 😴','يتأخر على كل موعد ⏰','يخلّص راتبه بأول أسبوع 💸','يدوّر على تلفونه وهو بإيده 📱','يصير مشهور بالتيك توك 🎥','ياكل أكل غيره من الثلاجة 🍗','يبچي على فلم كارتون 😭','يرد على المسج بعد ثلث أيام 📩','يسولف ويا نفسه 🗣️','يفضح المفاجأة قبل وقتها 🎁','يطلب دلفري كل يوم 🛵','ينسى عيد ميلاد أقرب صديق 🎂','يتصور ١٠٠ سيلفي لحد ما يرضى 🤳','يضحك على نكتته قبل لا يكملها 🤭','يصير رئيس جمهورية 🏛️','يتزوج أول واحد 💍','يفتح مطعم ويفلس بشهر 🍔','يتعارك ويا الكاشير 🧾','يصدّق أي إشاعة بالواتساب 📢','يغني بالحمام بصوت عالي 🎤','يضيع بالمول 🛍️','ينام والتلفزيون شغال 📺','يشتري شي ما يحتاجه لأن عليه خصم 🏷️','ينسى ليش دخل الغرفة 🚪','يكسب مسابقة المليون 💰','يحچي بالتلفون والمايك مفتوح 🎙️','يصير ممثل مشهور 🎬','يحب أكثر من مرة بالأسبوع 💘','ياكل وهو شبعان 🍕','يسوق وهو ضايع ويرفض يسأل 🗺️','يقرا الرسالة وما يرد 👀','يصير مليونير وينسانا 🤑','يخاف من صرصور 🪳','يتكلم بنص الفلم بالسينما 🍿','يسافر وينسى الجواز 🛂','يحط سكر بدل ملح 🧂','يقوم الساعة ٣ الظهر بالعطلة 🛏️','يسوي دايت ويكسره بنفس اليوم 🥗'];
+const TRUTHS = ['شنو أكثر موقف محرج صار وياك بالمدرسة؟','منو آخر واحد دورت عليه بالانستا؟ 👀','شنو أغرب أكلة تحبها؟','إذا تبادل حياتك ويا واحد هنا، منو؟ وليش؟','شنو أكبر كذبة كذبتها على أهلك؟','شنو الأغنية اللي تخجل إنك تحبها؟ 🎶','شنو أطول مدة قضيتها بدون تلفون؟','شنو أول شي تسويه لو صرت مليونير؟','شنو آخر شي بحثت عنه بجوجل؟','شنو الشي اللي تخاف منه وما تعترف؟','منو أكثر واحد بالجمعة تثق بيه؟','شنو أسخف سبب زعلت عليه؟','لو تكدر تمسح تطبيق من كل التلفونات، شنو يكون؟','شنو كان لقبك وانت صغير؟','كم ساعة تقضي على التلفون باليوم؟ وريهم!','شنو أسوأ هدية جتك وسويت نفسك فرحان؟','منو آخر واحد دزيتله مسج؟','شنو الأكلة اللي لو تنحرم منها تموت؟','شنو أكثر شي تندم عليه هالسنة؟','لو تختار قوة خارقة، شنو تختار؟','شنو أغرب حلم حلمته؟','شنو الشي اللي يخليك تعصب بسرعة؟','منو المشهور اللي تتمنى تتعشى وياه؟','شنو أغبى شي اشتريته؟ 🛒'];
+const DARES = ['قلّد صوت حيوان يختاره اللي يمك 🐒','احچي باللهجة المصرية لحد دورك الجاي 🇪🇬','غني مقطع أغنية بصوت أوبرا 🎼','ارقص ١٠ ثواني بدون موسيقى 💃','سوي وجه مضحك وخلي واحد يصورك 📸','امشي مثل البطريق للباب وارجع 🐧','احكي نكتة، وإذا محد ضحك تاخذ تحدي ثاني 😂','خلي اللي يمك يرسم على إيدك ✍️','احچي جملة كاملة وانت ماسك لسانك 👅','سوي إعلان تجاري لشي موجود بالغرفة 📺','قلّد واحد من الموجودين وخليهم يحزرون 🎭','سوي ١٠ ضغط هسه 💪','خلّي الجماعة يختارون لك اسم جديد لآخر الليلة 🏷️','غني "سنة حلوة" لواحد مو عيد ميلاده 🎂','احچي مثل الروبوت لحد دورك الجاي 🤖','سوي مقابلة تلفزيونية ويا المخدة 🎤','خلك جدي ١٥ ثانية وهم يضحكوك 😐','امدح كل واحد بالغرفة بجملة حلوة 🌹','مثّل إنك تطبخ بالمطبخ برنامج طبخ 👨‍🍳','قول الحروف من الياء للألف بسرعة 🔤','غير صوتك لصوت كارتون لحد دورك الجاي 🐭','اعمل وضعية تمثال ٢٠ ثانية بدون حركة 🗿'];
+const PENALTIES = [
+ {e:'🐔',s:'دجاجة',t:'قلّد دجاجة ١٠ ثواني قدام الكل'},
+ {e:'🎤',s:'غناء',t:'غنّي أغنية يختارونها الجماعة'},
+ {e:'💃',s:'رقصة',t:'ارقص ١٥ ثانية رقصة من اختراعك'},
+ {e:'🤐',s:'سكوت',t:'ممنوع تحچي الجولة الجاية كلها!'},
+ {e:'🍋',s:'ليمون',t:'اشرب ماي بليمون بدون سكر 🍋'},
+ {e:'🤖',s:'روبوت',t:'احچي مثل الروبوت لحد الجولة الجاية'},
+ {e:'🌹',s:'مدح',t:'امدح كل واحد بالجلسة بجملة'},
+ {e:'📸',s:'صورة',t:'صورة بأغرب وجه عندك 📸'},
+ {e:'🧹',s:'صحون',t:'انت اللي تشيل الصحون اليوم 🧽'},
+ {e:'🎭',s:'دراما',t:'مثّل مشهد مسلسل درامي حزين'},
+ {e:'😂',s:'نكتة',t:'احكي نكتة، وإذا محد ضحك تعيد'},
+ {e:'🍀',s:'نجوت!',t:'محظوظ! نجوت من العقاب هالمرة 🍀'},
+];
+const AVATARS = ['😎','🤠','🥸','🤡','👻','🐸','🐵','🦁','🐼','🦊','🐯','🐨','🤖','👽','🧔','👩','🧕','👳','🥷','🧙','🦄','🐙','🍉','🌶️','🐧','🦖','👑','🍕'];
+
+/* ============================ UTIL ============================ */
+const $ = s=>document.querySelector(s);
+const rnd = a=>a[Math.floor(Math.random()*a.length)];
+const shuffle = a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc = s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store={get(k,d){try{const v=localStorage.getItem('dakheel_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('dakheel_'+k,JSON.stringify(v))}catch(e){}}};
+const uid=()=>Math.random().toString(36).slice(2,9);
+
+let players = store.get('players',[]);
+let settings = Object.assign({timer:45,qRounds:1,voteMode:'secret',showCat:true,sound:true,vibrate:true,mode:'classic',outsiders:1}, store.get('settings',{}));
+let customCats = store.get('customCats',[]);
+let selCats = store.get('selCats',null);
+let gstats = Object.assign({rounds:0,caught:0,escaped:0,guessed:0,games:0}, store.get('gstats',{}));
+function save(){store.set('players',players);store.set('settings',settings);store.set('customCats',customCats);store.set('selCats',selCats);store.set('gstats',gstats)}
+const allCats=()=>CATS.concat(customCats);
+const pById=id=>players.find(p=>p.id===id);
+const pTag=p=>`${p.av} ${esc(p.name)}`;
+function newStats(){return {out:0,caught:0,escaped:0,guessed:0,votes:0}}
+players.forEach(p=>{p.st=Object.assign(newStats(),p.st||{});p.score=p.score||0});
+
+/* ============================ SOUND ============================ */
+let AC=null;
+function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){return null}} if(AC.state==='suspended')AC.resume(); return AC}
+function tone(f,d,type='sine',vol=.12,when=0,slide){if(!settings.sound)return;const c=ac();if(!c)return;const t=c.currentTime+when;const o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+d);g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(c.destination);o.start(t);o.stop(t+d+.02)}
+function noise(d,vol=.15,when=0){if(!settings.sound)return;const c=ac();if(!c)return;const t=c.currentTime+when;const b=c.createBuffer(1,c.sampleRate*d,c.sampleRate);const da=b.getChannelData(0);for(let i=0;i<da.length;i++)da[i]=(Math.random()*2-1)*(1-i/da.length);const s=c.createBufferSource();s.buffer=b;const g=c.createGain();g.gain.value=vol;const fl=c.createBiquadFilter();fl.type='lowpass';fl.frequency.value=900;s.connect(fl).connect(g).connect(c.destination);s.start(t)}
+const SFX={
+ click(){tone(520,.06,'triangle',.07)},
+ pop(){tone(500,.08,'sine',.12,0,1100)},
+ flip(){tone(300,.07,'square',.04);tone(600,.09,'square',.04,.07)},
+ tick(){tone(1200,.04,'square',.05)},
+ buzz(){tone(140,.6,'sawtooth',.13,0,90)},
+ win(){[523,659,784,1046].forEach((f,i)=>tone(f,.22,'triangle',.13,i*.12))},
+ fail(){[392,370,349,311].forEach((f,i)=>tone(f,.38,'sawtooth',.06,i*.32,f*.94))},
+ drum(){for(let i=0;i<26;i++)noise(.06,.18,i*.08);noise(.5,.35,2.15);tone(80,.5,'sine',.3,2.15)},
+ boing(){tone(180,.35,'sine',.18,0,600)},
+ honk(){tone(330,.12,'square',.08);tone(330,.18,'square',.08,.16)},
+};
+function sfx(n){try{SFX[n]&&SFX[n]()}catch(e){}}
+function vib(p){if(settings.vibrate&&navigator.vibrate)try{navigator.vibrate(p)}catch(e){}}
+
+/* ============================ FX ============================ */
+const fx=$('#fx'),fctx=fx.getContext('2d');let parts=[],fxRaf=0;
+function sizeFx(){fx.width=innerWidth*devicePixelRatio;fx.height=innerHeight*devicePixelRatio}
+addEventListener('resize',sizeFx);sizeFx();
+function confetti(n=140,emojis){const W=fx.width,H=fx.height;const cols=['#ffcc00','#ff4fa3','#30e3ca','#4ade80','#fff','#a78bfa'];
+ for(let i=0;i<n;i++)parts.push({x:W/2+(Math.random()-.5)*W*.3,y:H*.45,vx:(Math.random()-.5)*26*devicePixelRatio,vy:(-Math.random()*26-8)*devicePixelRatio,g:.7*devicePixelRatio,r:Math.random()*6.28,vr:(Math.random()-.5)*.4,s:(6+Math.random()*8)*devicePixelRatio,c:rnd(cols),e:emojis?rnd(emojis):null,l:0});
+ if(!fxRaf)fxLoop()}
+function fxLoop(){fctx.clearRect(0,0,fx.width,fx.height);parts.forEach(p=>{p.vy+=p.g;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;p.l++;fctx.save();fctx.translate(p.x,p.y);fctx.rotate(p.r);if(p.e){fctx.font=`${p.s*3}px serif`;fctx.fillText(p.e,0,0)}else{fctx.fillStyle=p.c;fctx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2)}fctx.restore()});
+ parts=parts.filter(p=>p.y<fx.height+60&&p.l<400);if(parts.length)fxRaf=requestAnimationFrame(fxLoop);else{fxRaf=0;fctx.clearRect(0,0,fx.width,fx.height)}}
+function toast(msg){document.querySelectorAll('.toast').forEach(t=>t.remove());const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2700)}
+function modal(html){closeModal();const o=document.createElement('div');o.className='overlay';o.id='ov';o.innerHTML=`<div class="modal">${html}</div>`;o.addEventListener('click',e=>{if(e.target===o)closeModal()});document.body.appendChild(o)}
+function closeModal(){const o=$('#ov');if(o)o.remove()}
+(function floaters(){const f=$('.floaters');const em=['🤡','🕵️','🤫','👀','😂','🎭','❓','🥸'];let h='';for(let i=0;i<12;i++)h+=`<span style="left:${Math.random()*100}%;animation-delay:-${Math.random()*14}s;animation-duration:${10+Math.random()*10}s">${rnd(em)}</span>`;f.innerHTML=h})();
+
+/* ============================ ROUTER ============================ */
+let screen='home',R=null,timers=[],raf=0,TMP={};
+const IN_ROUND=['reveal','qintro','questions','qend','vote','voteRes','unmask','guess'];
+function T(fn,ms){const t=setTimeout(fn,ms);timers.push(t);return t}
+function I(fn,ms){const t=setInterval(fn,ms);timers.push(t);return t}
+function clearTimers(){timers.forEach(t=>{clearTimeout(t);clearInterval(t)});timers=[];cancelAnimationFrame(raf)}
+function go(s){clearTimers();closeModal();screen=s;render()}
+function render(){
+ const showHome=screen!=='home';
+ const head=`<header class="top">${showHome?`<button class="icon-btn" data-a="home" aria-label="الرئيسية">🏠</button>`:'<span></span>'}
+  <span class="top-title">${screen==='home'?'':'🕵️ الدخيل'}</span>
+  <button class="icon-btn" data-a="toggleSound" aria-label="الصوت">${settings.sound?'🔊':'🔇'}</button></header>`;
+ $('#app').innerHTML=head+`<main class="screen s-${screen}">${V[screen]()}</main>`;
+ window.scrollTo(0,0);
+ M[screen]&&M[screen]();
+}
+
+/* ============================ VIEWS ============================ */
+const V={},M={},A={};
+
+V.home=()=>`
+ <div class="logo"><span class="logo-emoji">🕵️</span><h1>الدخيل</h1><div class="sub">مين برّا السالفة؟ 🤡</div><p class="tag" id="tag">${rnd(TAGLINES)}</p></div>
+ <button class="btn big primary" data-a="start">🎮 يلا نلعب</button>
+ <button class="btn pink" data-a="go" data-v="minis">🎲 ألعاب جانبية</button>
+ <div class="row">
+  <button class="btn small" data-a="go" data-v="howto">📖 شلون نلعب</button>
+  <button class="btn small" data-a="go" data-v="settings">⚙️ الإعدادات</button>
+  <button class="btn small" data-a="go" data-v="stats">🏆 الأبطال</button>
+ </div>
+ <p class="center muted" style="margin-top:auto;font-size:13px">لعبة جماعية على جهاز واحد • ٣ لاعبين أو أكثر 👨‍👩‍👧‍👦</p>`;
+M.home=()=>{I(()=>{const t=$('#tag');if(t){t.style.opacity=0;setTimeout(()=>{t.textContent=rnd(TAGLINES);t.style.opacity=1},250)}},4500);const t=$('#tag');if(t)t.style.transition='opacity .25s'};
+
+V.players=()=>`
+ <h2>👥 منو يلعب؟</h2>
+ <p class="center muted">اضغط على الوجه حتى تغيّره 😜</p>
+ <div class="addrow"><input id="pname" maxlength="16" placeholder="اسم اللاعب..." autocomplete="off"><button class="btn primary" data-a="addPlayer">➕</button></div>
+ <div class="plist">${players.map(p=>`
+  <div class="pitem"><button class="av" data-a="cycleAv" data-v="${p.id}">${p.av}</button><span class="pname">${esc(p.name)}</span><span class="pscore">${p.score} ⭐</span><button class="del" data-a="delPlayer" data-v="${p.id}" aria-label="حذف">✖</button></div>`).join('')||'<div class="card center muted">ماكو لاعبين بعد... ضيف ربعك 👇</div>'}
+ </div>
+ ${players.length?`<button class="btn small ghost" data-a="resetScores">🔄 تصفير النقاط</button>`:''}
+ <div style="margin-top:auto"></div>
+ <button class="btn big primary" data-a="go" data-v="setup" ${players.length<3?'disabled':''}>التالي ⬅️ ${players.length<3?`(تحتاج ${3-players.length} بعد)`:''}</button>`;
+M.players=()=>{const i=$('#pname');i.addEventListener('keydown',e=>{if(e.key==='Enter')A.addPlayer()});if(!('ontouchstart' in window))i.focus()};
+
+V.setup=()=>{
+ const cats=allCats();const sel=selCats||cats.map(c=>c.id);
+ const maxOut=Math.max(1,Math.floor(players.length/3));if(settings.outsiders>maxOut)settings.outsiders=maxOut;
+ return `
+ <h2>🗂️ اختاروا الفئات</h2>
+ <div class="row"><button class="btn small" data-a="catAll">✅ الكل</button><button class="btn small" data-a="catNone">❌ ولا شي</button><button class="btn small cyan" data-a="customCat">➕ فئة خاصة</button></div>
+ <div class="cgrid">${cats.map(c=>`<button class="cat ${sel.includes(c.id)?'on':''}" data-a="toggleCat" data-v="${c.id}"><span class="e">${c.emoji}</span>${esc(c.name)}${c.custom?' ✏️':''}</button>`).join('')}</div>
+ <div class="card opt"><label>🎭 نوع اللعب</label>
+  <div class="seg"><button class="${settings.mode==='classic'?'on':''}" data-a="setMode" data-v="classic">🤡 كلاسيك</button><button class="${settings.mode==='undercover'?'on':''}" data-a="setMode" data-v="undercover">🥸 المتخفي</button></div>
+  <small>${settings.mode==='classic'?'الدخيل يعرف إنه برّا السالفة وما يعرف الكلمة.':'الدخيل ياخذ كلمة قريبة وما يدري إنه دخيل! 😂 فوضى مضمونة.'}</small>
+ </div>
+ <div class="card opt"><label>🕵️ عدد الدخلاء</label>
+  <div class="stepper"><button data-a="outs" data-v="-1">−</button><b>${settings.outsiders}</b><button data-a="outs" data-v="1">+</button></div>
+  <small class="center">الحد الأعلى ${maxOut} حسب عدد اللاعبين</small>
+ </div>
+ <button class="btn big primary" data-a="startRound">🚀 ابدأ الجولة</button>`};
+
+V.reveal=()=>{
+ const p=pById(R.order[R.ri]);const isOut=R.outsiders.includes(p.id);
+ if(!R.shown) return `
+  <div class="pass card"><div class="bigav">${p.av}</div><h2>مرّر الجهاز لـ ${esc(p.name)}</h2><p class="muted">${rnd(PASS_LINES)}</p><p class="pill" style="margin-top:8px">${R.ri+1} / ${R.order.length}</p></div>
+  <div class="flip" data-a="flipCard"><div class="flip-inner"><div class="face back"><span class="q">❓</span>اضغط وشوف سرّك</div><div class="face front"></div></div></div>`;
+ let front;
+ if(isOut&&settings.mode==='classic') front=`<div class="face front out"><span class="emo">🤡</span><div class="word">انت برّا السالفة!</div>${settings.showCat?`<p>الفئة: <b>${R.cat.emoji} ${esc(R.cat.name)}</b></p>`:''}<p>اندمج وياهم وحاول تعرف الكلمة من أسئلتهم 🤫</p></div>`;
+ else { const w=isOut?R.decoy:R.word; front=`<div class="face front"><span class="pill" style="color:#2a1300;border-color:#0002">${R.cat.emoji} ${esc(R.cat.name)}</span><div class="word">${esc(w)}</div><p>انت داخل السالفة 😏<br>لا تفضح الكلمة، وفتّش عن الدخيل!</p></div>`;}
+ return `
+  <div class="center"><h3>${p.av} ${esc(p.name)}</h3></div>
+  <div class="flip on"><div class="flip-inner"><div class="face back"></div>${front}</div></div>
+  <button class="btn big primary" data-a="nextReveal">🙈 خبّيتها، ${R.ri+1<R.order.length?'التالي':'يلا نبدأ'}</button>`;
+};
+
+V.qintro=()=>`
+ <div class="center" style="font-size:90px">🎤</div>
+ <h2>وقت الأسئلة!</h2>
+ <div class="card"><p>كل واحد يسأل اللي بعده سؤال عن الكلمة. <b>لا تكون واضح</b> حتى الدخيل ما يعرفها، و<b>لا تكون غامض</b> حتى ما يشكون بيك 😏</p></div>
+ <div class="card"><p>🤡 الدخيل: جاوب بثقة وكأنك تعرف كل شي!</p></div>
+ <button class="btn big primary" data-a="go" data-v="questions">يلا! ⬅️</button>`;
+
+V.questions=()=>{
+ const [a,b]=R.q[R.qi];const pa=pById(a),pb=pById(b);const tot=R.q.length;
+ return `
+ <div class="row" style="align-items:center"><span class="pill" style="flex:none">سؤال ${R.qi+1} من ${tot}</span><div class="progress"><i style="width:${(R.qi)/tot*100}%"></i></div></div>
+ <div class="qpair"><div class="qp"><div class="a">${pa.av}</div><div class="n">${esc(pa.name)}</div><small class="muted">يسأل</small></div><div class="arrow">⬅️</div><div class="qp"><div class="a">${pb.av}</div><div class="n">${esc(pb.name)}</div><small class="muted">يجاوب</small></div></div>
+ ${settings.timer?`<div class="ring" id="ring"><svg width="120" height="120"><circle cx="60" cy="60" r="52" stroke="rgba(0,0,0,.3)" stroke-width="12" fill="none"/><circle id="rc" cx="60" cy="60" r="52" stroke="#30e3ca" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="0" style="transition:stroke-dashoffset 1s linear, stroke .3s"/></svg><b id="rt">${settings.timer}</b></div>`:''}
+ <div class="hint">💡 اقتراح سؤال: <span id="qh">${rnd(Q_HINTS)}</span> <button class="btn small" style="width:auto;margin-top:8px" data-a="newHint">🔀 غيره</button></div>
+ <button class="btn big primary" data-a="nextQ">${R.qi+1<tot?'السؤال الجاي ⬅️':'خلصنا ✅'}</button>
+ <button class="btn small ghost" data-a="go" data-v="qend">⏩ عرفناه! نروح للتصويت</button>`};
+M.questions=()=>{if(!settings.timer)return;let left=settings.timer;const rc=$('#rc'),rt=$('#rt'),ring=$('#ring');
+ I(()=>{left--;if(left<0)return;rt.textContent=left;rc.style.strokeDashoffset=326.7*(1-left/settings.timer);
+  if(left<=5&&left>0){sfx('tick');ring.classList.add('warn');rc.style.stroke='#ff5d5d'}
+  if(left===0){sfx('buzz');vib([200,100,200]);rt.textContent='⏰';toast('خلص الوقت! جاوب بسرعة 😤')}},1000)};
+
+V.qend=()=>`
+ <div class="center" style="font-size:90px">🤔</div>
+ <h2>خلصت الأسئلة!</h2>
+ <p class="center muted">شكّيتوا بأحد؟ لو تبون جولة أسئلة ثانية؟</p>
+ <button class="btn big primary" data-a="startVote">🗳️ يلا نصوّت</button>
+ <button class="btn" data-a="moreQ">🔁 جولة أسئلة ثانية</button>`;
+
+V.vote=()=>{
+ if(settings.voteMode==='group') return `
+  <h2>🗳️ اتفقوا على واحد!</h2><p class="center muted">تناقشوا، تعاركوا، وبعدين اضغطوا على المتهم 👇</p>
+  <div class="vgrid">${players.map(p=>`<button class="vbtn" data-a="groupVote" data-v="${p.id}"><span class="a">${p.av}</span>${esc(p.name)}</button>`).join('')}</div>`;
+ const v=pById(R.voters[R.vi]);
+ if(!R.vready) return `
+  <div class="pass card"><div class="bigav">${v.av}</div><h2>دور ${esc(v.name)} يصوّت</h2><p class="muted">التصويت سرّي! الباقين ولّوا وجوهكم 🙈</p><p class="pill" style="margin-top:8px">${R.vi+1} / ${R.voters.length}</p></div>
+  <button class="btn big primary" data-a="voteReady">أنا ${esc(v.name)}، جاهز 🫡</button>`;
+ return `
+  <h2>${v.av} منو الدخيل برأيك؟</h2>
+  <div class="vgrid">${players.filter(p=>p.id!==v.id).map(p=>`<button class="vbtn" data-a="castVote" data-v="${p.id}"><span class="a">${p.av}</span>${esc(p.name)}</button>`).join('')}</div>`;
+};
+
+V.voteRes=()=>{
+ if(!R.vrShown) return `<div style="margin:auto 0;display:flex;flex-direction:column;gap:16px"><div class="drum">🥁</div><h2>ونشوف منو المتّهم...</h2></div>`;
+ const tally=R.tally;const max=Math.max(1,...Object.values(tally));
+ const rows=players.slice().sort((a,b)=>(tally[b.id]||0)-(tally[a.id]||0)).map(p=>`<div class="bar"><span class="n">${pTag(p)}</span><span class="t"><i data-w="${(tally[p.id]||0)/max*100}"></i></span><span class="c">${tally[p.id]||0}</span></div>`).join('');
+ const acc=R.accused?pById(R.accused):null;
+ return `<h2>📊 نتيجة التصويت</h2><div class="card" style="display:flex;flex-direction:column;gap:8px">${rows}</div>
+  <div class="card center">${acc?`<p>المتّهم الأول:</p><h3 style="font-size:32px">${pTag(acc)}</h3>`:`<h3>تعادل! 🤷 ما اتفقتوا على أحد</h3><p class="muted">والدخيل يضحك بقلبه 😏</p>`}</div>
+  <button class="btn big pink" data-a="go" data-v="unmask">😱 اكشف الدخيل</button>`;
+};
+M.voteRes=()=>{if(!R.vrShown){sfx('drum');vib([50,50,50,50,50,50,300]);T(()=>{R.vrShown=true;render()},2500)}else T(()=>document.querySelectorAll('.bar i').forEach(i=>i.style.width=i.dataset.w+'%'),60)};
+
+V.unmask=()=>{
+ const outs=R.outsiders.map(pById);const caught=R.caught.length>0;
+ const acc=R.accused?pById(R.accused):null;const wrong=acc&&!R.outsiders.includes(acc.id);
+ return `<div class="unmask card">
+  <p class="muted">${outs.length>1?'الدخلاء كانوا':'الدخيل كان'}...</p>
+  <div class="who">${outs.map(p=>p.av).join(' ')}</div>
+  <h2 style="font-size:40px">${outs.map(p=>esc(p.name)).join(' و ')}</h2>
+  ${settings.mode==='undercover'?`<p>كلمته المزيفة كانت: <b>${esc(R.decoy)}</b> 🥸</p>`:''}
+ </div>
+ <div class="verdict center ${caught?'good':'bad'}">${caught?'🚨 انكشف! 🚨':'🦊 فلت منكم!'}</div>
+ <p class="center" style="font-size:20px;font-weight:800">${caught?rnd(CAUGHT_ROASTS):rnd(ESCAPED_ROASTS)}</p>
+ ${wrong?`<p class="center muted" style="font-weight:700">${rnd(WRONG_ACCUSE).replace('{n}',esc(acc.name))}</p>`:''}
+ <button class="btn big primary" data-a="startGuess">🎯 الدخيل يخمّن الكلمة</button>`;
+};
+M.unmask=()=>{if(R.caught.length){sfx('win');confetti(120,['🚨','🤡','😂'])}else{sfx('fail');confetti(60,['🦊','😏','🕶️'])}vib(300)};
+
+V.guess=()=>{
+ const id=R.outsiders[R.gi];const p=pById(id);const opts=R.opts[id];const res=R.gres[id];
+ return `<div class="center"><div style="font-size:70px">${p.av}</div><h2>${esc(p.name)}، شنو الكلمة؟ 🤔</h2>
+ <p class="muted">الفئة: ${R.cat.emoji} ${esc(R.cat.name)} • عندك فرصة وحدة!</p></div>
+ <div class="ggrid">${opts.map(w=>{let cls='';if(res!==undefined){if(w===R.word)cls='right';else if(w===R.gpick[id])cls='wrong'}return `<button class="gbtn ${cls}" data-a="pickGuess" data-v="${esc(w)}" ${res!==undefined?'disabled':''}>${esc(w)}</button>`}).join('')}</div>
+ ${res!==undefined?`<div class="verdict center ${res?'good':'bad'}">${res?'✅ '+rnd(GUESS_RIGHT):'❌ '+rnd(GUESS_WRONG)}</div>
+  <button class="btn big primary" data-a="afterGuess">${R.gi+1<R.outsiders.length?'الدخيل الثاني ⬅️':'🏆 النتائج'}</button>`:''}`;
+};
+
+V.results=()=>{
+ const sorted=players.slice().sort((a,b)=>b.score-a.score);
+ const loser=R.loser?pById(R.loser):null;
+ return `<h2>🏆 نتائج الجولة</h2>
+ <div class="secret"><small>الكلمة السرية كانت</small><div class="word">${R.cat.emoji} ${esc(R.word)}</div></div>
+ <div class="lb">${sorted.map((p,i)=>`<div class="lbi ${i===0?'first':''}"><span class="r">${i===0?'👑':i+1}</span><span class="a">${p.av}</span><span class="n">${esc(p.name)}${R.outsiders.includes(p.id)?' 🤡':''}</span>${R.pts[p.id]?`<span class="d">+${R.pts[p.id]}</span>`:''}<span class="s">${p.score}</span></div>`).join('')}</div>
+ <div class="card"><p class="muted" style="font-size:14px">⭐ النقاط: صوّت صح على الدخيل +٢ • الدخيل يفلت +٣ • الدخيل يعرف الكلمة +٢</p></div>
+ <button class="btn big primary" data-a="startRound">🔁 جولة جديدة</button>
+ ${loser?`<button class="btn pink" data-a="wheelFor" data-v="${loser.id}">🎡 دولاب العقاب لـ ${esc(loser.name)} ${loser.av}</button>`:''}
+ <div class="row"><button class="btn small" data-a="go" data-v="setup">🗂️ غيّر الفئات</button><button class="btn small" data-a="go" data-v="players">👥 اللاعبين</button></div>`;
+};
+M.results=()=>{if(!R.celebrated){R.celebrated=true;confetti(160);sfx('win')}};
+
+/* ---------- side games ---------- */
+V.minis=()=>`<h2>🎲 ألعاب جانبية</h2><p class="center muted">للتسخين أو للعقاب 😈</p>
+ <div class="mgrid">
+  <button class="mini" style="background:linear-gradient(160deg,#ff4fa3,#a3164f)" data-a="wheelFor" data-v=""><span class="e">🎡</span><b>دولاب العقاب</b><small>لفّه وشوف حظك</small></button>
+  <button class="mini" style="background:linear-gradient(160deg,#30e3ca,#0e7c6b)" data-a="go" data-v="likely"><span class="e">👉</span><b>مين الأكثر؟</b><small>كلكم أشروا ١ ٢ ٣</small></button>
+  <button class="mini" style="background:linear-gradient(160deg,#ffcc00,#c27a00);color:#2a1300" data-a="go" data-v="charSetup"><span class="e">🎭</span><b>مثّلها!</b><small>مثّل والباقين يحزرون</small></button>
+  <button class="mini" style="background:linear-gradient(160deg,#8b5cf6,#4c1d95)" data-a="go" data-v="td"><span class="e">🔥</span><b>صراحة لو تحدي</b><small>اختار وتحمّل</small></button>
+ </div>`;
+
+V.wheel=()=>{const v=TMP.victim?pById(TMP.victim):null;return `<h2>🎡 دولاب العقاب</h2>
+ ${v?`<p class="center" style="font-weight:800;font-size:20px">الضحية: ${pTag(v)} 😈</p>`:'<p class="center muted">لفّه وخلّي الحظ يقرر 🍀</p>'}
+ <div class="wheelwrap"><div class="pointer">🔻</div><canvas id="wh" width="680" height="680"></canvas></div>
+ <button class="btn big pink" id="spinBtn" data-a="spin">🌀 لفّ الدولاب</button>
+ <div id="whres"></div>`};
+M.wheel=()=>{TMP.rot=TMP.rot||0;drawWheel(TMP.rot)};
+function drawWheel(rot){const c=$('#wh');if(!c)return;const x=c.getContext('2d'),W=c.width,r=W/2-10,n=PENALTIES.length,seg=Math.PI*2/n;const cols=['#ff4fa3','#ffcc00','#30e3ca','#8b5cf6','#4ade80','#ff8a3d'];
+ x.clearRect(0,0,W,W);x.save();x.translate(W/2,W/2);
+ for(let i=0;i<n;i++){const a0=rot+i*seg;x.beginPath();x.moveTo(0,0);x.arc(0,0,r,a0,a0+seg);x.closePath();x.fillStyle=cols[i%cols.length];x.fill();x.strokeStyle='#1b0f3b';x.lineWidth=5;x.stroke();
+  const mid=a0+seg/2,flip=Math.cos(mid)<0;x.save();x.rotate(flip?mid+Math.PI:mid);x.textBaseline='middle';x.textAlign=flip?'left':'right';const sg=flip?-1:1;
+  x.font='44px serif';x.fillText(PENALTIES[i].e,sg*(r-18),0);x.font='800 28px Cairo, sans-serif';x.fillStyle='#1b0f3b';x.fillText(PENALTIES[i].s,sg*(r-80),2);x.restore()}
+ x.beginPath();x.arc(0,0,52,0,Math.PI*2);x.fillStyle='#1b0f3b';x.fill();x.font='54px serif';x.textAlign='center';x.textBaseline='middle';x.fillText('😈',0,4);x.restore()}
+
+V.likely=()=>`<h2>👉 مين الأكثر؟</h2>
+ <div class="card bigcard"><span class="muted" style="font-size:18px">مين أكثر واحد ممكن...</span><span id="lq">${esc(TMP.lq||(TMP.lq=rnd(MOST_LIKELY)))}</span></div>
+ <div id="lcount" style="min-height:160px;display:grid;place-items:center"></div>
+ <button class="btn big cyan" id="lgo" data-a="likelyGo">٣ ٢ ١ ... أشروا! 👉</button>
+ <button class="btn" data-a="likelyNext">🔀 سؤال ثاني</button>`;
+
+V.charSetup=()=>{const cats=allCats();TMP.chCat=TMP.chCat||'mix';TMP.chTime=TMP.chTime||60;return `<h2>🎭 مثّلها!</h2>
+ <div class="card"><p>واحد ياخذ التلفون ويمثّل الكلمة <b>بدون حچي</b>، والباقين يحزرون. كل ما يحزرون اضغط ✅، وإذا صعبة اضغط ⏭️</p></div>
+ <div class="cgrid"><button class="cat ${TMP.chCat==='mix'?'on':''}" data-a="chCat" data-v="mix"><span class="e">🎲</span>خلطة</button>${cats.map(c=>`<button class="cat ${TMP.chCat===c.id?'on':''}" data-a="chCat" data-v="${c.id}"><span class="e">${c.emoji}</span>${esc(c.name)}</button>`).join('')}</div>
+ <div class="card opt"><label>⏱️ الوقت</label><div class="seg">${[30,60,90].map(t=>`<button class="${TMP.chTime===t?'on':''}" data-a="chTime" data-v="${t}">${t} ثانية</button>`).join('')}</div></div>
+ <button class="btn big primary" data-a="chStart">🎬 ابدأ</button>`};
+V.charPlay=()=>`<div class="row" style="align-items:center"><span class="pill" style="flex:none">✅ ${TMP.ch.ok.length}</span><div class="progress"><i id="chp" style="width:100%"></i></div><span class="pill" style="flex:none" id="cht">${TMP.ch.left}</span></div>
+ <div class="charword" id="chw">${esc(TMP.ch.cur)}</div>
+ <div class="row"><button class="btn big green" data-a="chOk">✅ صح</button><button class="btn big red" data-a="chSkip">⏭️ تخطي</button></div>`;
+M.charPlay=()=>{const ch=TMP.ch;I(()=>{ch.left--;const t=$('#cht'),p=$('#chp');if(t)t.textContent=ch.left;if(p)p.style.width=(ch.left/ch.total*100)+'%';if(ch.left<=5&&ch.left>0)sfx('tick');if(ch.left<=0){sfx('buzz');vib(400);go('charEnd')}},1000)};
+V.charEnd=()=>{const ch=TMP.ch;return `<div class="center" style="font-size:90px">${ch.ok.length>=8?'🏆':ch.ok.length>=4?'👏':'🥲'}</div>
+ <h2>حزرتوا ${ch.ok.length} كلمات!</h2><p class="center muted">${ch.ok.length>=8?'نجوم التمثيل بلا منازع 🌟':ch.ok.length>=4?'مو بطّال، بس تحتاجون تمرين 😅':'تمثيلك يخوّف أكثر مما يضحك 😂'}</p>
+ <div class="card"><p>✅ ${ch.ok.map(esc).join('، ')||'ولا وحدة 😭'}</p><p class="muted" style="margin-top:6px">⏭️ ${ch.skip.map(esc).join('، ')||'—'}</p></div>
+ <button class="btn big primary" data-a="chStart">🔁 الدور الجاي</button><button class="btn" data-a="go" data-v="minis">🎲 ألعاب ثانية</button>`};
+M.charEnd=()=>{if(TMP.ch.ok.length>=4){confetti(120);sfx('win')}else sfx('fail')};
+
+V.td=()=>{const p=TMP.tdP?pById(TMP.tdP):null;return `<h2>🔥 صراحة لو تحدي</h2>
+ ${players.length?`<div class="card center"><div style="font-size:64px">${p?p.av:'🎯'}</div><h3>${p?'الدور على '+esc(p.name):'منو الضحية؟'}</h3><button class="btn small" style="margin-top:8px" data-a="tdPick">🎲 اختار واحد عشوائي</button></div>`:''}
+ ${TMP.tdText?`<div class="card bigcard" style="min-height:160px"><span class="pill">${TMP.tdType==='t'?'🤐 صراحة':'🔥 تحدي'}</span><span>${esc(TMP.tdText)}</span></div>`:''}
+ <div class="row"><button class="btn big cyan" data-a="tdGo" data-v="t">🤐 صراحة</button><button class="btn big pink" data-a="tdGo" data-v="d">🔥 تحدي</button></div>`};
+
+/* ---------- misc ---------- */
+V.howto=()=>`<h2>📖 شلون نلعب؟</h2>
+ <div class="card"><ol class="rules">
+  <li>👥 ضيفوا أسماءكم (٣ أو أكثر) واختاروا الفئات.</li>
+  <li>📱 مرّروا التلفون، كل واحد يشوف بطاقته بالسر. الكل يشوف <b>نفس الكلمة</b> إلا <b>الدخيل</b> 🤡 مكتوب له "انت برّا السالفة!".</li>
+  <li>🎤 كل واحد يسأل اللي بعده سؤال عن الكلمة. لا توضّح هواية حتى الدخيل ما يعرفها!</li>
+  <li>🗳️ صوّتوا على الشخص اللي تشكّون بيه (سرّي أو جماعي).</li>
+  <li>😱 ينكشف الدخيل، وبعدين ياخذ فرصة يخمّن الكلمة من بين خيارات.</li>
+  <li>🎡 الخسران يلف دولاب العقاب 😈</li>
+ </ol></div>
+ <div class="card"><h3>🥸 مود المتخفي</h3><p>الدخيل ياخذ كلمة <b>قريبة</b> من نفس الفئة وما يدري إنه دخيل! يجاوب بثقة وهو غلطان 😂</p></div>
+ <div class="card"><h3>⭐ النقاط</h3><p>تصويت صح على الدخيل: +٢<br>الدخيل يفلت: +٣<br>الدخيل يخمّن الكلمة صح: +٢</p></div>
+ <button class="btn big primary" data-a="start">🎮 فهمت، يلا!</button>`;
+
+V.settings=()=>{const sw=(k,l)=>`<div class="toggle"><span>${l}</span><button class="sw ${settings[k]?'on':''}" data-a="sw" data-v="${k}"></button></div>`;
+ const seg=(k,vals)=>`<div class="seg">${vals.map(([v,l])=>`<button class="${settings[k]===v?'on':''}" data-a="setOpt" data-v="${k}|${v}">${l}</button>`).join('')}</div>`;
+ return `<h2>⚙️ الإعدادات</h2>
+ <div class="card opt"><label>⏱️ وقت كل سؤال</label>${seg('timer',[[0,'بلا'],[30,'٣٠ث'],[45,'٤٥ث'],[60,'٦٠ث'],[90,'٩٠ث']])}</div>
+ <div class="card opt"><label>🔁 جولات الأسئلة</label>${seg('qRounds',[[1,'وحدة'],[2,'ثنتين'],[3,'ثلاث']])}</div>
+ <div class="card opt"><label>🗳️ طريقة التصويت</label>${seg('voteMode',[['secret','🤫 سرّي'],['group','📢 جماعي']])}<small>السرّي: كل واحد يصوت لوحده على التلفون. الجماعي: تتفقون وتضغطون مرة وحدة.</small></div>
+ <div class="card">${sw('showCat','🗂️ الدخيل يشوف الفئة')}${sw('sound','🔊 الأصوات')}${sw('vibrate','📳 الاهتزاز')}</div>
+ <button class="btn red small" data-a="wipe">🗑️ مسح كل البيانات</button>`};
+
+V.stats=()=>{const ps=players.slice();const top=(f)=>ps.length?ps.slice().sort((a,b)=>f(b)-f(a))[0]:null;
+ const badges=[];
+ const most=top(p=>p.st.caught);if(most&&most.st.caught)badges.push(['🤡','أكثر واحد ينكشف',most]);
+ const fox=top(p=>p.st.escaped);if(fox&&fox.st.escaped)badges.push(['🦊','الثعلب (يفلت دائماً)',fox]);
+ const det=top(p=>p.st.votes);if(det&&det.st.votes)badges.push(['🕵️','المحقق كونان',det]);
+ const gen=top(p=>p.st.guessed);if(gen&&gen.st.guessed)badges.push(['🧠','عبقري التخمين',gen]);
+ const king=top(p=>p.score);if(king&&king.score)badges.push(['👑','ملك الجلسة',king]);
+ return `<h2>🏆 الأبطال</h2>
+ ${badges.length?badges.map(([e,t,p])=>`<div class="badge"><span class="e">${e}</span><div><div>${t}</div><div class="muted">${pTag(p)}</div></div></div>`).join(''):'<div class="card center muted">العبوا كم جولة حتى تطلع الألقاب 😎</div>'}
+ <div class="card"><div class="stat"><span>🎮 جولات ملعوبة</span><span>${gstats.rounds}</span></div><div class="stat"><span>🚨 الدخيل انكشف</span><span>${gstats.caught}</span></div><div class="stat"><span>🦊 الدخيل فلت</span><span>${gstats.escaped}</span></div><div class="stat"><span>🎯 تخمينات صحيحة</span><span>${gstats.guessed}</span></div></div>
+ ${ps.length?`<div class="card"><h3>📋 تفاصيل اللاعبين</h3>${ps.map(p=>`<div class="stat"><span>${pTag(p)}</span><span class="muted" style="font-size:13px">دخيل ${p.st.out} • انكشف ${p.st.caught} • فلت ${p.st.escaped} • ⭐${p.score}</span></div>`).join('')}</div>`:''}`};
+
+/* ============================ ACTIONS ============================ */
+A.go=v=>go(v);
+A.home=()=>{if(IN_ROUND.includes(screen)){modal(`<h3 class="center">🚪 تطلع من الجولة؟</h3><p class="center muted">الجولة راح تنلغي وما تنحسب نقاطها</p><div class="row"><button class="btn red" data-a="confirmHome">إي، اطلع</button><button class="btn" data-a="closeModal">لا، كمّل</button></div>`)}else go('home')};
+A.confirmHome=()=>{R=null;go('home')};
+A.closeModal=closeModal;
+A.toggleSound=()=>{settings.sound=!settings.sound;save();const b=document.querySelector('[data-a="toggleSound"]');if(b)b.textContent=settings.sound?'🔊':'🔇';if(settings.sound)sfx('pop')};
+A.start=()=>go(players.length>=3?'setup':'players');
+A.addPlayer=()=>{const i=$('#pname');const n=(i.value||'').trim();if(!n){sfx('honk');i.focus();return}
+ if(players.some(p=>p.name===n)){toast('هذا الاسم موجود! تبي نسخة ثانية منه؟ 😂');return}
+ if(players.length>=20){toast('بس! صارت حفلة 😅');return}
+ const used=players.map(p=>p.av);const av=rnd(AVATARS.filter(a=>!used.includes(a)))||rnd(AVATARS);
+ players.push({id:uid(),name:n,av,score:0,st:newStats()});save();sfx('pop');render();const ni=$('#pname');if(ni)ni.focus()};
+A.delPlayer=id=>{players=players.filter(p=>p.id!==id);save();render()};
+A.cycleAv=id=>{const p=pById(id);p.av=AVATARS[(AVATARS.indexOf(p.av)+1)%AVATARS.length];save();sfx('boing');render()};
+A.resetScores=()=>{players.forEach(p=>{p.score=0;p.st=newStats()});save();toast('صفّرنا النقاط، بداية جديدة 🧼');render()};
+A.toggleCat=id=>{const all=allCats().map(c=>c.id);let s=selCats||all.slice();s=s.includes(id)?s.filter(x=>x!==id):s.concat(id);selCats=s;save();render()};
+A.catAll=()=>{selCats=null;save();render()};
+A.catNone=()=>{selCats=[];save();render()};
+A.customCat=()=>modal(`<h3>✏️ فئة خاصة</h3><input id="ccn" maxlength="20" placeholder="اسم الفئة (مثلاً: ربعنا 😂)"><input id="cce" maxlength="4" placeholder="إيموجي (اختياري) 🎯"><textarea id="ccw" placeholder="الكلمات، كل كلمة بسطر أو بينها فاصلة (٤ كلمات أو أكثر)"></textarea>
+ <button class="btn primary" data-a="saveCustom">💾 حفظ</button>${customCats.length?`<p class="muted">فئاتك:</p>${customCats.map(c=>`<div class="row" style="align-items:center"><span>${c.emoji} ${esc(c.name)} (${c.words.length})</span><button class="btn small red" style="flex:none;width:auto" data-a="delCustom" data-v="${c.id}">حذف</button></div>`).join('')}`:''}`);
+A.saveCustom=()=>{const n=$('#ccn').value.trim();const e=$('#cce').value.trim()||'⭐';const w=[...new Set($('#ccw').value.split(/[\n,،]+/).map(s=>s.trim()).filter(Boolean))];
+ if(!n){toast('اكتب اسم الفئة');return} if(w.length<4){toast('تحتاج ٤ كلمات على الأقل');return}
+ const id='c_'+uid();customCats.push({id,name:n,emoji:e,words:w,custom:true});if(selCats)selCats.push(id);save();closeModal();sfx('win');toast('تمت إضافة الفئة 🎉');render()};
+A.delCustom=id=>{customCats=customCats.filter(c=>c.id!==id);if(selCats)selCats=selCats.filter(x=>x!==id);save();closeModal();render()};
+A.setMode=m=>{settings.mode=m;save();render()};
+A.outs=d=>{const maxOut=Math.max(1,Math.floor(players.length/3));settings.outsiders=Math.min(maxOut,Math.max(1,settings.outsiders+(+d)));save();render()};
+
+A.startRound=()=>{
+ if(players.length<3){go('players');return}
+ const all=allCats();let pool=all.filter(c=>(selCats||all.map(x=>x.id)).includes(c.id));
+ if(!pool.length){toast('اختار فئة وحدة على الأقل! 🙄');if(screen!=='setup')go('setup');return}
+ const cat=rnd(pool);const word=rnd(cat.words);const decoy=rnd(cat.words.filter(w=>w!==word))||word;
+ const k=Math.min(settings.outsiders,Math.max(1,Math.floor(players.length/3)));
+ const outsiders=shuffle(players.map(p=>p.id)).slice(0,k);
+ const q=[];for(let r=0;r<settings.qRounds;r++){const o=shuffle(players.map(p=>p.id));o.forEach((id,i)=>q.push([id,o[(i+1)%o.length]]))}
+ R={cat,word,decoy,outsiders,order:players.map(p=>p.id),ri:0,shown:false,q,qi:0,votes:{},voters:shuffle(players.map(p=>p.id)),vi:0,vready:false,opts:{},gres:{},gpick:{},gi:0};
+ go('reveal')};
+A.flipCard=()=>{if(R.shown)return;R.shown=true;sfx('flip');vib(40);render()};
+A.nextReveal=()=>{R.shown=false;R.ri++;if(R.ri>=R.order.length)go('qintro');else render()};
+A.newHint=()=>{const h=$('#qh');if(h)h.textContent=rnd(Q_HINTS)};
+A.nextQ=()=>{R.qi++;if(R.qi>=R.q.length)go('qend');else go('questions')};
+A.moreQ=()=>{const o=shuffle(players.map(p=>p.id));o.forEach((id,i)=>R.q.push([id,o[(i+1)%o.length]]));go('questions')};
+A.startVote=()=>{R.votes={};R.vi=0;R.vready=false;go('vote')};
+A.voteReady=()=>{R.vready=true;render()};
+A.castVote=id=>{const v=R.voters[R.vi];R.votes[v]=id;sfx('pop');vib(30);R.vi++;R.vready=false;if(R.vi>=R.voters.length)tallyVotes();else render()};
+A.groupVote=id=>{players.forEach(p=>{if(p.id!==id)R.votes[p.id]=id});tallyVotes()};
+function tallyVotes(){const t={};Object.values(R.votes).forEach(id=>t[id]=(t[id]||0)+1);R.tally=t;const max=Math.max(0,...Object.values(t));const tops=Object.keys(t).filter(id=>t[id]===max);
+ R.accused=(tops.length===1&&max>0)?tops[0]:null;R.caught=R.accused&&R.outsiders.includes(R.accused)?[R.accused]:[];R.vrShown=false;go('voteRes')}
+A.startGuess=()=>{R.outsiders.forEach(id=>{const others=shuffle(R.cat.words.filter(w=>w!==R.word)).slice(0,11);R.opts[id]=shuffle(others.concat(R.word))});R.gi=0;go('guess')};
+A.pickGuess=w=>{const id=R.outsiders[R.gi];if(R.gres[id]!==undefined)return;const ok=w===R.word;R.gres[id]=ok;R.gpick[id]=w;if(ok){sfx('win');confetti(100,['🧠','🦊','✨'])}else{sfx('fail');vib([100,50,100])}render()};
+A.afterGuess=()=>{R.gi++;if(R.gi<R.outsiders.length)render();else{scoreRound();go('results')}};
+function scoreRound(){if(R.scored)return;R.scored=true;const pts={};players.forEach(p=>pts[p.id]=0);
+ Object.entries(R.votes).forEach(([v,t])=>{if(!R.outsiders.includes(v)&&R.outsiders.includes(t)){pts[v]+=2;const p=pById(v);if(p)p.st.votes++}});
+ R.outsiders.forEach(id=>{const p=pById(id);if(!p)return;p.st.out++;if(R.caught.includes(id)){p.st.caught++;gstats.caught++}else{pts[id]+=3;p.st.escaped++;gstats.escaped++}if(R.gres[id]){pts[id]+=2;p.st.guessed++;gstats.guessed++}});
+ players.forEach(p=>p.score+=pts[p.id]);R.pts=pts;gstats.rounds++;
+ const minPts=Math.min(...players.map(p=>pts[p.id]));const losers=players.filter(p=>pts[p.id]===minPts);
+ const caughtOut=R.caught.length?R.caught[0]:null;R.loser=caughtOut||rnd(losers).id;save()}
+
+/* side game actions */
+A.wheelFor=id=>{TMP.victim=id||null;go('wheel')};
+A.spin=()=>{if(TMP.spinning)return;TMP.spinning=true;const b=$('#spinBtn');if(b)b.disabled=true;$('#whres').innerHTML='';
+ const n=PENALTIES.length,seg=Math.PI*2/n,target=Math.floor(Math.random()*n);const r0=TMP.rot;const base=-Math.PI/2-(target+.5)*seg+(Math.random()-.5)*seg*.6;
+ const rf=base+Math.PI*2*Math.ceil((r0+Math.PI*12-base)/(Math.PI*2));const dur=4800,t0=performance.now();let lastSeg=-1;
+ const step=now=>{const k=Math.min(1,(now-t0)/dur);const e=1-Math.pow(1-k,4);const rot=r0+(rf-r0)*e;TMP.rot=rot;drawWheel(rot);
+  const cur=Math.floor((((-Math.PI/2-rot)%(Math.PI*2))+Math.PI*2)%(Math.PI*2)/seg);if(cur!==lastSeg){lastSeg=cur;sfx('tick')}
+  if(k<1)raf=requestAnimationFrame(step);else{TMP.spinning=false;if(b)b.disabled=false;const p=PENALTIES[target];
+   if(p.s==='نجوت!'){sfx('win');confetti(100,['🍀','😅'])}else{sfx('honk');confetti(60,['😈','😂'])}vib(200);
+   $('#whres').innerHTML=`<div class="card bigcard" style="min-height:120px;animation:pop .5s"><span style="font-size:60px">${p.e}</span><span>${esc(p.t)}</span></div>`}};
+ raf=requestAnimationFrame(step)};
+A.likelyNext=()=>{TMP.lq=rnd(MOST_LIKELY.filter(q=>q!==TMP.lq));render()};
+A.likelyGo=()=>{const b=$('#lgo');if(b.disabled)return;b.disabled=true;const c=$('#lcount');let n=3;const show=()=>{c.innerHTML=`<div class="count">${n||'👉'}</div>`;if(n){sfx('tick')}else{sfx('honk');vib(200);c.innerHTML+=`<p class="center" style="font-weight:800;font-size:22px">أشروا هسّه!</p>`;b.disabled=false}n--};show();const iv=I(()=>{if(n<0){clearInterval(iv);return}show()},800)};
+A.chCat=v=>{TMP.chCat=v;render()};
+A.chTime=v=>{TMP.chTime=+v;render()};
+A.chStart=()=>{const cats=allCats();const words=TMP.chCat==='mix'?cats.flatMap(c=>c.words):(cats.find(c=>c.id===TMP.chCat)||cats[0]).words;
+ const q=shuffle(words);TMP.ch={q,cur:q.pop(),ok:[],skip:[],left:TMP.chTime,total:TMP.chTime};sfx('pop');go('charPlay')};
+function chNext(){const ch=TMP.ch;if(!ch.q.length)ch.q=shuffle(ch.skip.length?ch.skip:['خلصت الكلمات 😅']);ch.cur=ch.q.pop();const w=$('#chw');if(w){w.textContent=ch.cur;w.style.animation='none';w.offsetHeight;w.style.animation='pop .3s'}const pl=document.querySelector('.s-charPlay .pill');if(pl)pl.textContent='✅ '+ch.ok.length}
+A.chOk=()=>{TMP.ch.ok.push(TMP.ch.cur);sfx('win');vib(40);chNext()};
+A.chSkip=()=>{TMP.ch.skip.push(TMP.ch.cur);sfx('boing');chNext()};
+A.tdPick=()=>{if(!players.length)return;TMP.tdP=rnd(players.filter(p=>p.id!==TMP.tdP))?.id||players[0].id;TMP.tdText=null;sfx('boing');render()};
+A.tdGo=t=>{TMP.tdType=t;TMP.tdText=rnd(t==='t'?TRUTHS:DARES);sfx(t==='t'?'pop':'honk');render()};
+
+A.sw=k=>{settings[k]=!settings[k];save();render()};
+A.setOpt=v=>{const [k,val]=v.split('|');settings[k]=isNaN(+val)?val:+val;save();render()};
+A.wipe=()=>modal(`<h3 class="center">⚠️ متأكد؟</h3><p class="center muted">راح ينمسح كل شي: اللاعبين، النقاط، الفئات الخاصة</p><div class="row"><button class="btn red" data-a="confirmWipe">امسح</button><button class="btn" data-a="closeModal">لا</button></div>`);
+A.confirmWipe=()=>{players=[];customCats=[];selCats=null;gstats={rounds:0,caught:0,escaped:0,guessed:0,games:0};settings={timer:45,qRounds:1,voteMode:'secret',showCat:true,sound:true,vibrate:true,mode:'classic',outsiders:1};save();toast('انمسح كل شي 🧹');go('home')};
+
+document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el||el.disabled)return;const a=el.dataset.a;if(!A[a])return;
+ if(!['spin','toggleSound','addPlayer','cycleAv','flipCard','castVote','pickGuess','chOk','chSkip','tdGo','tdPick','likelyGo'].includes(a))sfx('click');A[a](el.dataset.v,el)});
+
+render();
+</script>
+</body>
+</html>
