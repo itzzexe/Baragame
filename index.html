@@ -18,7 +18,7 @@
 :root[data-theme="dark"]{--bg1:#1b0f3b;--bg2:#3d1166}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
-html{background:#1b0f3b}
+html{background:#1b0f3b;overflow-x:hidden}
 body{min-height:100dvh;color:var(--text);font-family:'Cairo',system-ui,sans-serif;
   background:radial-gradient(circle at 20% 10%,rgba(255,79,163,.25),transparent 40%),radial-gradient(circle at 85% 90%,rgba(48,227,202,.18),transparent 45%),linear-gradient(160deg,var(--bg1),var(--bg2));
   background-attachment:fixed;overflow-x:hidden;user-select:none;-webkit-user-select:none}
@@ -189,6 +189,29 @@ p{margin:0;line-height:1.7}
 .sw::after{content:'';position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;background:#fff;transition:.2s}
 .sw.on{background:var(--green)}
 .sw.on::after{right:30px}
+/* slot + podium */
+.reels{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.reel{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:12px 8px;text-align:center;display:flex;flex-direction:column;gap:4px;min-height:96px;justify-content:center;overflow:hidden}
+.reel small{color:var(--muted);font-weight:700}
+.reel b{font-family:'Lalezar';font-weight:400;font-size:22px;line-height:1.3;filter:blur(1.5px);opacity:.75}
+.reel.stop{border-color:var(--pri);background:linear-gradient(160deg,#5b3a00,var(--card));animation:popS .45s cubic-bezier(.3,1.8,.5,1)}
+@keyframes popS{from{transform:scale(.3)}to{transform:scale(1)}}
+.reel.stop b{filter:none;opacity:1}
+.twist{text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center;border:2px solid var(--pink);animation:popS .5s cubic-bezier(.3,1.8,.5,1)}
+.twist .e{font-size:60px;line-height:1}
+.twistpill{align-self:center;background:rgba(255,79,163,.18);border-color:var(--pink)}
+.slotico{font-size:70px;text-align:center;animation:shake .25s infinite}
+.podium{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;align-items:end;margin-top:10px}
+.pod{text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.pod .a{font-size:50px;animation:bounce 1.4s infinite}
+.pod .n{font-weight:800;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pod .st{width:100%;border-radius:16px 16px 6px 6px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:8px;font-size:30px;box-shadow:var(--shadow)}
+.pod .st b{font-family:'Lalezar';font-weight:400;font-size:28px;color:var(--pri-ink)}
+.pod.p0 .st{height:130px;background:linear-gradient(#d9d9e3,#9a9ab0)}
+.pod.p1 .st{height:175px;background:linear-gradient(var(--pri),#c27a00)}
+.pod.p1 .a{font-size:66px}
+.pod.p2 .st{height:105px;background:linear-gradient(#e8a46a,#a0592a)}
+.rk{font-size:13px;font-weight:700;color:var(--muted)}
 @media (max-width:360px){.cgrid{grid-template-columns:repeat(2,1fr)}.ggrid{grid-template-columns:repeat(2,1fr)}.logo h1{font-size:56px}}
 </style>
 </head>
@@ -218,6 +241,9 @@ const CATS = [
  {id:'school',name:'المدرسة',emoji:'🎒',words:['سبورة','طباشير','قلم','ممحاة','مسطرة','مبراة','دفتر','كتاب','حقيبة','مدير','معلمة','فرصة','امتحان','واجب','شهادة','كانتين','رحلة مدرسية','اصطفاف','حصة رياضة','مختبر','جرس','غياب','نشيد','عقوبة','درجة','كرسي','رحلة','دوام','عطلة','تخرج']},
  {id:'events',name:'مناسبات',emoji:'🎉',words:['عرس','عيد ميلاد','العيد','رمضان','خطوبة','تخرج','حفلة','سفرة','عزيمة','مولد طفل','رأس السنة','ختان','نجاح','ترقية','سحور','فطور رمضان','حنة','شهر العسل','يوم الجمعة','كشتة','زيارة الأهل','حفلة مفاجأة','مباراة نهائي','افتتاح محل','سباق','مهرجان','معرض','حفلة توديع','ذكرى زواج','الشتاء']},
  {id:'body',name:'جسم الإنسان',emoji:'🫀',words:['عين','أذن','خشم','حلق','سن','لسان','شعر','حاجب','رقبة','كتف','إيد','إصبع','ظفر','ركبة','رجل','كعب','قلب','معدة','كبد','رئة','دماغ','ظهر','بطن','شارب','لحية','جبهة','خد','كف','سرة','ضرس']},
+ {id:'family',name:'العائلة والناس',emoji:'👨‍👩‍👧',words:['جدة','جد','خالة','عمة','عم','خال','نسيب','حماة','جار','ابن العم','توأم','عريس','عروس','طفل رضيع','مراهق','مدير','زميل','صديق الطفولة','ضيف ثقيل','بواب','خطيب','حفيد','مربية','شيخ العشيرة','مختار','دلّال','أستاذ خصوصي','جارة فضولية','كابتن الفريق','الحمو']},
+ {id:'hobbies',name:'ألعاب وهوايات',emoji:'🎮',words:['بلايستيشن','شطرنج','دومينو','طاولي','ورق شدة','صيد سمك','طبخ','رسم','قراءة','تصوير','سفر','تخييم','ركوب خيل','طيارة ورقية','حياكة','زراعة','غناء','عزف عود','ألغاز','بازل','ببجي','ماين كرافت','خدع سحرية','غوص','جمع طوابع','نجارة','مشي','كاراوكي','محيبس','لعبة الكراسي']},
+ {id:'car',name:'أشياء بالسيارة',emoji:'🚘',words:['ستيرن','كلج','بريك','بنزين','مراية','حزام أمان','هورن','ماسحات','تاير','سبير','دبة','مكيف','راديو','جي بي إس','لايت','بونيد','رقم السيارة','كرسي','جامة','سويچ','عداد','بطارية','فرامل يد','شاحن سيارة','معطر','ستكر','سقف','دواسة','گير','ضوء الخطر']},
  {id:'nature',name:'طبيعة وطقس',emoji:'🌦️',words:['شمس','قمر','نجمة','مطر','ثلج','عاصفة','رعد','برق','غيمة','قوس قزح','بحر','نهر','جبل','وادي','بركان','زلزال','صحراء','واحة','شلال','بحيرة','غابة','وردة','نخلة','شجرة','رمل','ريح','ضباب','غبار','موج','كهف']},
 ];
 
@@ -253,6 +279,24 @@ const PENALTIES = [
  {e:'😂',s:'نكتة',t:'احكي نكتة، وإذا محد ضحك تعيد'},
  {e:'🍀',s:'نجوت!',t:'محظوظ! نجوت من العقاب هالمرة 🍀'},
 ];
+const TWISTS=[
+ {id:'none',e:'😐',n:'جولة عادية',d:'ولا مفاجأة... هالمرة 😏',w:3.5},
+ {id:'double',e:'💰',n:'نقاط مضاعفة',d:'كل النقاط بهالجولة ×٢!',w:2},
+ {id:'jackpot',e:'🎰',n:'جاكبوت الدخيل',d:'إذا فلت الدخيل ياخذ +٦ بدل +٣ 🤑',w:1.5},
+ {id:'letter',e:'🔤',n:'تلميحة للدخيل',d:'الدخيل يعرف أول حرف من الكلمة!',w:1.5,classic:true},
+ {id:'blind',e:'🙈',n:'الدخيل أعمى',d:'الدخيل ما يعرف حتى الفئة! الله يعينه',w:1.2,classic:true},
+ {id:'speed',e:'⚡',n:'جولة سريعة',d:'كل سؤال ١٥ ثانية بس! فكّر بسرعة',w:1.5},
+ {id:'two',e:'👯',n:'دخيلين!',d:'هالجولة أكو دخيلين بيناتكم 😱',w:1.3,min:5},
+ {id:'oneword',e:'☝️',n:'كلمة وحدة',d:'كل جواب لازم يكون كلمة وحدة بس!',w:1},
+ {id:'egypt',e:'🇪🇬',n:'جولة مصرية',d:'الكل يحچي باللهجة المصرية يا باشا!',w:1},
+ {id:'robot',e:'🤖',n:'جولة الروبوتات',d:'كل الأسئلة والأجوبة بصوت روبوت',w:1},
+ {id:'whisper',e:'🤫',n:'جولة الهمس',d:'كل الأسئلة والأجوبة بالهمس',w:1},
+ {id:'compliment',e:'🌹',n:'جولة المجاملات',d:'كل سؤال لازم يبدي بمدح اللي تسأله',w:1},
+ {id:'poker',e:'😑',n:'وجه بوكر',d:'ممنوع تضحك! اللي يضحك الكل يشك بيه 😂',w:1},
+ {id:'opera',e:'🎼',n:'جولة الأوبرا',d:'الأجوبة لازم تنغنى غناء!',w:.8},
+];
+const RANKS=[[0,'🐣','مبتدئ'],[5,'🙂','هاوي'],[12,'🔎','محقق'],[25,'🦊','داهية'],[45,'🧠','عبقري'],[70,'🐐','أسطورة'],[100,'👑','خرافي']];
+const CHAMP_LINES=['محد يكدر عليه! الكل يسجد للبطل 🙇','ذكاء خارق ولا مجرد حظ؟ ما راح نعرف أبداً 🤔','البطل يعزمكم على عشا الليلة (إجباري) 🍕','سجلوه بموسوعة غينيس للدهاء 📜'];
 const AVATARS = ['😎','🤠','🥸','🤡','👻','🐸','🐵','🦁','🐼','🦊','🐯','🐨','🤖','👽','🧔','👩','🧕','👳','🥷','🧙','🦄','🐙','🍉','🌶️','🐧','🦖','👑','🍕'];
 
 /* ============================ UTIL ============================ */
@@ -264,15 +308,22 @@ const store={get(k,d){try{const v=localStorage.getItem('dakheel_'+k);return v?JS
 const uid=()=>Math.random().toString(36).slice(2,9);
 
 let players = store.get('players',[]);
-let settings = Object.assign({timer:45,qRounds:1,voteMode:'secret',showCat:true,sound:true,vibrate:true,mode:'classic',outsiders:1}, store.get('settings',{}));
+const DEF_SETTINGS={timer:45,qRounds:1,voteMode:'secret',showCat:true,sound:true,vibrate:true,mode:'classic',outsiders:1,random:true,twists:true,matchLen:5};
+let settings = Object.assign({},DEF_SETTINGS, store.get('settings',{}));
+let match = store.get('match',null);
+let recentWords = store.get('recent',[]);
+const wpick=a=>{let t=a.reduce((s,x)=>s+(x.w||1),0)*Math.random();for(const x of a){t-=(x.w||1);if(t<=0)return x}return a[a.length-1]};
+const rankOf=s=>{let r=RANKS[0];for(const x of RANKS)if(s>=x[0])r=x;return r};
+const mp=id=>(match&&match.pts[id])||0;
+function newMatch(){match={len:settings.matchLen,round:0,pts:{},done:false};players.forEach(p=>match.pts[p.id]=0);save()}
 let customCats = store.get('customCats',[]);
 let selCats = store.get('selCats',null);
 let gstats = Object.assign({rounds:0,caught:0,escaped:0,guessed:0,games:0}, store.get('gstats',{}));
-function save(){store.set('players',players);store.set('settings',settings);store.set('customCats',customCats);store.set('selCats',selCats);store.set('gstats',gstats)}
+function save(){store.set('match',match);store.set('recent',recentWords);store.set('players',players);store.set('settings',settings);store.set('customCats',customCats);store.set('selCats',selCats);store.set('gstats',gstats)}
 const allCats=()=>CATS.concat(customCats);
 const pById=id=>players.find(p=>p.id===id);
 const pTag=p=>`${p.av} ${esc(p.name)}`;
-function newStats(){return {out:0,caught:0,escaped:0,guessed:0,votes:0}}
+function newStats(){return {out:0,caught:0,escaped:0,guessed:0,votes:0,wins:0}}
 players.forEach(p=>{p.st=Object.assign(newStats(),p.st||{});p.score=p.score||0});
 
 /* ============================ SOUND ============================ */
@@ -311,7 +362,7 @@ function closeModal(){const o=$('#ov');if(o)o.remove()}
 
 /* ============================ ROUTER ============================ */
 let screen='home',R=null,timers=[],raf=0,TMP={};
-const IN_ROUND=['reveal','qintro','questions','qend','vote','voteRes','unmask','guess'];
+const IN_ROUND=['slot','reveal','qintro','questions','qend','vote','voteRes','unmask','guess'];
 function T(fn,ms){const t=setTimeout(fn,ms);timers.push(t);return t}
 function I(fn,ms){const t=setInterval(fn,ms);timers.push(t);return t}
 function clearTimers(){timers.forEach(t=>{clearTimeout(t);clearInterval(t)});timers=[];cancelAnimationFrame(raf)}
@@ -331,8 +382,9 @@ const V={},M={},A={};
 
 V.home=()=>`
  <div class="logo"><span class="logo-emoji">🕵️</span><h1>الدخيل</h1><div class="sub">مين برّا السالفة؟ 🤡</div><p class="tag" id="tag">${rnd(TAGLINES)}</p></div>
- <button class="btn big primary" data-a="start">🎮 يلا نلعب</button>
- <button class="btn pink" data-a="go" data-v="minis">🎲 ألعاب جانبية</button>
+ <button class="btn big primary" data-a="quick">🎰 لعب عشوائي سريع</button>
+ <div class="row"><button class="btn cyan" data-a="start">🎮 لعبة مخصصة</button><button class="btn pink" data-a="go" data-v="minis">🎲 ألعاب جانبية</button></div>
+ ${match&&!match.done&&match.round>0&&players.length>=3?`<button class="btn small ghost" data-a="startRound">▶️ كمّل المباراة (الجولة ${match.round+1}${match.len?' من '+match.len:''})</button>`:''}
  <div class="row">
   <button class="btn small" data-a="go" data-v="howto">📖 شلون نلعب</button>
   <button class="btn small" data-a="go" data-v="settings">⚙️ الإعدادات</button>
@@ -346,18 +398,27 @@ V.players=()=>`
  <p class="center muted">اضغط على الوجه حتى تغيّره 😜</p>
  <div class="addrow"><input id="pname" maxlength="16" placeholder="اسم اللاعب..." autocomplete="off"><button class="btn primary" data-a="addPlayer">➕</button></div>
  <div class="plist">${players.map(p=>`
-  <div class="pitem"><button class="av" data-a="cycleAv" data-v="${p.id}">${p.av}</button><span class="pname">${esc(p.name)}</span><span class="pscore">${p.score} ⭐</span><button class="del" data-a="delPlayer" data-v="${p.id}" aria-label="حذف">✖</button></div>`).join('')||'<div class="card center muted">ماكو لاعبين بعد... ضيف ربعك 👇</div>'}
+  <div class="pitem"><button class="av" data-a="cycleAv" data-v="${p.id}">${p.av}</button><span class="pname">${esc(p.name)} <span class="rk">${rankOf(p.score)[1]} ${rankOf(p.score)[2]}</span></span><span class="pscore">${p.score} ⭐</span><button class="del" data-a="delPlayer" data-v="${p.id}" aria-label="حذف">✖</button></div>`).join('')||'<div class="card center muted">ماكو لاعبين بعد... ضيف ربعك 👇</div>'}
  </div>
  ${players.length?`<button class="btn small ghost" data-a="resetScores">🔄 تصفير النقاط</button>`:''}
  <div style="margin-top:auto"></div>
  <button class="btn big primary" data-a="go" data-v="setup" ${players.length<3?'disabled':''}>التالي ⬅️ ${players.length<3?`(تحتاج ${3-players.length} بعد)`:''}</button>`;
 M.players=()=>{const i=$('#pname');i.addEventListener('keydown',e=>{if(e.key==='Enter')A.addPlayer()});if(!('ontouchstart' in window))i.focus()};
 
+const segH=(k,vals)=>`<div class="seg">${vals.map(([v,l])=>`<button class="${settings[k]===v?'on':''}" data-a="setOpt" data-v="${k}|${v}">${l}</button>`).join('')}</div>`;
+const swH=(k,l)=>`<div class="toggle"><span>${l}</span><button class="sw ${settings[k]?'on':''}" data-a="sw" data-v="${k}"></button></div>`;
+const MATCH_SEG=[[3,'٣ جولات'],[5,'٥'],[7,'٧'],[10,'١٠'],[0,'♾️']];
 V.setup=()=>{
+ const head=`<h2>🎲 تجهيز المباراة</h2>
+ <div class="card">${swH('random','🎰 عشوائي كامل<br><small class="muted">الحظ يختار الفئة، النوع، عدد الدخلاء والمفاجأة كل جولة</small>')}</div>
+ <div class="card opt"><label>🏁 طول المباراة</label>${segH('matchLen',MATCH_SEG)}</div>`;
+ if(settings.random) return head+`<div class="card center"><div class="slotico">🎰</div><p style="font-weight:800">كل جولة الحظ يقرر كلشي... حتى المفاجآت 😈</p><p class="muted">${allCats().length} فئة • ${allCats().reduce((s,c)=>s+c.words.length,0)} كلمة • ${TWISTS.length} مفاجأة</p></div>
+ <button class="btn small cyan" data-a="customCat">➕ أضف فئة خاصة</button>
+ <button class="btn big primary" data-a="newMatchGo">🚀 ابدأ المباراة</button>`;
  const cats=allCats();const sel=selCats||cats.map(c=>c.id);
  const maxOut=Math.max(1,Math.floor(players.length/3));if(settings.outsiders>maxOut)settings.outsiders=maxOut;
- return `
- <h2>🗂️ اختاروا الفئات</h2>
+ return head+`
+ <h3>🗂️ الفئات</h3>
  <div class="row"><button class="btn small" data-a="catAll">✅ الكل</button><button class="btn small" data-a="catNone">❌ ولا شي</button><button class="btn small cyan" data-a="customCat">➕ فئة خاصة</button></div>
  <div class="cgrid">${cats.map(c=>`<button class="cat ${sel.includes(c.id)?'on':''}" data-a="toggleCat" data-v="${c.id}"><span class="e">${c.emoji}</span>${esc(c.name)}${c.custom?' ✏️':''}</button>`).join('')}</div>
  <div class="card opt"><label>🎭 نوع اللعب</label>
@@ -368,7 +429,24 @@ V.setup=()=>{
   <div class="stepper"><button data-a="outs" data-v="-1">−</button><b>${settings.outsiders}</b><button data-a="outs" data-v="1">+</button></div>
   <small class="center">الحد الأعلى ${maxOut} حسب عدد اللاعبين</small>
  </div>
- <button class="btn big primary" data-a="startRound">🚀 ابدأ الجولة</button>`};
+ <div class="card">${swH('twists','🎁 مفاجآت عشوائية كل جولة')}</div>
+ <button class="btn big primary" data-a="newMatchGo">🚀 ابدأ المباراة</button>`};
+
+/* ---------- slot machine ---------- */
+function slotReels(){const hideCat=!R.showCat&&R.mode==='classic';return [
+ ['🗂️ الفئة',hideCat?'🔒 سرّية':`${R.cat.emoji} ${esc(R.cat.name)}`,allCats().map(c=>`${c.emoji} ${esc(c.name)}`)],
+ ['🎭 النوع',R.mode==='classic'?'🤡 كلاسيك':'🥸 المتخفي',['🤡 كلاسيك','🥸 المتخفي']],
+ ['🕵️ الدخلاء',R.outsiders.length>1?'👯 دخيلين':'🕵️ دخيل واحد',['🕵️ دخيل واحد','👯 دخيلين','❓ ؟؟؟']],
+ ['🎁 المفاجأة',`${R.twist.e} ${R.twist.n}`,TWISTS.map(t=>`${t.e} ${t.n}`)]]}
+V.slot=()=>`<h2>🎰 الحظ يختار...</h2>
+ <p class="center"><span class="pill">الجولة ${match.round+1}${match.len?' من '+match.len:''}</span></p>
+ <div class="reels">${slotReels().map((r,i)=>`<div class="reel" id="reel${i}"><small>${r[0]}</small><b>❓</b></div>`).join('')}</div>
+ <div id="twistCard"></div>
+ <div id="slotBtns" style="display:none;flex-direction:column;gap:10px"><button class="btn big primary" data-a="go" data-v="reveal">🎴 وزّع البطاقات</button><button class="btn small ghost" data-a="reroll">🔁 ما عجبني، اسحب مرة ثانية</button></div>`;
+M.slot=()=>{const reels=slotReels();reels.forEach((r,i)=>{const el=$('#reel'+i+' b');const iv=I(()=>{el.innerHTML=rnd(r[2])},70);
+  T(()=>{clearInterval(iv);el.innerHTML=r[1];$('#reel'+i).classList.add('stop');sfx('pop');vib(30)},650+i*600)});
+ T(()=>{const t=R.twist;$('#twistCard').innerHTML=`<div class="card twist"><span class="e">${t.e}</span><h3>${t.n}</h3><p>${t.d}</p></div>`;
+  if(t.id!=='none'){sfx('win');confetti(70,[t.e,'🎁'])}else sfx('honk');$('#slotBtns').style.display='flex'},650+4*600+200)};
 
 V.reveal=()=>{
  const p=pById(R.order[R.ri]);const isOut=R.outsiders.includes(p.id);
@@ -376,7 +454,7 @@ V.reveal=()=>{
   <div class="pass card"><div class="bigav">${p.av}</div><h2>مرّر الجهاز لـ ${esc(p.name)}</h2><p class="muted">${rnd(PASS_LINES)}</p><p class="pill" style="margin-top:8px">${R.ri+1} / ${R.order.length}</p></div>
   <div class="flip" data-a="flipCard"><div class="flip-inner"><div class="face back"><span class="q">❓</span>اضغط وشوف سرّك</div><div class="face front"></div></div></div>`;
  let front;
- if(isOut&&settings.mode==='classic') front=`<div class="face front out"><span class="emo">🤡</span><div class="word">انت برّا السالفة!</div>${settings.showCat?`<p>الفئة: <b>${R.cat.emoji} ${esc(R.cat.name)}</b></p>`:''}<p>اندمج وياهم وحاول تعرف الكلمة من أسئلتهم 🤫</p></div>`;
+ if(isOut&&R.mode==='classic') front=`<div class="face front out"><span class="emo">🤡</span><div class="word">انت برّا السالفة!</div>${R.twist.id==='letter'?`<p>🔤 أول حرف: <b style="font-size:34px">${esc([...R.word][0])}</b></p>`:''}${R.showCat?`<p>الفئة: <b>${R.cat.emoji} ${esc(R.cat.name)}</b></p>`:''}<p>اندمج وياهم وحاول تعرف الكلمة من أسئلتهم 🤫</p></div>`;
  else { const w=isOut?R.decoy:R.word; front=`<div class="face front"><span class="pill" style="color:#2a1300;border-color:#0002">${R.cat.emoji} ${esc(R.cat.name)}</span><div class="word">${esc(w)}</div><p>انت داخل السالفة 😏<br>لا تفضح الكلمة، وفتّش عن الدخيل!</p></div>`;}
  return `
   <div class="center"><h3>${p.av} ${esc(p.name)}</h3></div>
@@ -396,12 +474,13 @@ V.questions=()=>{
  return `
  <div class="row" style="align-items:center"><span class="pill" style="flex:none">سؤال ${R.qi+1} من ${tot}</span><div class="progress"><i style="width:${(R.qi)/tot*100}%"></i></div></div>
  <div class="qpair"><div class="qp"><div class="a">${pa.av}</div><div class="n">${esc(pa.name)}</div><small class="muted">يسأل</small></div><div class="arrow">⬅️</div><div class="qp"><div class="a">${pb.av}</div><div class="n">${esc(pb.name)}</div><small class="muted">يجاوب</small></div></div>
- ${settings.timer?`<div class="ring" id="ring"><svg width="120" height="120"><circle cx="60" cy="60" r="52" stroke="rgba(0,0,0,.3)" stroke-width="12" fill="none"/><circle id="rc" cx="60" cy="60" r="52" stroke="#30e3ca" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="0" style="transition:stroke-dashoffset 1s linear, stroke .3s"/></svg><b id="rt">${settings.timer}</b></div>`:''}
+ ${R.twist.id!=='none'?`<span class="pill twistpill">${R.twist.e} ${R.twist.n}: ${R.twist.d}</span>`:''}
+ ${R.timer?`<div class="ring" id="ring"><svg width="120" height="120"><circle cx="60" cy="60" r="52" stroke="rgba(0,0,0,.3)" stroke-width="12" fill="none"/><circle id="rc" cx="60" cy="60" r="52" stroke="#30e3ca" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="0" style="transition:stroke-dashoffset 1s linear, stroke .3s"/></svg><b id="rt">${R.timer}</b></div>`:''}
  <div class="hint">💡 اقتراح سؤال: <span id="qh">${rnd(Q_HINTS)}</span> <button class="btn small" style="width:auto;margin-top:8px" data-a="newHint">🔀 غيره</button></div>
  <button class="btn big primary" data-a="nextQ">${R.qi+1<tot?'السؤال الجاي ⬅️':'خلصنا ✅'}</button>
  <button class="btn small ghost" data-a="go" data-v="qend">⏩ عرفناه! نروح للتصويت</button>`};
-M.questions=()=>{if(!settings.timer)return;let left=settings.timer;const rc=$('#rc'),rt=$('#rt'),ring=$('#ring');
- I(()=>{left--;if(left<0)return;rt.textContent=left;rc.style.strokeDashoffset=326.7*(1-left/settings.timer);
+M.questions=()=>{if(!R.timer)return;let left=R.timer;const rc=$('#rc'),rt=$('#rt'),ring=$('#ring');
+ I(()=>{left--;if(left<0)return;rt.textContent=left;rc.style.strokeDashoffset=326.7*(1-left/R.timer);
   if(left<=5&&left>0){sfx('tick');ring.classList.add('warn');rc.style.stroke='#ff5d5d'}
   if(left===0){sfx('buzz');vib([200,100,200]);rt.textContent='⏰';toast('خلص الوقت! جاوب بسرعة 😤')}},1000)};
 
@@ -443,7 +522,7 @@ V.unmask=()=>{
   <p class="muted">${outs.length>1?'الدخلاء كانوا':'الدخيل كان'}...</p>
   <div class="who">${outs.map(p=>p.av).join(' ')}</div>
   <h2 style="font-size:40px">${outs.map(p=>esc(p.name)).join(' و ')}</h2>
-  ${settings.mode==='undercover'?`<p>كلمته المزيفة كانت: <b>${esc(R.decoy)}</b> 🥸</p>`:''}
+  ${R.mode==='undercover'?`<p>كلمته المزيفة كانت: <b>${esc(R.decoy)}</b> 🥸</p>`:''}
  </div>
  <div class="verdict center ${caught?'good':'bad'}">${caught?'🚨 انكشف! 🚨':'🦊 فلت منكم!'}</div>
  <p class="center" style="font-size:20px;font-weight:800">${caught?rnd(CAUGHT_ROASTS):rnd(ESCAPED_ROASTS)}</p>
@@ -462,20 +541,36 @@ V.guess=()=>{
 };
 
 V.results=()=>{
- const sorted=players.slice().sort((a,b)=>b.score-a.score);
+ const sorted=players.slice().sort((a,b)=>mp(b.id)-mp(a.id));
  const loser=R.loser?pById(R.loser):null;
  return `<h2>🏆 نتائج الجولة</h2>
+ <div class="row" style="align-items:center"><span class="pill" style="flex:none">الجولة ${match.round}${match.len?' من '+match.len:''}</span>${match.len?`<div class="progress"><i style="width:${match.round/match.len*100}%"></i></div>`:''}</div>
+ ${R.twist.id!=='none'?`<span class="pill twistpill">${R.twist.e} ${R.twist.n}</span>`:''}
  <div class="secret"><small>الكلمة السرية كانت</small><div class="word">${R.cat.emoji} ${esc(R.word)}</div></div>
- <div class="lb">${sorted.map((p,i)=>`<div class="lbi ${i===0?'first':''}"><span class="r">${i===0?'👑':i+1}</span><span class="a">${p.av}</span><span class="n">${esc(p.name)}${R.outsiders.includes(p.id)?' 🤡':''}</span>${R.pts[p.id]?`<span class="d">+${R.pts[p.id]}</span>`:''}<span class="s">${p.score}</span></div>`).join('')}</div>
- <div class="card"><p class="muted" style="font-size:14px">⭐ النقاط: صوّت صح على الدخيل +٢ • الدخيل يفلت +٣ • الدخيل يعرف الكلمة +٢</p></div>
- <button class="btn big primary" data-a="startRound">🔁 جولة جديدة</button>
+ <div class="lb">${sorted.map((p,i)=>`<div class="lbi ${i===0?'first':''}"><span class="r">${i===0?'👑':i+1}</span><span class="a">${p.av}</span><span class="n">${esc(p.name)}${R.outsiders.includes(p.id)?' 🤡':''}<br><span class="rk">${rankOf(p.score)[1]} ${rankOf(p.score)[2]} • ${p.score}⭐ بالمجموع</span></span>${R.pts[p.id]?`<span class="d">+${R.pts[p.id]}</span>`:''}<span class="s">${mp(p.id)}</span></div>`).join('')}</div>
+ <div class="card"><p class="muted" style="font-size:14px">⭐ النقاط: صوّت صح على الدخيل +٢ • الدخيل يفلت +٣ • الدخيل يعرف الكلمة +٢${R.twist.id==='double'?' • 💰 كلشي ×٢ هالجولة':''}${R.twist.id==='jackpot'?' • 🎰 الدخيل الفالت +٦':''}</p></div>
+ ${match.done?`<button class="btn big primary" data-a="go" data-v="final">🏁 النتيجة النهائية!</button>`:`<button class="btn big primary" data-a="startRound">🎰 الجولة الجاية</button>`}
  ${loser?`<button class="btn pink" data-a="wheelFor" data-v="${loser.id}">🎡 دولاب العقاب لـ ${esc(loser.name)} ${loser.av}</button>`:''}
  <div class="row"><button class="btn small" data-a="go" data-v="setup">🗂️ غيّر الفئات</button><button class="btn small" data-a="go" data-v="players">👥 اللاعبين</button></div>`;
 };
-M.results=()=>{if(!R.celebrated){R.celebrated=true;confetti(160);sfx('win')}};
+M.results=()=>{if(!R.celebrated){R.celebrated=true;confetti(160);sfx('win');
+ (R.levelUps||[]).forEach(([id,rk],i)=>T(()=>{const p=pById(id);if(!p)return;toast(`⬆️ ${p.name} ترقّى وصار ${rk[2]} ${rk[1]}!`);confetti(90,[rk[1],'⬆️']);sfx('win')},1400+i*2000))}};
+
+V.final=()=>{const s=players.slice().sort((a,b)=>mp(b.id)-mp(a.id));const g=s[0],last=s[s.length-1];
+ const pod=[s[1],s[0],s[2]];
+ return `<h2>🏁 نهاية المباراة!</h2><p class="center muted">بعد ${match.round} جولات من الشك والخيانة 😂</p>
+ <div class="podium">${pod.map((p,i)=>p?`<div class="pod p${i}"><div class="a">${p.av}</div><div class="n">${esc(p.name)}</div><div class="st">${['🥈','🥇','🥉'][i]}<b>${mp(p.id)}</b></div></div>`:'<div></div>').join('')}</div>
+ <div class="card center"><h3>👑 بطل الجلسة: ${esc(g.name)}</h3><p>${rnd(CHAMP_LINES)}</p></div>
+ ${s.length>3?`<div class="lb">${s.slice(3).map((p,i)=>`<div class="lbi"><span class="r">${i+4}</span><span class="a">${p.av}</span><span class="n">${esc(p.name)}</span><span class="s">${mp(p.id)}</span></div>`).join('')}</div>`:''}
+ <button class="btn big pink" data-a="wheelFor" data-v="${last.id}">🎡 العقاب للأخير: ${esc(last.name)} ${last.av}</button>
+ <button class="btn big primary" data-a="newMatchGo">🔁 مباراة جديدة</button>
+ <button class="btn small" data-a="go" data-v="setup">⚙️ غيّر الإعدادات</button>`};
+M.final=()=>{if(!match.celebrated){match.celebrated=true;const g=players.slice().sort((a,b)=>mp(b.id)-mp(a.id))[0];if(g)g.st.wins++;gstats.games++;save()}
+ sfx('win');confetti(200,['👑','🏆','🎉']);T(()=>{confetti(150);sfx('win')},1200);T(()=>confetti(150,['🥇','✨']),2400)};
 
 /* ---------- side games ---------- */
 V.minis=()=>`<h2>🎲 ألعاب جانبية</h2><p class="center muted">للتسخين أو للعقاب 😈</p>
+ <button class="btn big primary" data-a="surprise">🎲 فاجئني! (لعبة عشوائية)</button>
  <div class="mgrid">
   <button class="mini" style="background:linear-gradient(160deg,#ff4fa3,#a3164f)" data-a="wheelFor" data-v=""><span class="e">🎡</span><b>دولاب العقاب</b><small>لفّه وشوف حظك</small></button>
   <button class="mini" style="background:linear-gradient(160deg,#30e3ca,#0e7c6b)" data-a="go" data-v="likely"><span class="e">👉</span><b>مين الأكثر؟</b><small>كلكم أشروا ١ ٢ ٣</small></button>
@@ -536,9 +631,10 @@ V.howto=()=>`<h2>📖 شلون نلعب؟</h2>
  <div class="card"><h3>⭐ النقاط</h3><p>تصويت صح على الدخيل: +٢<br>الدخيل يفلت: +٣<br>الدخيل يخمّن الكلمة صح: +٢</p></div>
  <button class="btn big primary" data-a="start">🎮 فهمت، يلا!</button>`;
 
-V.settings=()=>{const sw=(k,l)=>`<div class="toggle"><span>${l}</span><button class="sw ${settings[k]?'on':''}" data-a="sw" data-v="${k}"></button></div>`;
- const seg=(k,vals)=>`<div class="seg">${vals.map(([v,l])=>`<button class="${settings[k]===v?'on':''}" data-a="setOpt" data-v="${k}|${v}">${l}</button>`).join('')}</div>`;
+V.settings=()=>{const sw=swH,seg=segH;
  return `<h2>⚙️ الإعدادات</h2>
+ <div class="card">${sw('random','🎰 عشوائي كامل')}${sw('twists','🎁 مفاجآت عشوائية')}</div>
+ <div class="card opt"><label>🏁 طول المباراة</label>${seg('matchLen',MATCH_SEG)}</div>
  <div class="card opt"><label>⏱️ وقت كل سؤال</label>${seg('timer',[[0,'بلا'],[30,'٣٠ث'],[45,'٤٥ث'],[60,'٦٠ث'],[90,'٩٠ث']])}</div>
  <div class="card opt"><label>🔁 جولات الأسئلة</label>${seg('qRounds',[[1,'وحدة'],[2,'ثنتين'],[3,'ثلاث']])}</div>
  <div class="card opt"><label>🗳️ طريقة التصويت</label>${seg('voteMode',[['secret','🤫 سرّي'],['group','📢 جماعي']])}<small>السرّي: كل واحد يصوت لوحده على التلفون. الجماعي: تتفقون وتضغطون مرة وحدة.</small></div>
@@ -551,11 +647,13 @@ V.stats=()=>{const ps=players.slice();const top=(f)=>ps.length?ps.slice().sort((
  const fox=top(p=>p.st.escaped);if(fox&&fox.st.escaped)badges.push(['🦊','الثعلب (يفلت دائماً)',fox]);
  const det=top(p=>p.st.votes);if(det&&det.st.votes)badges.push(['🕵️','المحقق كونان',det]);
  const gen=top(p=>p.st.guessed);if(gen&&gen.st.guessed)badges.push(['🧠','عبقري التخمين',gen]);
+ const champ=top(p=>p.st.wins);if(champ&&champ.st.wins)badges.push(['🏆','أكثر واحد بطل مباريات',champ]);
  const king=top(p=>p.score);if(king&&king.score)badges.push(['👑','ملك الجلسة',king]);
  return `<h2>🏆 الأبطال</h2>
  ${badges.length?badges.map(([e,t,p])=>`<div class="badge"><span class="e">${e}</span><div><div>${t}</div><div class="muted">${pTag(p)}</div></div></div>`).join(''):'<div class="card center muted">العبوا كم جولة حتى تطلع الألقاب 😎</div>'}
- <div class="card"><div class="stat"><span>🎮 جولات ملعوبة</span><span>${gstats.rounds}</span></div><div class="stat"><span>🚨 الدخيل انكشف</span><span>${gstats.caught}</span></div><div class="stat"><span>🦊 الدخيل فلت</span><span>${gstats.escaped}</span></div><div class="stat"><span>🎯 تخمينات صحيحة</span><span>${gstats.guessed}</span></div></div>
- ${ps.length?`<div class="card"><h3>📋 تفاصيل اللاعبين</h3>${ps.map(p=>`<div class="stat"><span>${pTag(p)}</span><span class="muted" style="font-size:13px">دخيل ${p.st.out} • انكشف ${p.st.caught} • فلت ${p.st.escaped} • ⭐${p.score}</span></div>`).join('')}</div>`:''}`};
+ <div class="card"><div class="stat"><span>🏁 مباريات خلصت</span><span>${gstats.games}</span></div><div class="stat"><span>🎮 جولات ملعوبة</span><span>${gstats.rounds}</span></div><div class="stat"><span>🚨 الدخيل انكشف</span><span>${gstats.caught}</span></div><div class="stat"><span>🦊 الدخيل فلت</span><span>${gstats.escaped}</span></div><div class="stat"><span>🎯 تخمينات صحيحة</span><span>${gstats.guessed}</span></div></div>
+ <div class="card"><h3>🎖️ الرتب</h3><p class="muted">${RANKS.map(r=>`${r[1]} ${r[2]} (${r[0]}⭐)`).join(' ← ')}</p></div>
+ ${ps.length?`<div class="card"><h3>📋 تفاصيل اللاعبين</h3>${ps.map(p=>`<div class="stat"><span>${pTag(p)}</span><span class="muted" style="font-size:13px">${rankOf(p.score)[1]} ${rankOf(p.score)[2]} • 🏆${p.st.wins} • دخيل ${p.st.out} • انكشف ${p.st.caught} • فلت ${p.st.escaped} • ⭐${p.score}</span></div>`).join('')}</div>`:''}`};
 
 /* ============================ ACTIONS ============================ */
 A.go=v=>go(v);
@@ -564,6 +662,9 @@ A.confirmHome=()=>{R=null;go('home')};
 A.closeModal=closeModal;
 A.toggleSound=()=>{settings.sound=!settings.sound;save();const b=document.querySelector('[data-a="toggleSound"]');if(b)b.textContent=settings.sound?'🔊':'🔇';if(settings.sound)sfx('pop')};
 A.start=()=>go(players.length>=3?'setup':'players');
+A.quick=()=>{if(players.length<3){toast('ضيف ٣ لاعبين على الأقل أول 👥');go('players');return}settings.random=true;save();newMatch();A.startRound()};
+A.newMatchGo=()=>{if(players.length<3){go('players');return}newMatch();A.startRound()};
+A.reroll=()=>{buildRound();sfx('boing');render()};
 A.addPlayer=()=>{const i=$('#pname');const n=(i.value||'').trim();if(!n){sfx('honk');i.focus();return}
  if(players.some(p=>p.name===n)){toast('هذا الاسم موجود! تبي نسخة ثانية منه؟ 😂');return}
  if(players.length>=20){toast('بس! صارت حفلة 😅');return}
@@ -586,14 +687,28 @@ A.outs=d=>{const maxOut=Math.max(1,Math.floor(players.length/3));settings.outsid
 
 A.startRound=()=>{
  if(players.length<3){go('players');return}
- const all=allCats();let pool=all.filter(c=>(selCats||all.map(x=>x.id)).includes(c.id));
- if(!pool.length){toast('اختار فئة وحدة على الأقل! 🙄');if(screen!=='setup')go('setup');return}
- const cat=rnd(pool);const word=rnd(cat.words);const decoy=rnd(cat.words.filter(w=>w!==word))||word;
- const k=Math.min(settings.outsiders,Math.max(1,Math.floor(players.length/3)));
+ if(!match||match.done)newMatch();
+ if(!buildRound())return;
+ go('slot')};
+function buildRound(){
+ const all=allCats();const rand=settings.random;
+ let pool=rand?all:all.filter(c=>(selCats||all.map(x=>x.id)).includes(c.id));
+ if(!pool.length){toast('اختار فئة وحدة على الأقل! 🙄');if(screen!=='setup')go('setup');return false}
+ const maxOut=Math.max(1,Math.floor(players.length/3));
+ const mode=rand?(Math.random()<.35?'undercover':'classic'):settings.mode;
+ let k=rand?(maxOut>1&&Math.random()<.25?2:1):Math.min(settings.outsiders,maxOut);
+ let twist=TWISTS[0];
+ if(rand||settings.twists)twist=wpick(TWISTS.filter(t=>(!t.classic||mode==='classic')&&(!t.min||players.length>=t.min)));
+ if(twist.id==='two')k=Math.max(k,2);
+ k=Math.max(1,Math.min(k,players.length-2));
+ const cat=rnd(pool);let fresh=cat.words.filter(w=>!recentWords.includes(cat.id+':'+w));if(!fresh.length)fresh=cat.words;
+ const word=rnd(fresh);recentWords=[cat.id+':'+word].concat(recentWords).slice(0,120);
+ const decoy=rnd(cat.words.filter(w=>w!==word))||word;
  const outsiders=shuffle(players.map(p=>p.id)).slice(0,k);
  const q=[];for(let r=0;r<settings.qRounds;r++){const o=shuffle(players.map(p=>p.id));o.forEach((id,i)=>q.push([id,o[(i+1)%o.length]]))}
- R={cat,word,decoy,outsiders,order:players.map(p=>p.id),ri:0,shown:false,q,qi:0,votes:{},voters:shuffle(players.map(p=>p.id)),vi:0,vready:false,opts:{},gres:{},gpick:{},gi:0};
- go('reveal')};
+ R={cat,word,decoy,outsiders,mode,twist,timer:twist.id==='speed'?15:settings.timer,showCat:twist.id==='blind'?false:settings.showCat,
+  order:shuffle(players.map(p=>p.id)),ri:0,shown:false,q,qi:0,votes:{},voters:shuffle(players.map(p=>p.id)),vi:0,vready:false,opts:{},gres:{},gpick:{},gi:0};
+ save();return true}
 A.flipCard=()=>{if(R.shown)return;R.shown=true;sfx('flip');vib(40);render()};
 A.nextReveal=()=>{R.shown=false;R.ri++;if(R.ri>=R.order.length)go('qintro');else render()};
 A.newHint=()=>{const h=$('#qh');if(h)h.textContent=rnd(Q_HINTS)};
@@ -609,9 +724,12 @@ A.startGuess=()=>{R.outsiders.forEach(id=>{const others=shuffle(R.cat.words.filt
 A.pickGuess=w=>{const id=R.outsiders[R.gi];if(R.gres[id]!==undefined)return;const ok=w===R.word;R.gres[id]=ok;R.gpick[id]=w;if(ok){sfx('win');confetti(100,['🧠','🦊','✨'])}else{sfx('fail');vib([100,50,100])}render()};
 A.afterGuess=()=>{R.gi++;if(R.gi<R.outsiders.length)render();else{scoreRound();go('results')}};
 function scoreRound(){if(R.scored)return;R.scored=true;const pts={};players.forEach(p=>pts[p.id]=0);
+ const before={};players.forEach(p=>before[p.id]=rankOf(p.score));const mult=R.twist.id==='double'?2:1;const esc3=R.twist.id==='jackpot'?6:3;
  Object.entries(R.votes).forEach(([v,t])=>{if(!R.outsiders.includes(v)&&R.outsiders.includes(t)){pts[v]+=2;const p=pById(v);if(p)p.st.votes++}});
- R.outsiders.forEach(id=>{const p=pById(id);if(!p)return;p.st.out++;if(R.caught.includes(id)){p.st.caught++;gstats.caught++}else{pts[id]+=3;p.st.escaped++;gstats.escaped++}if(R.gres[id]){pts[id]+=2;p.st.guessed++;gstats.guessed++}});
- players.forEach(p=>p.score+=pts[p.id]);R.pts=pts;gstats.rounds++;
+ R.outsiders.forEach(id=>{const p=pById(id);if(!p)return;p.st.out++;if(R.caught.includes(id)){p.st.caught++;gstats.caught++}else{pts[id]+=esc3;p.st.escaped++;gstats.escaped++}if(R.gres[id]){pts[id]+=2;p.st.guessed++;gstats.guessed++}});
+ players.forEach(p=>{pts[p.id]*=mult;p.score+=pts[p.id];match.pts[p.id]=(match.pts[p.id]||0)+pts[p.id]});R.pts=pts;gstats.rounds++;
+ match.round++;if(match.len&&match.round>=match.len)match.done=true;
+ R.levelUps=players.filter(p=>rankOf(p.score)!==before[p.id]).map(p=>[p.id,rankOf(p.score)]);
  const minPts=Math.min(...players.map(p=>pts[p.id]));const losers=players.filter(p=>pts[p.id]===minPts);
  const caughtOut=R.caught.length?R.caught[0]:null;R.loser=caughtOut||rnd(losers).id;save()}
 
@@ -626,6 +744,11 @@ A.spin=()=>{if(TMP.spinning)return;TMP.spinning=true;const b=$('#spinBtn');if(b)
    if(p.s==='نجوت!'){sfx('win');confetti(100,['🍀','😅'])}else{sfx('honk');confetti(60,['😈','😂'])}vib(200);
    $('#whres').innerHTML=`<div class="card bigcard" style="min-height:120px;animation:pop .5s"><span style="font-size:60px">${p.e}</span><span>${esc(p.t)}</span></div>`}};
  raf=requestAnimationFrame(step)};
+A.surprise=()=>{const g=rnd(['wheel','likely','char','td']);
+ if(g==='wheel'){TMP.victim=players.length?rnd(players).id:null;go('wheel');T(()=>A.spin(),700)}
+ else if(g==='likely'){TMP.lq=rnd(MOST_LIKELY);go('likely')}
+ else if(g==='char'){TMP.chCat=rnd(allCats()).id;TMP.chTime=60;toast('🎭 مثّلها! الفئة: '+allCats().find(c=>c.id===TMP.chCat).name);A.chStart()}
+ else{TMP.tdP=players.length?rnd(players).id:null;A.tdGo(Math.random()<.5?'t':'d')}};
 A.likelyNext=()=>{TMP.lq=rnd(MOST_LIKELY.filter(q=>q!==TMP.lq));render()};
 A.likelyGo=()=>{const b=$('#lgo');if(b.disabled)return;b.disabled=true;const c=$('#lcount');let n=3;const show=()=>{c.innerHTML=`<div class="count">${n||'👉'}</div>`;if(n){sfx('tick')}else{sfx('honk');vib(200);c.innerHTML+=`<p class="center" style="font-weight:800;font-size:22px">أشروا هسّه!</p>`;b.disabled=false}n--};show();const iv=I(()=>{if(n<0){clearInterval(iv);return}show()},800)};
 A.chCat=v=>{TMP.chCat=v;render()};
@@ -641,7 +764,7 @@ A.tdGo=t=>{TMP.tdType=t;TMP.tdText=rnd(t==='t'?TRUTHS:DARES);sfx(t==='t'?'pop':'
 A.sw=k=>{settings[k]=!settings[k];save();render()};
 A.setOpt=v=>{const [k,val]=v.split('|');settings[k]=isNaN(+val)?val:+val;save();render()};
 A.wipe=()=>modal(`<h3 class="center">⚠️ متأكد؟</h3><p class="center muted">راح ينمسح كل شي: اللاعبين، النقاط، الفئات الخاصة</p><div class="row"><button class="btn red" data-a="confirmWipe">امسح</button><button class="btn" data-a="closeModal">لا</button></div>`);
-A.confirmWipe=()=>{players=[];customCats=[];selCats=null;gstats={rounds:0,caught:0,escaped:0,guessed:0,games:0};settings={timer:45,qRounds:1,voteMode:'secret',showCat:true,sound:true,vibrate:true,mode:'classic',outsiders:1};save();toast('انمسح كل شي 🧹');go('home')};
+A.confirmWipe=()=>{players=[];customCats=[];selCats=null;gstats={rounds:0,caught:0,escaped:0,guessed:0,games:0};settings=Object.assign({},DEF_SETTINGS);match=null;recentWords=[];save();toast('انمسح كل شي 🧹');go('home')};
 
 document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el||el.disabled)return;const a=el.dataset.a;if(!A[a])return;
  if(!['spin','toggleSound','addPlayer','cycleAv','flipCard','castVote','pickGuess','chOk','chSkip','tdGo','tdPick','likelyGo'].includes(a))sfx('click');A[a](el.dataset.v,el)});
