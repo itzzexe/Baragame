@@ -275,6 +275,21 @@ p{margin:0;line-height:1.7}
 .wyrpct{font-family:'Lalezar';font-size:40px;text-align:center}
 .or{font-family:'Lalezar';font-size:26px;text-align:center;color:var(--pri)}
 .teams{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* mafia pro */
+.rlist{display:flex;flex-direction:column;gap:6px}
+.rrow{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:8px 10px;border-inline-start:5px solid var(--green)}
+.rrow.m{border-inline-start-color:var(--red)}.rrow.n{border-inline-start-color:var(--pri)}
+.rrow .e{font-size:30px;flex:none}
+.rrow .n{flex:1;font-weight:800;min-width:0}
+.rrow .n small{display:block;font-weight:600;color:var(--muted);font-size:12px;line-height:1.5}
+.meter{height:14px;border-radius:9px;background:linear-gradient(90deg,#16a34a,#fbbf24,#dc2626);position:relative;margin:8px 4px 0}
+.meter i{position:absolute;top:-6px;width:8px;height:26px;background:#fff;border-radius:4px;transform:translateX(50%);box-shadow:0 0 0 2px #1b0f3b;transition:right .3s}
+.meter-l{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-weight:700;margin-top:4px}
+.clue{border:2px dashed var(--cyan)}
+.clue p{margin:4px 0}
+details.card summary{cursor:pointer;font-weight:800}
+details.card h4{margin:12px 0 2px;color:var(--pri);font-family:'Lalezar';font-weight:400;font-size:18px}
+details.card p{font-size:14px;margin:2px 0}
 @media (max-width:360px){.cgrid{grid-template-columns:repeat(2,1fr)}.ggrid{grid-template-columns:repeat(2,1fr)}.logo h1{font-size:56px}}
 </style>
 </head>
@@ -365,6 +380,7 @@ const TWISTS=[
 const RANKS=[[0,'🐣','مبتدئ'],[5,'🙂','هاوي'],[12,'🔎','محقق'],[25,'🦊','داهية'],[45,'🧠','عبقري'],[70,'🐐','أسطورة'],[100,'👑','خرافي']];
 const CHAMP_LINES=['محد يكدر عليه! الكل يسجد للبطل 🙇','ذكاء خارق ولا مجرد حظ؟ ما راح نعرف أبداً 🤔','البطل يعزمكم على عشا الليلة (إجباري) 🍕','سجلوه بموسوعة غينيس للدهاء 📜'];
 const GAMES=[
+ {id:'mafpro',e:'🎩',n:'المافيا الكبرى',d:'١٢ دور • راوي ذكي • تحدي',min:6,go:'mpSetup',sec:'deceive',bg:'linear-gradient(160deg,#111827,#7f1d1d)'},
  {id:'mafia',e:'🔪',n:'المافيا',d:'منو القاتل بيناتكم؟',min:5,go:'mafSetup',sec:'deceive',bg:'linear-gradient(160deg,#ff5d5d,#7a0f2e)'},
  {id:'lie',e:'🤥',n:'مين الكذاب؟',d:'قصة صدق لو كذب؟',min:3,go:'lieIntro',sec:'deceive',bg:'linear-gradient(160deg,#f97316,#9a3412)'},
  {id:'friends',e:'💞',n:'شكد تعرف ربعك؟',d:'الكرسي الساخن',min:3,go:'frIntro',sec:'deceive',bg:'linear-gradient(160deg,#ff4fa3,#a3164f)'},
@@ -397,6 +413,7 @@ const HOWTO={
  likely:'يطلع سؤال "مين أكثر واحد ممكن..."، تعدّون ٣ ٢ ١ وكلكم تأشّرون على واحد بنفس الوقت 😂',
  td:'الحظ يختار واحد، وهو يختار صراحة لو تحدي ويتحمّل النتيجة 🔥',
  wheel:'لفّه للخسران وشوف شنو عقابه 😈',
+ mafpro:'نسخة المحترفين: ١٢ دور (العرّاب، الكاتم، السفّاح، المهرج، الحارس، الشرطي، القنّاص، العمدة...). الراوي الذكي يحل كل تفاعلات الليل: الحبس، الحماية، التضحية، الطلقة الوحيدة. المواطنين يصوّتون على شكوكهم كل ليلة، والراوي يعطي تلميحات حسب الصعوبة. تصويت سري، إعادة عند التعادل، كلمة أخيرة، وسجل كامل لأسرار الليل بالنهاية.',
  lie:'واحد ياخذ موضوع بالسر، والتلفون يكله: احچي قصة حقيقية لو اكذب! يحچي القصة، والباقين يصوّتون صدق لو كذب. اللي يصيب +١، والحكواتي ياخذ نقطة عن كل واحد ضحك عليه.',
  bomb:'يطلع موضوع، واللي ماسك التلفون يقول كلمة منه ويمرره بسرعة. القنبلة تنفجر بوقت سري، واللي تنفجر بإيده يخسر 💥',
  fast:'حطّوا التلفون بالنص بين لاعبين. لمّا يصير اللون أخضر، أول واحد يضغط على جهته يفوز. اللي يضغط قبل الأخضر يخسر!',
@@ -529,10 +546,10 @@ function closeModal(){const o=$('#ov');if(o)o.remove()}
 /* ============================ ROUTER ============================ */
 let screen='home',R=null,timers=[],raf=0,TMP={};
 const IN_ROUND=['pick','reveal','qintro','questions','qend','vote','voteRes','unmask','guess'];
-const GUARDED=IN_ROUND.concat(['bombPlay','tbPlay','lieVote','fastPlay','boomPlay','memPlay','hlPlay','tenPlay','mafRole','mafNight','mafMorning','mafDay','mafVote','mafElim','clsGuess','frIntro','frGuess','drawPlay','letPlay','charPlay']);
+const GUARDED=IN_ROUND.concat(['mpRole','mpNight','mpMorning','mpDay','mpVote','mpTally','mpLast','mpElim','bombPlay','tbPlay','lieVote','fastPlay','boomPlay','memPlay','hlPlay','tenPlay','mafRole','mafNight','mafMorning','mafDay','mafVote','mafElim','clsGuess','frIntro','frGuess','drawPlay','letPlay','charPlay']);
 let lastRender=0;
 function titleFor(s){if(s==='home')return '';if(IN_ROUND.includes(s)||['setup','results','final'].includes(s))return '🤡 برّا السالفة';
- const m={maf:'🔪 المافيا',let:'🔤 اسم حيوان نبات',cls:'🎯 مين الأقرب؟',fr:'💞 شكد تعرف ربعك؟',draw:'✏️ ارسمها!',char:'🎭 مثّلها!',likely:'👉 مين الأكثر؟',td:'🔥 صراحة لو تحدي',wheel:'🎡 دولاب العقاب',bomb:'💣 القنبلة',tb:'🗣️ وصّفها',lie:'🤥 مين الكذاب؟',fast:'⚡ أسرع إصبع',boom:'7️⃣ بوم!',wyr:'🤔 لو خيروك',prov:'📜 كمّل المثل',mem:'🛒 سوق الذاكرة',hl:'🃏 أعلى لو أوطى',ten:'⏱️ ١٠ ثواني',five:'🖐️ ٥ ثواني'};
+ const m={maf:'🔪 المافيا',let:'🔤 اسم حيوان نبات',cls:'🎯 مين الأقرب؟',fr:'💞 شكد تعرف ربعك؟',draw:'✏️ ارسمها!',char:'🎭 مثّلها!',likely:'👉 مين الأكثر؟',td:'🔥 صراحة لو تحدي',wheel:'🎡 دولاب العقاب',bomb:'💣 القنبلة',mp:'🎩 المافيا الكبرى',tb:'🗣️ وصّفها',lie:'🤥 مين الكذاب؟',fast:'⚡ أسرع إصبع',boom:'7️⃣ بوم!',wyr:'🤔 لو خيروك',prov:'📜 كمّل المثل',mem:'🛒 سوق الذاكرة',hl:'🃏 أعلى لو أوطى',ten:'⏱️ ١٠ ثواني',five:'🖐️ ٥ ثواني'};
  for(const k in m)if(s.startsWith(k))return m[k];return '🎉 شلة الجودة'}
 function T(fn,ms){const t=setTimeout(fn,ms);timers.push(t);return t}
 function I(fn,ms){const t=setInterval(fn,ms);timers.push(t);return t}
@@ -1240,6 +1257,181 @@ M.five=()=>{const F=TMP.five;if(F.state!=='run')return;let n=5;sfx('tick');I(()=
 A.fiveRes=v=>{const F=TMP.five;if(+v){sAdd('five',F.p,1,1);sfx('win');confetti(60,['🖐️','🔥'])}else sfx('fail');save();INIT.five();go('five')};
 A.fiveSkip=()=>{const F=TMP.five;F.rot.unshift(F.p);INIT.five();render()};
 
+/* ============================ MAFIA PRO ============================ */
+const PR={
+ maf:{e:'🔪',n:'مافيا',t:'m',d:'كل ليلة تتفق ويا عائلتك على ضحية. بالنهار اندمج وكون بريء 😇'},
+ god:{e:'👑',n:'العرّاب',t:'m',d:'زعيم المافيا. المحقق يشوفك بريء! وإذا اختلفت العائلة على الضحية، كلمتك هي اللي تمشي.'},
+ sil:{e:'🤐',n:'الكاتم',t:'m',d:'من المافيا. كل ليلة تختار واحد تسكّته: باچر ما يحچي ولا يصوّت.'},
+ sk:{e:'🩸',n:'السفّاح',t:'n',d:'تشتغل لوحدك وتقتل كل ليلة. تفوز إذا بقيت آخر واحد أو ويا واحد بس.'},
+ jes:{e:'🃏',n:'المهرج',t:'n',d:'هدفك الوحيد: تخلي الشلة يعدمونك بالتصويت! إذا عدموك تفوز لوحدك 🤡'},
+ doc:{e:'💉',n:'الطبيب',t:'c',d:'كل ليلة تحمي واحد من الموت. ما تكدر تحمي نفس الشخص ليلتين ورا بعض.'},
+ det:{e:'🕵️',n:'المحقق',t:'c',d:'كل ليلة تحقق بواحد وتعرف إذا شرير. انتبه: العرّاب يطلع بريء!'},
+ bg:{e:'🛡️',n:'الحارس',t:'c',d:'كل ليلة تحرس واحد. إذا هجموا عليه، انت تموت بداله 🫡'},
+ cop:{e:'🚔',n:'الشرطي',t:'c',d:'كل ليلة تحبس واحد: يتعطل قتله أو حمايته أو إسكاته هالليلة.'},
+ snp:{e:'🎯',n:'القنّاص',t:'c',d:'عندك طلقة وحدة بكل اللعبة. إذا قتلت بريء، تموت من الندم 😔'},
+ may:{e:'🎩',n:'العمدة',t:'c',d:'بالتصويت السري صوتك يحسب صوتين. خلّي هويتك سر!'},
+ cit:{e:'🧑‍🌾',n:'مواطن',t:'c',d:'ما عندك قوة، بس كل ليلة تصوّت على منو تشك بيه، وشكوك الشعب تساعد الكل!'},
+};
+const PR_W={maf:-4,god:-5,sil:-4.5,sk:-4.5,jes:-1,doc:2.5,det:3,bg:2,cop:1.5,snp:2,may:1,cit:1};
+const MP=()=>TMP.mp;
+const isEvil=k=>PR[k].t==='m'||k==='sk';
+const mpUsed=c=>Object.values(c).reduce((a,b)=>a+b,0);
+function mpBalance(c,n){let s=(n-mpUsed(c))*PR_W.cit;for(const k in c)s+=c[k]*PR_W[k];return s}
+function mpPreset(n){const c={maf:0,god:0,sil:0,sk:0,jes:0,doc:0,det:0,bg:0,cop:0,snp:0,may:0};const m=n<=6?1:n<=9?2:n<=13?3:4;
+ c.god=n>=6?1:0;c.maf=m-c.god;if(n>=9&&c.maf>0){c.sil=1;c.maf--}if(n>=13&&c.maf>0){c.sk=1;c.maf--}if(n>=8)c.jes=1;
+ c.doc=1;c.det=1;for(const k of ['bg','snp','cop','may']){if(mpBalance(c,n)>=-1||n-mpUsed(c)<=1)break;c[k]=1}return c}
+function rerender(){const y=window.scrollY;render();window.scrollTo(0,y)}
+INIT.mafpro=()=>{TMP.mpOpt=TMP.mpOpt||{reveal:true,clue:'mid',vote:'secret',t:150};if(!TMP.mpCfg||TMP.mpCfgN!==players.length){TMP.mpCfg=mpPreset(players.length);TMP.mpCfgN=players.length}};
+V.mpSetup=()=>{INIT.mafpro();const n=players.length,c=TMP.mpCfg,o=TMP.mpOpt;const used=mpUsed(c),cit=n-used;const bal=mpBalance(c,n);const evil=c.maf+c.god+c.sil+c.sk;
+ const pos=Math.max(3,Math.min(97,50+bal*5));const lbl=bal>4?'⚖️ الكفة تميل للشعب 😇':bal<-4?'⚖️ الكفة تميل للأشرار 😈':'⚖️ متوازنة 👌';
+ const row=k=>{const r=PR[k];const ctl=k==='maf'?`<div class="stepper sm"><button data-a="mpCfg" data-v="maf|-1">−</button><b>${c.maf}</b><button data-a="mpCfg" data-v="maf|1">+</button></div>`:`<button class="sw ${c[k]?'on':''}" data-a="mpCfg" data-v="${k}|t"></button>`;
+  return `<div class="rrow ${r.t}"><span class="e">${r.e}</span><span class="n">${r.n}<small>${r.d}</small></span>${ctl}</div>`};
+ const seg=(k,vals)=>`<div class="seg">${vals.map(([v,l])=>`<button class="${o[k]===v?'on':''}" data-a="mpOpt" data-v="${k}|${v}">${l}</button>`).join('')}</div>`;
+ return `<h2>🎩 المافيا الكبرى</h2>
+ <div class="card"><p>نسخة المحترفين: ١٢ دور، والراوي الذكي يحل كل تفاعلات الليل. بيها تلميحات، وتصويت سري، وكلمة أخيرة، وسجل كامل لأسرار الليل بالنهاية. <b>تحتاج عقل!</b> 🧠</p></div>
+ <div class="card"><div class="meter"><i style="right:${pos}%"></i></div><div class="meter-l"><span>😈 الأشرار</span><span>😇 الشعب</span></div>
+  <p class="center" style="font-weight:800;margin-top:6px">${lbl}</p><p class="center muted" style="font-size:13px">${n} لاعبين • ${used} أدوار خاصة • ${Math.max(0,cit)} مواطنين</p>
+  ${cit<0?'<p class="center" style="color:var(--red);font-weight:800">⚠️ الأدوار أكثر من اللاعبين!</p>':''}${!evil?'<p class="center" style="color:var(--red);font-weight:800">⚠️ لازم يكون أكو شرير واحد على الأقل</p>':''}
+  <button class="btn small cyan" data-a="mpAuto" style="margin-top:8px">🧠 توزيع ذكي حسب عدد اللاعبين</button></div>
+ <h3>😈 الأشرار</h3><div class="rlist">${['maf','god','sil','sk'].map(row).join('')}</div>
+ <h3>🃏 المحايد</h3><div class="rlist">${row('jes')}</div>
+ <h3>😇 الشعب</h3><div class="rlist">${['doc','det','bg','cop','snp','may'].map(row).join('')}<div class="rrow c"><span class="e">🧑‍🌾</span><span class="n">مواطن × ${Math.max(0,cit)}<small>${PR.cit.d}</small></span></div></div>
+ <div class="card opt"><label>🧩 مستوى التحدي (تلميحات الراوي)</label>${seg('clue',[['easy','😌 سهل'],['mid','🤔 متوسط'],['hard','😈 صعب']])}<small>${o.clue==='easy'?'كل صبح: شكوك الشعب + دليل بين اسمين، واحد منهم شرير':o.clue==='mid'?'كل صبح: شكوك الشعب + دليل بين ٣ أسماء':'ولا تلميح! اعتمدوا على عقولكم بس 🧠'}</small></div>
+ <div class="card opt"><label>🗳️ التصويت بالنهار</label>${seg('vote',[['secret','🤫 سري'],['public','📢 علني']])}<small>${o.vote==='secret'?'كل واحد يصوّت بالسر، صوت العمدة بصوتين، والتعادل يعيد التصويت.':'تتفقون برفع الإيد وتضغطون مرة وحدة.'}</small></div>
+ <div class="card opt"><label>⏱️ وقت النقاش</label>${seg('t',[[90,'٩٠ث'],[150,'٢٫٥ د'],[240,'٤ د'],[0,'بلا']])}</div>
+ <div class="card"><div class="toggle"><span>💀 كشف دور اللي يموت</span><button class="sw ${o.reveal?'on':''}" data-a="mpOpt" data-v="reveal|t"></button></div></div>
+ <button class="btn big primary" data-a="mpStart" ${cit<0||!evil?'disabled':''}>🎭 وزّع الأدوار</button>`};
+A.mpCfg=v=>{const [k,x]=v.split('|');const c=TMP.mpCfg;if(k==='maf')c.maf=Math.max(0,c.maf+(+x));else c[k]=c[k]?0:1;sfx('pop');rerender()};
+A.mpOpt=v=>{const [k,x]=v.split('|');const o=TMP.mpOpt;if(x==='t')o[k]=!o[k];else o[k]=isNaN(+x)?x:+x;rerender()};
+A.mpAuto=()=>{TMP.mpCfg=mpPreset(players.length);sfx('win');toast('🧠 وزّعت الأدوار بشكل متوازن');rerender()};
+A.mpStart=()=>{if(players.length<6){TMP.after='mafpro';go('players');return}const c=TMP.mpCfg;const keys=[];for(const k in c)for(let i=0;i<c[k];i++)keys.push(k);
+ if(keys.length>players.length)return;while(keys.length<players.length)keys.push('cit');const ids=shuffle(players.map(p=>p.id));const sk=shuffle(keys);const roles={};ids.forEach((id,i)=>roles[id]=sk[i]);
+ TMP.mp={roles,order0:players.map(p=>p.id),alive:players.map(p=>p.id),ri:0,shown:false,night:0,lastDoc:null,sniperUsed:false,silenced:null,log:[],st:{saves:{},found:{},guard:{}},opt:Object.assign({},TMP.mpOpt)};sfx('pop');go('mpRole')};
+V.mpRole=()=>{const S=MP();const p=pById(S.order0[S.ri]);
+ if(!S.shown)return `<div class="pass card"><div class="bigav">${p.av}</div><h2>مرّر الجهاز لـ ${esc(p.name)}</h2><p class="muted">دورك سرّي للموت 🤫</p><p class="pill" style="margin-top:8px">${S.ri+1} / ${S.order0.length}</p></div>
+ <div class="flip" data-a="mpFlip"><div class="flip-inner"><div class="face back"><span class="q">🎩</span>اضغط وشوف دورك</div><div class="face front"></div></div></div>`;
+ const k=S.roles[p.id],r=PR[k];const mates=r.t==='m'?Object.keys(S.roles).filter(x=>PR[S.roles[x]].t==='m'&&x!==p.id).map(x=>`${esc(pById(x).name)} ${PR[S.roles[x]].e}`):[];
+ const goal=r.t==='m'?'🎯 هدفك: المافيا لازم تصير بعدد الباقين':r.t==='c'?'🎯 هدفك: اكشفوا كل الأشرار':'';
+ return `<div class="center"><h3>${pTag(p)}</h3></div>
+ <div class="flip on" style="height:400px"><div class="flip-inner"><div class="face back"></div><div class="face front ${r.t==='m'||k==='sk'?'out':''}"><span class="emo">${r.e}</span><div class="word">${r.n}</div><p>${r.d}</p>${mates.length?`<p>🤝 عائلتك: <b>${mates.join('، ')}</b></p>`:''}${goal?`<p style="font-weight:800">${goal}</p>`:''}</div></div></div>
+ <button class="btn big primary" data-a="mpRoleNext">🙈 خبّيته، ${S.ri+1<S.order0.length?'التالي':'يلا يبدي الليل 🌙'}</button>`};
+A.mpFlip=()=>{const S=MP();if(S.shown)return;S.shown=true;sfx('flip');vib(40);render()};
+A.mpRoleNext=()=>{const S=MP();S.shown=false;S.ri++;if(S.ri>=S.order0.length)mpNight();else render()};
+function mpNight(){const S=MP();S.night++;S.order=shuffle(S.alive.slice());S.idx=0;S.ready=false;S.sub=0;S.res=null;S.acts={};S.susp={};go('mpNight')}
+A.mpNightGo=()=>mpNight();
+V.mpNight=()=>{const S=MP();const id=S.order[S.idx];const p=pById(id);const k=S.roles[id];const r=PR[k];const alive=S.alive.map(pById);
+ if(!S.ready)return `<div class="center" style="font-size:64px">🌙</div><h2>الليلة ${S.night}</h2>`+passH(p,`مرّر الجهاز لـ ${esc(p.name)}`,'الكل يغمّض... الراوي يشتغل 🎙️',`${S.idx+1} / ${S.order.length}`,'mpReady',`أنا ${esc(p.name)} 🫡`);
+ const head=`<div class="center"><span class="pill">${r.e} ${r.n}</span></div>`;
+ if(S.res)return head+`<div class="card center">${S.res}</div><button class="btn big primary" data-a="mpNext">تمام، خبّي ⬅️</button>`;
+ const g=(list,t,extra)=>`<h2>${t}</h2>`+gridH(list,'mpAct',extra);const others=alive.filter(x=>x.id!==id);
+ if(r.t==='m'){
+  if(k==='sil'&&S.sub===1)return head+g(alive.filter(x=>x.id!==id),'🤐 منو تسكّت باچر؟',`<button class="btn ghost" data-a="mpAct" data-v="">ولا أحد</button>`);
+  const team=S.alive.filter(x=>PR[S.roles[x]].t==='m'&&x!==id).map(x=>`${pById(x).av} ${esc(pById(x).name)} ${PR[S.roles[x]].e}`);
+  const votes=Object.entries(S.acts).filter(([a,v])=>v.kind==='kill').map(([a,v])=>`${esc(pById(a).name)} ← ${esc(pById(v.t).name)}`);
+  return head+(team.length?`<p class="center muted">🤝 عائلتك: ${team.join('، ')}</p>`:'')+(votes.length?`<p class="center muted">🗳️ اختيارات العائلة: ${votes.join(' • ')}</p>`:'')+(k==='god'?'<p class="center muted">👑 إذا تعادلت الأصوات، اختيارك يمشي</p>':'')+g(alive.filter(x=>PR[S.roles[x.id]].t!=='m'),'🔪 منو الضحية الليلة؟')}
+ if(k==='sk')return head+g(others,'🩸 منو ضحيتك الليلة؟');
+ if(k==='doc')return head+g(alive.filter(x=>x.id!==S.lastDoc),'💉 منو تحمي الليلة؟')+(S.lastDoc&&S.alive.includes(S.lastDoc)?`<p class="center muted">ما تكدر تحمي ${esc(pById(S.lastDoc).name)} ليلتين ورا بعض</p>`:'');
+ if(k==='det')return head+g(others,'🕵️ منو تحقق بيه؟');
+ if(k==='bg')return head+g(others,'🛡️ منو تحرس الليلة؟');
+ if(k==='cop')return head+g(others,'🚔 منو تحبس الليلة؟');
+ if(k==='snp'&&!S.sniperUsed)return head+g(others,'🎯 ترمي طلقتك الوحيدة على منو؟',`<button class="btn ghost" data-a="mpAct" data-v="">🤚 ما أرمي الليلة</button>`);
+ return head+`<p class="center muted">${k==='snp'?'طلقتك خلصت 🔫 — ':''}${k==='jes'?'🤡 خلّيهم يشكّون بيك باچر! — ':''}صوّت على شكّك، وشكوك الشعب تطلع بالصبح 👥</p>`+g(others,'🤔 منو تشك بيه؟')};
+A.mpReady=()=>{MP().ready=true;render()};
+A.mpAct=id=>{const S=MP();const me=S.order[S.idx];const k=S.roles[me];vib(30);const set=kind=>{S.acts[me]={kind,t:id||null}};
+ if(PR[k].t==='m'){if(k==='sil'&&S.sub===1){S.acts[me+'_s']={kind:'sil',t:id||null};return A.mpNext()}set('kill');if(k==='sil'){S.sub=1;render();return}return A.mpNext()}
+ if(['sk','doc','bg','cop'].includes(k)){set(k);return A.mpNext()}
+ if(k==='det'){set('det');const tk=S.roles[id];const bad=(PR[tk].t==='m'&&tk!=='god')||tk==='sk';if(bad)S.st.found[me]=(S.st.found[me]||0)+1;
+  S.res=`<div style="font-size:64px">${pById(id).av}</div><h3>${esc(pById(id).name)}</h3><div class="verdict ${bad?'bad':'good'}">${bad?(tk==='sk'?'🩸 خطير جداً!':'🔪 شرير!'):'😇 يبيّن بريء'}</div><p class="muted">احفظها براسك وسوّي نفسك ما تدري 🤐</p>`;render();return}
+ if(k==='snp'&&!S.sniperUsed){if(id)set('snp');return A.mpNext()}
+ if(id)S.susp[id]=(S.susp[id]||0)+1;A.mpNext()};
+A.mpNext=()=>{const S=MP();S.res=null;S.sub=0;S.idx++;S.ready=false;if(S.idx<S.order.length){render();return}mpResolve();S.mShown=false;go('mpMorning')};
+function mpResolve(){const S=MP();const AC_=S.acts;const log=[];const nm=id=>id&&pById(id)?esc(pById(id).name):'؟';const actorOf=a=>a.replace(/_s$/,'');
+ const blocked=new Set();Object.entries(AC_).forEach(([a,v])=>{if(v.kind==='cop'&&v.t){blocked.add(v.t);log.push(`🚔 الشرطي (${nm(a)}) حبس ${nm(v.t)}`)}});
+ const ok=a=>!blocked.has(actorOf(a));
+ const mv={};let godPick=null;Object.entries(AC_).forEach(([a,v])=>{if(v.kind!=='kill'||!v.t)return;if(!ok(a)){log.push(`🚫 ${nm(a)} (${PR[S.roles[a]].n}) انحبس وما شارك بالقتل`);return}mv[v.t]=(mv[v.t]||0)+1;if(S.roles[a]==='god')godPick=v.t});
+ let mVictim=null;const mx=Math.max(0,...Object.values(mv));if(mx){const tops=Object.keys(mv).filter(t=>mv[t]===mx);mVictim=tops.length>1&&godPick&&tops.includes(godPick)?godPick:rnd(tops)}
+ const attacks=[];if(mVictim){attacks.push({by:'maf',t:mVictim});log.push(`🔪 المافيا اختارت ${nm(mVictim)}`)}
+ let prot=null,guard=null,sil=null;
+ Object.entries(AC_).forEach(([a,v])=>{const actor=actorOf(a);if(!v.t)return;const blk=!ok(a);
+  if(v.kind==='sk'){if(blk)log.push('🚫 السفّاح انحبس');else{attacks.push({by:'sk',t:v.t,a:actor});log.push(`🩸 السفّاح (${nm(actor)}) هجم على ${nm(v.t)}`)}}
+  else if(v.kind==='snp'){if(blk)log.push('🚫 القنّاص انحبس وما رمى');else{attacks.push({by:'snp',t:v.t,a:actor});S.sniperUsed=true;log.push(`🎯 القنّاص (${nm(actor)}) رمى على ${nm(v.t)}`)}}
+  else if(v.kind==='doc'){if(blk)log.push('🚫 الطبيب انحبس');else{prot={a:actor,t:v.t};log.push(`💉 الطبيب (${nm(actor)}) حمى ${nm(v.t)}`)}}
+  else if(v.kind==='bg'){if(blk)log.push('🚫 الحارس انحبس');else{guard={a:actor,t:v.t};log.push(`🛡️ الحارس (${nm(actor)}) حرس ${nm(v.t)}`)}}
+  else if(v.kind==='sil'){if(blk)log.push('🚫 الكاتم انحبس');else{sil=v.t;log.push(`🤐 الكاتم (${nm(actor)}) سكّت ${nm(v.t)}`)}}
+  else if(v.kind==='det')log.push(`🕵️ المحقق (${nm(actor)}) حقق بـ ${nm(v.t)}`)});
+ S.lastDoc=prot?prot.t:null;
+ const deaths=[];const kill=(id,why)=>{if(!deaths.find(d=>d.id===id))deaths.push({id,why})};let saved=0;
+ attacks.forEach(at=>{const t=at.t;if(prot&&prot.t===t){saved++;S.st.saves[prot.a]=(S.st.saves[prot.a]||0)+1;log.push(`✨ ${nm(t)} نجا بفضل الطبيب`);return}
+  if(guard&&guard.t===t&&guard.a!==t){if(prot&&prot.t===guard.a){saved++;log.push(`✨ الحارس دافع عن ${nm(t)} والطبيب أنقذ الحارس`);return}kill(guard.a,'bg');S.st.guard[guard.a]=1;log.push(`🛡️ الحارس ${nm(guard.a)} ضحّى بنفسه حتى ينقذ ${nm(t)}`);return}
+  kill(t,at.by);log.push(`💀 ${nm(t)} مات`);if(at.by==='snp'&&PR[S.roles[t]].t==='c'){kill(at.a,'guilt');log.push('😔 القنّاص قتل بريء ومات من الندم')}});
+ const dead=new Set(deaths.map(d=>d.id));S.alive=S.alive.filter(x=>!dead.has(x));
+ S.silenced=sil&&S.alive.includes(sil)?sil:null;S.deaths=deaths;S.saved=saved;
+ S.clues=[];if(S.opt.clue!=='hard'){const sv=Object.entries(S.susp).filter(([id])=>S.alive.includes(id)).sort((a,b)=>b[1]-a[1]);
+  if(sv.length)S.clues.push(`👥 أكثر واحد يشكّون بيه الشعب الليلة: <b>${nm(sv[0][0])}</b> (${sv[0][1]} ${sv[0][1]>1?'أصوات':'صوت'})`);
+  const bad=S.alive.filter(id=>isEvil(S.roles[id]));if(bad.length){const kk=S.opt.clue==='easy'?2:3;const b0=rnd(bad);const rest=shuffle(S.alive.filter(x=>x!==b0)).slice(0,kk-1);
+   if(rest.length===kk-1&&S.alive.length>kk)S.clues.push(`🔎 دليل الراوي: واحد على الأقل من هذول شرير ⬅️ <b>${shuffle([b0,...rest]).map(nm).join('، ')}</b>`)}}
+ S.log.push({t:`🌙 الليلة ${S.night}`,items:log})}
+function mpWin(){const S=MP();if(S.jesterWin)return 'jes';const al=S.alive;const m=al.filter(id=>PR[S.roles[id]].t==='m').length;const sk=al.some(id=>S.roles[id]==='sk');
+ if(sk&&al.length<=2)return 'sk';if(!m&&!sk)return 'town';if(!sk&&m>=al.length-m)return 'mafia';return null}
+const DEATH_N={maf:['لكينا {n} بالصبح مقتول بطريقة مافيوية 🔪','{n} ما گعد من النوم... المافيا مرّت من يمه 😱','باب بيت {n} مفتوح... وهو ما موجود بعد 🔪'],sk:['{n} لكيناه مقتول بطريقة وحشية 🩸 أكو سفّاح بيناتنا!','آثار دم بكل مكان... {n} راح ضحية السفّاح 🩸'],snp:['صوت طلقة بنص الليل... و{n} طاح 🎯'],bg:['{n} مات بطل! ضحّى بنفسه حتى ينقذ غيره 🛡️'],guilt:['{n} ما تحمّل الذنب ومات من الندم 😔']};
+const mpClues=S=>S.clues&&S.clues.length?`<div class="card clue"><h3>🧩 تلميحات الراوي</h3>${S.clues.map(c=>`<p>${c}</p>`).join('')}</div>`:'';
+V.mpMorning=()=>{const S=MP();if(!S.mShown)return drumH('🌅','الراوي يحچي شنو صار بالليل...');const w=mpWin();
+ const ds=S.deaths.map(d=>{const p=pById(d.id);return `<div class="unmask card"><div class="who">💀</div><h3>${rnd(DEATH_N[d.why]).replace('{n}',esc(p.name))}</h3>${S.opt.reveal?`<p class="muted">كان دوره: ${PR[S.roles[d.id]].e} ${PR[S.roles[d.id]].n}</p>`:''}</div>`}).join('');
+ return `<h2>☀️ صباح اليوم ${S.night}</h2>${ds||`<div class="unmask card"><div class="who">${S.saved?'✨':'😴'}</div><h2>${S.saved?'محاولة قتل فاشلة!':'ليلة هادئة'}</h2><p>${S.saved?'أحد انهجم عليه بالليل... بس نجا بأعجوبة ✨':'محد مات الليلة... غريب 🤔'}</p></div>`}
+ ${S.silenced?`<div class="card center">🤐 <b>${esc(pById(S.silenced).name)}</b> انسكت اليوم: ممنوع يحچي أو يصوّت!</div>`:''}${mpClues(S)}
+ ${w?`<button class="btn big pink" data-a="mpFinish">🏁 النتيجة</button>`:`<button class="btn big primary" data-a="go" data-v="mpDay">☀️ نبدي النقاش</button>`}`};
+M.mpMorning=()=>{const S=MP();if(!S.mShown){sfx('drum');T(()=>{S.mShown=true;render()},2500)}else if(S.deaths.length){sfx('fail');vib(300)}else{sfx('win');confetti(70,['✨','😴'])}};
+V.mpDay=()=>{const S=MP();const t=S.opt.t;const dead=S.order0.filter(x=>!S.alive.includes(x));
+ return `<h2>☀️ نقاش اليوم ${S.night}</h2>${t?ringH(t):''}
+ <div class="pgrid">${S.alive.map(id=>{const p=pById(id);return `<div class="pc"><span class="a">${p.av}</span><span class="n">${esc(p.name)}${id===S.silenced?' 🤐':''}</span></div>`}).join('')}</div>
+ ${mpClues(S)}${dead.length?`<p class="center muted">💀 ${dead.map(x=>esc(pById(x).name)+(S.opt.reveal?` ${PR[S.roles[x]].e}`:'')).join('، ')}</p>`:''}
+ <button class="btn big pink" data-a="mpVoteStart">⚖️ للتصويت</button>`};
+M.mpDay=()=>{const t=MP().opt.t;if(t)ringTimer(t,()=>toast('خلص وقت النقاش! ⏰ صوّتوا'))};
+function mpVoteInit(){const S=MP();S.voters=shuffle(S.alive.filter(x=>x!==S.silenced));S.vi=0;S.vready=false;S.votes={}}
+A.mpVoteStart=()=>{const S=MP();S.cands=S.alive.slice();S.revote=false;mpVoteInit();go('mpVote')};
+A.mpRevote=()=>{mpVoteInit();go('mpVote')};
+V.mpVote=()=>{const S=MP();const cands=S.cands.map(pById);
+ if(S.opt.vote==='public')return `<h2>⚖️ ${S.revote?'إعادة التصويت!':'منو تعدمون؟'}</h2><p class="center muted">${S.silenced?`🤐 ${esc(pById(S.silenced).name)} ما يصوّت اليوم • `:''}صوّتوا برفع الإيد واضغطوا على اللي اخترتوه</p>`+gridH(cands,'mpLynch',`<button class="btn ghost" data-a="mpLynch" data-v="">🤷 ما نعدم أحد</button>`);
+ const v=pById(S.voters[S.vi]);
+ if(!S.vready)return passH(v,`دور ${esc(v.name)} يصوّت${S.revote?' (إعادة)':''}`,'التصويت سري 🤫 محد يباوع',`${S.vi+1} / ${S.voters.length}`,'mpVReady',`أنا ${esc(v.name)} 🫡`);
+ return `<h2>${v.av} منو تعدم؟</h2>`+gridH(cands.filter(x=>x.id!==v.id),'mpCast',`<button class="btn ghost" data-a="mpCast" data-v="">🤷 أمتنع</button>`)};
+A.mpVReady=()=>{MP().vready=true;render()};
+A.mpCast=id=>{const S=MP();const v=S.voters[S.vi];if(id)S.votes[id]=(S.votes[id]||0)+(S.roles[v]==='may'?2:1);sfx('pop');vib(30);S.vi++;S.vready=false;if(S.vi<S.voters.length){render();return}mpTally()};
+function mpTally(){const S=MP();const mx=Math.max(0,...Object.values(S.votes));const tops=Object.keys(S.votes).filter(x=>S.votes[x]===mx);S.tally=Object.assign({},S.votes);
+ if(!mx){S.lynch=null;S.tieMsg='محد صوّت على أحد... محد ينعدم اليوم'}else if(tops.length===1){S.lynch=tops[0];S.tieMsg=''}else if(!S.revote){S.lynch=null;S.revote=true;S.cands=tops;S.tieMsg='tie'}else{S.lynch=null;S.tieMsg='تعادل مرة ثانية... محد ينعدم اليوم'}
+ S.tShown=false;go('mpTally')}
+V.mpTally=()=>{const S=MP();if(!S.tShown)return drumH('🗳️','الراوي يحسب الأصوات...');const max=Math.max(1,...Object.values(S.tally));
+ const rows=Object.keys(S.tally).sort((a,b)=>S.tally[b]-S.tally[a]).map(id=>`<div class="bar"><span class="n">${pTag(pById(id))}</span><span class="t"><i data-w="${S.tally[id]/max*100}"></i></span><span class="c">${S.tally[id]}</span></div>`).join('');
+ const L=S.lynch?pById(S.lynch):null;
+ return `<h2>📊 نتيجة التصويت</h2><div class="card" style="display:flex;flex-direction:column;gap:8px">${rows||'<p class="center muted">ولا صوت</p>'}</div>
+ ${S.tieMsg==='tie'?`<div class="card center"><h3>⚖️ تعادل!</h3><p>إعادة التصويت بس بين: <b>${S.cands.map(x=>esc(pById(x).name)).join('، ')}</b></p></div><button class="btn big pink" data-a="mpRevote">🔁 إعادة التصويت</button>`:
+  L?`<div class="card center"><p>الشلة قررت إعدام:</p><h2>${pTag(L)}</h2></div><button class="btn big pink" data-a="go" data-v="mpLast">🎤 الكلمة الأخيرة</button>`:
+  `<div class="card center"><h3>🤷 ${S.tieMsg}</h3></div><button class="btn big primary" data-a="mpNightGo">🌙 الليلة الجاية</button>`}`};
+M.mpTally=()=>{const S=MP();if(!S.tShown){sfx('drum');T(()=>{S.tShown=true;render()},2300)}else T(()=>document.querySelectorAll('.bar i').forEach(i=>i.style.width=i.dataset.w+'%'),60)};
+A.mpLynch=id=>{const S=MP();S.tally=id?{[id]:1}:{};S.lynch=id||null;S.tieMsg=id?'':'الشلة قررت ما تعدم أحد اليوم';S.tShown=true;go(id?'mpLast':'mpTally')};
+V.mpLast=()=>{const p=pById(MP().lynch);return `<div class="center"><div class="bigav">${p.av}</div><h2>${esc(p.name)}</h2><p class="muted">عندك ٢٠ ثانية للكلمة الأخيرة... دافع عن نفسك! 🎤</p></div>${ringH(20)}<button class="btn big red" data-a="mpExec">⚖️ نفّذ الحكم</button>`};
+M.mpLast=()=>ringTimer(20,()=>{});
+A.mpExec=()=>{const S=MP();const id=S.lynch;S.alive=S.alive.filter(x=>x!==id);if(S.silenced===id)S.silenced=null;const r=PR[S.roles[id]];
+ S.log.push({t:`☀️ اليوم ${S.night}`,items:[`⚖️ الشلة عدمت ${esc(pById(id).name)} (${r.e} ${r.n})`]});if(S.roles[id]==='jes')S.jesterWin=id;S.eShown=false;go('mpElim')};
+V.mpElim=()=>{const S=MP();if(!S.eShown)return drumH('⚖️','والحكم...');const p=pById(S.lynch);const k=S.roles[p.id];const r=PR[k];const w=mpWin();
+ const msg=k==='jes'?'🃏 هههه! طلع المهرج... وهذا اللي يريده بالضبط!':r.t==='m'?'🔪 طلع من المافيا! عفية عليكم 👏':k==='sk'?'🩸 طلع السفّاح! خلصتوا منه 👏':'😇 طلع بريء... ظلمتوه 😭';
+ return `<div class="unmask card"><div class="who">${p.av}</div><h2>${esc(p.name)} انعدم!</h2>${S.opt.reveal||k==='jes'?`<div class="verdict ${r.t==='c'||k==='jes'?'bad':'good'}">${msg}</div><p class="muted">دوره: ${r.e} ${r.n}</p>`:'<p class="muted">دوره يبقى سر لآخر اللعبة 🤐</p>'}</div>
+ ${w?`<button class="btn big pink" data-a="mpFinish">🏁 النتيجة</button>`:`<button class="btn big primary" data-a="mpNightGo">🌙 الليلة الجاية</button>`}`};
+M.mpElim=()=>{const S=MP();if(!S.eShown){sfx('drum');T(()=>{S.eShown=true;render()},2500)}else{const k=S.roles[S.lynch];if(isEvil(k)){sfx('win');confetti(100,['👏','⚖️'])}else sfx('fail')}};
+function mpWon(id){const S=MP();const k=S.roles[id],t=PR[k].t;return (S.win==='town'&&t==='c')||(S.win==='mafia'&&t==='m')||(S.win==='sk'&&k==='sk')||(S.win==='jes'&&id===S.jesterWin)}
+A.mpFinish=()=>{const S=MP();if(!S.scored){S.scored=true;S.win=mpWin()||'town';Object.keys(S.roles).forEach(id=>{if(mpWon(id))sAdd('mafpro',id,S.win==='jes'||S.win==='sk'?5:3,2)});save()}go('mpEnd')};
+const WIN_T={town:['😇','الشعب انتصر!','كل الأشرار انكشفوا 👏'],mafia:['🔪','المافيا سيطرت على البلد!','ضحكوا عليكم واحد واحد 😈'],sk:['🩸','السفّاح فاز لوحده!','محد كدر يوقفه 😱'],jes:['🃏','المهرج فاز!','عدمتوه وهذا اللي كان يريده 🤡']};
+V.mpEnd=()=>{const S=MP();const [e,t,sub]=WIN_T[S.win]||WIN_T.town;const nm=id=>esc(pById(id).name);const hl=[];
+ Object.entries(S.st.saves).forEach(([id,n])=>hl.push(`💉 ${nm(id)} أنقذ ${n} ${n>1?'مرات':'مرة'}`));Object.entries(S.st.found).forEach(([id,n])=>hl.push(`🕵️ ${nm(id)} كشف ${n} ${n>1?'أشرار':'شرير'}`));Object.keys(S.st.guard).forEach(id=>hl.push(`🛡️ ${nm(id)} ضحّى بنفسه بطولياً`));
+ const ev=S.alive.filter(id=>isEvil(S.roles[id]));if(ev.length)hl.push(`😈 أخطر شرير: ${nm(ev[0])} (${PR[S.roles[ev[0]]].n}) نجا لآخر اللعبة`);
+ return `<div class="center" style="font-size:90px">${e}</div><h2>${t}</h2><p class="center muted">${sub} • ${S.night} ${S.night>1?'ليالي':'ليلة'}</p>
+ ${hl.length?`<div class="card"><h3>🏅 تحليل الراوي</h3>${hl.map(x=>`<p>${x}</p>`).join('')}</div>`:''}
+ <div class="lb role-list">${S.order0.filter(pById).map(id=>{const p=pById(id);const k=S.roles[id];const al=S.alive.includes(id);return `<div class="lbi ${mpWon(id)?'first':''}"><span class="a">${p.av}</span><span class="n ${al?'':'dead'}">${esc(p.name)}<small>${PR[k].e} ${PR[k].n}${al?'':' • 💀'}</small></span>${mpWon(id)?'<span class="s">🏆</span>':''}</div>`}).join('')}</div>
+ <details class="card"><summary>📜 سجل الأحداث الكامل (كل أسرار الليل)</summary>${S.log.map(l=>`<h4>${l.t}</h4>${l.items.map(i=>`<p>${i}</p>`).join('')||'<p class="muted">—</p>'}`).join('')}</details>
+ <h3>🏆 نقاط المافيا الكبرى</h3>${sBoard('mafpro')}
+ <button class="btn big primary" data-a="go" data-v="mpSetup">🔁 لعبة جديدة</button><button class="btn pink" data-a="wheelFor" data-v="">🎡 دولاب العقاب للخسرانين</button>`};
+M.mpEnd=()=>{sfx('win');confetti(180,[WIN_T[MP().win][0],'🏆','🎉'])};
+
 /* ============================ ACTIONS ============================ */
 A.go=v=>go(v);
 A.home=()=>{if(GUARDED.includes(screen)){modal(`<h3 class="center">🚪 تطلع من اللعبة؟</h3><p class="center muted">الجولة الحالية راح تنلغي</p><div class="row"><button class="btn red" data-a="confirmHome">إي، اطلع</button><button class="btn" data-a="closeModal">لا، كمّل</button></div>`)}else go('home')};
@@ -1362,8 +1554,8 @@ A.confirmWipe=()=>{players=[];customCats=[];selCats=null;gstats={rounds:0,caught
 let wakeLock=null;function keepAwake(){try{if(navigator.wakeLock&&!wakeLock)navigator.wakeLock.request('screen').then(l=>{wakeLock=l;l.addEventListener('release',()=>{wakeLock=null})}).catch(()=>{})}catch(e){}}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')keepAwake()});
 document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el||el.disabled)return;const a=el.dataset.a;if(!A[a])return;keepAwake();
- if(performance.now()-lastRender<380&&!el.closest('#ov')&&!['toggleSound','home','letPt','drawCol','drawSize','drawClear','chOk','chSkip','newHint','bombPass','tbOk','tbSkip','lieV','wyrPick','boomPeek','tenStop'].includes(a))return;
- if(!['spin','toggleSound','addPlayer','cycleAv','flipCard','castVote','pickGuess','chOk','chSkip','tdGo','tdPick','likelyGo','letPt','drawCol','mafAct','frHot','frGuess','drawWin','clsSubmit','bombPass','tbOk','tbSkip','wyrPick','tenStop','hlGuess'].includes(a))sfx('click');A[a](el.dataset.v,el)});
+ if(performance.now()-lastRender<380&&!el.closest('#ov')&&!['toggleSound','home','letPt','drawCol','drawSize','drawClear','chOk','chSkip','newHint','mpCfg','mpOpt','bombPass','tbOk','tbSkip','lieV','wyrPick','boomPeek','tenStop'].includes(a))return;
+ if(!['spin','toggleSound','addPlayer','cycleAv','flipCard','castVote','pickGuess','chOk','chSkip','tdGo','tdPick','likelyGo','letPt','drawCol','mafAct','frHot','frGuess','drawWin','clsSubmit','mpAct','mpCast','bombPass','tbOk','tbSkip','wyrPick','tenStop','hlGuess'].includes(a))sfx('click');A[a](el.dataset.v,el)});
 
 render();
 cloudLoad();
