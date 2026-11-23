@@ -326,7 +326,18 @@ function newMatch(){match={len:settings.matchLen,round:0,pts:{},done:false};play
 let customCats = store.get('customCats',[]);
 let selCats = store.get('selCats',null);
 let gstats = Object.assign({rounds:0,caught:0,escaped:0,guessed:0,games:0}, store.get('gstats',{}));
-function save(){store.set('match',match);store.set('recent',recentWords);store.set('players',players);store.set('settings',settings);store.set('customCats',customCats);store.set('selCats',selCats);store.set('gstats',gstats)}
+function save(){store.set('ts',Date.now());cloudSave();store.set('match',match);store.set('recent',recentWords);store.set('players',players);store.set('settings',settings);store.set('customCats',customCats);store.set('selCats',selCats);store.set('gstats',gstats)}
+/* cloud backup: keeps names & scores even if the browser forgets them */
+let cloud=null,cloudT=0;
+function cloudSave(){if(!cloud)return;clearTimeout(cloudT);cloudT=setTimeout(()=>{try{cloud.set({players,settings,customCats,selCats:selCats||[],allSel:!selCats,gstats,match:match||{},recent:recentWords,ts:Date.now()}).catch(()=>{})}catch(e){}},800)}
+async function cloudLoad(){try{if(!window.claude||!window.claude.use)return;const [db,user]=await Promise.all([claude.use('db'),claude.use('user')]);if(!db||!user)return;
+ const id=await user.id();if(!id)return;const ref=db.doc('data/users/'+id+'/state');const snap=await ref.get();cloud=ref;
+ if(snap.exists){const d=snap.data()||{};if((d.ts||0)>store.get('ts',0)||!players.length){
+  if(Array.isArray(d.players))players=d.players.map(p=>Object.assign({score:0},p,{st:Object.assign(newStats(),p.st||{})}));
+  if(d.settings)settings=Object.assign({},DEF_SETTINGS,d.settings);if(Array.isArray(d.customCats))customCats=d.customCats;
+  selCats=d.allSel?null:(d.selCats||null);if(d.gstats)gstats=Object.assign(gstats,d.gstats);match=d.match&&d.match.pts?d.match:null;if(Array.isArray(d.recent))recentWords=d.recent;
+  const c=cloud;cloud=null;save();cloud=c;if(!IN_ROUND.includes(screen)&&!['wheel','charPlay'].includes(screen))render()}}
+ else cloudSave()}catch(e){}}
 const allCats=()=>CATS.concat(customCats);
 const pById=id=>players.find(p=>p.id===id);
 const pTag=p=>`${p.av} ${esc(p.name)}`;
@@ -402,14 +413,14 @@ M.home=()=>{I(()=>{const t=$('#tag');if(t){t.style.opacity=0;setTimeout(()=>{t.t
 
 V.players=()=>`
  <h2>👥 منو يلعب؟</h2>
- <p class="center muted">اضغط على الوجه حتى تغيّره 😜</p>
+ <p class="center muted">${players.length?'الأسماء محفوظة من آخر مرة 💾 ضيف أو احذف، أو كمّل بنفس الجماعة':'اضغط على الوجه حتى تغيّره 😜'}</p>
  <div class="addrow"><input id="pname" maxlength="16" placeholder="اسم اللاعب..." autocomplete="off"><button class="btn primary" data-a="addPlayer">➕</button></div>
  <div class="plist">${players.map(p=>`
   <div class="pitem"><button class="av" data-a="cycleAv" data-v="${p.id}">${p.av}</button><span class="pname">${esc(p.name)} <span class="rk">${rankOf(p.score)[1]} ${rankOf(p.score)[2]}</span></span><span class="pscore">${p.score} ⭐</span><button class="del" data-a="delPlayer" data-v="${p.id}" aria-label="حذف">✖</button></div>`).join('')||'<div class="card center muted">ماكو لاعبين بعد... ضيف ربعك 👇</div>'}
  </div>
- ${players.length?`<button class="btn small ghost" data-a="resetScores">🔄 تصفير النقاط</button>`:''}
+ ${players.length?`<div class="row"><button class="btn small ghost" data-a="resetScores">🔄 تصفير النقاط</button><button class="btn small ghost" data-a="clearPlayers">🧹 لاعبين جدد</button></div>`:''}
  <div style="margin-top:auto"></div>
- <button class="btn big primary" data-a="go" data-v="setup" ${players.length<3?'disabled':''}>التالي ⬅️ ${players.length<3?`(تحتاج ${3-players.length} بعد)`:''}</button>`;
+ <button class="btn big primary" data-a="go" data-v="setup" ${players.length<3?'disabled':''}>${players.length<3?`التالي ⬅️ (تحتاج ${3-players.length} بعد)`:`✅ يلا بنفس اللاعبين (${players.length})`}</button>`;
 M.players=()=>{const i=$('#pname');i.addEventListener('keydown',e=>{if(e.key==='Enter')A.addPlayer()});if(!('ontouchstart' in window))i.focus()};
 
 const segH=(k,vals)=>`<div class="seg">${vals.map(([v,l])=>`<button class="${settings[k]===v?'on':''}" data-a="setOpt" data-v="${k}|${v}">${l}</button>`).join('')}</div>`;
@@ -664,7 +675,9 @@ A.home=()=>{if(IN_ROUND.includes(screen)){modal(`<h3 class="center">🚪 تطل�
 A.confirmHome=()=>{R=null;go('home')};
 A.closeModal=closeModal;
 A.toggleSound=()=>{settings.sound=!settings.sound;save();const b=document.querySelector('[data-a="toggleSound"]');if(b)b.textContent=settings.sound?'🔊':'🔇';if(settings.sound)sfx('pop')};
-A.start=()=>go(players.length>=3?'setup':'players');
+A.start=()=>go('players');
+A.clearPlayers=()=>modal(`<h3 class="center">🧹 لاعبين جدد؟</h3><p class="center muted">راح تنمسح الأسماء الحالية حتى تدخل أسماء جديدة</p><div class="row"><button class="btn red" data-a="confirmClearPlayers">إي، امسح</button><button class="btn" data-a="closeModal">لا</button></div>`);
+A.confirmClearPlayers=()=>{players=[];match=null;save();closeModal();go('players')};
 A.quick=()=>{if(players.length<3){toast('ضيف ٣ لاعبين على الأقل أول 👥');go('players');return}settings.random=true;save();newMatch();A.startRound()};
 A.newMatchGo=()=>{if(players.length<3){go('players');return}newMatch();A.startRound()};
 
@@ -773,6 +786,7 @@ document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!
  if(!['spin','toggleSound','addPlayer','cycleAv','flipCard','castVote','pickGuess','chOk','chSkip','tdGo','tdPick','likelyGo'].includes(a))sfx('click');A[a](el.dataset.v,el)});
 
 render();
+cloudLoad();
 </script>
 </body>
 </html>
