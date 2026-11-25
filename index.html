@@ -290,6 +290,21 @@ p{margin:0;line-height:1.7}
 details.card summary{cursor:pointer;font-weight:800}
 details.card h4{margin:12px 0 2px;color:var(--pri);font-family:'Lalezar';font-weight:400;font-size:18px}
 details.card p{font-size:14px;margin:2px 0}
+/* v8 games */
+.gen{display:flex;flex-direction:column;align-items:center;padding:14px;border-radius:26px;background:linear-gradient(160deg,#facc15,#a16207);color:#2a1300;box-shadow:var(--shadow);transition:background .3s}
+.gen .g{font-size:66px;line-height:1.1;animation:wobble 1.5s infinite}
+.gen b{font-family:'Lalezar';font-weight:400;font-size:60px;line-height:1}
+.gen small{font-weight:800}
+.gen.off{background:linear-gradient(160deg,#334155,#0f172a);color:#fff}
+.gen.off .g{animation:shake .2s 4}
+.dotc{display:inline-block;width:14px;height:14px;border-radius:50%;vertical-align:middle;margin-inline-end:4px;border:2px solid #fff3}
+.spec .bar{position:relative;height:48px;border-radius:14px;background:linear-gradient(90deg,#30e3ca,#ffcc00,#ff4fa3);box-shadow:var(--shadow)}
+.spec .ends{display:flex;justify-content:space-between;gap:10px;font-weight:800;margin-top:8px;font-size:15px}
+.spec .ends span:last-child{text-align:right}
+.spec i.tgt,.spec i.gs{position:absolute;top:-6px;bottom:-6px;width:8px;border-radius:4px;transform:translateX(-50%);box-shadow:0 0 0 3px #1b0f3b}
+.spec i.tgt{background:#fff}.spec i.gs{background:#1b0f3b;box-shadow:0 0 0 3px #fff}
+.spec .gm{position:absolute;top:50%;transform:translate(-50%,-50%);font-size:26px;filter:drop-shadow(0 2px 0 #0006)}
+.wrange{width:100%;height:44px;accent-color:var(--pri)}
 @media (max-width:360px){.cgrid{grid-template-columns:repeat(2,1fr)}.ggrid{grid-template-columns:repeat(2,1fr)}.logo h1{font-size:56px}}
 </style>
 </head>
@@ -401,8 +416,20 @@ const GAMES=[
  {id:'likely',e:'👉',n:'مين الأكثر؟',d:'كلكم أشروا ١ ٢ ٣',min:0,go:'likely',sec:'fun',bg:'linear-gradient(160deg,#4ade80,#13703a)',ink:'#063014'},
  {id:'td',e:'🔥',n:'صراحة لو تحدي',d:'اختار وتحمّل',min:0,go:'td',sec:'fun',bg:'linear-gradient(160deg,#a78bfa,#5b21b6)'},
  {id:'wheel',e:'🎡',n:'دولاب العقاب',d:'لفّه وشوف حظك',min:0,go:'wheel',sec:'fun',bg:'linear-gradient(160deg,#38bdf8,#1e3a8a)'},
+
+ {id:'dict',e:'📖',n:'قاموس عراقي',d:'تعرف معنى كلامنا؟',min:3,go:'dict',sec:'iraq',bg:'linear-gradient(160deg,#16a34a,#14532d)'},
+ {id:'iqact',e:'🎭',n:'مثّل الشخصية',d:'سايق كيا، أبو المولدة...',min:3,go:'iqactPass',sec:'iraq',bg:'linear-gradient(160deg,#e11d48,#4c0519)'},
+ {id:'gen',e:'⚡',n:'أبو المولدة',d:'اسحب أمبيرات قبل لا تطفي!',min:3,go:'gen',sec:'iraq',bg:'linear-gradient(160deg,#facc15,#854d0e)',ink:'#2a1300'},
+ {id:'city',e:'🗺️',n:'خمّن المدينة',d:'مدن العراق بالتلميحات',min:3,go:'city',sec:'iraq',bg:'linear-gradient(160deg,#0ea5e9,#0c4a6e)'},
+ {id:'mom',e:'👩‍👦',n:'عتاب أمك',d:'جاوب أمك بعذر مقنع!',min:3,go:'mom',sec:'iraq',bg:'linear-gradient(160deg,#f472b6,#831843)'},
+ {id:'fake',e:'🎨',n:'الفنان المزيف',d:'واحد يرسم وما يدري شنو',min:3,go:'fakeReveal',sec:'deceive',bg:'linear-gradient(160deg,#a855f7,#3b0764)'},
+ {id:'split',e:'🗡️',n:'تقاسم لو خيانة',d:'تثق بصاحبك؟',min:3,go:'splitSetup',sec:'deceive',bg:'linear-gradient(160deg,#78716c,#1c1917)'},
+ {id:'wave',e:'📡',n:'على نفس الموجة',d:'اقرا عقل صاحبك',min:3,go:'wavePass',sec:'brain',bg:'linear-gradient(160deg,#2dd4bf,#7c3aed)'},
+ {id:'auction',e:'💰',n:'المزاد السري',d:'زايد بذكاء... يمكن مقلب!',min:3,go:'aucSetup',sec:'brain',bg:'linear-gradient(160deg,#eab308,#713f12)',ink:'#2a1300'},
+ {id:'mind',e:'🧠',n:'عقل الشلة',d:'جاوب مثل الأغلبية',min:3,go:'mindQ',sec:'fun',bg:'linear-gradient(160deg,#fb7185,#9f1239)'},
 ];
-const SECS=[['deceive','🕵️ الشك والخداع'],['speed','⚡ السرعة والحماس'],['brain','🧠 الذكاء والكلمات'],['fun','😂 الضحك والعقاب']];
+GAMES.forEach(g=>{if(g.min<3)g.min=3});
+const SECS=[['iraq','🇮🇶 ألعاب عراقية'],['deceive','🕵️ الشك والخداع'],['speed','⚡ السرعة والحماس'],['brain','🧠 الذكاء والكلمات'],['fun','😂 الضحك والعقاب']];
 const HOWTO={
  mafia:'كل واحد ياخذ دور سري: مافيا 🔪، طبيب 💉، محقق 🕵️، لو مواطن. بالليل تمررون التلفون وكل واحد يسوي دوره بالسر. بالنهار تتناقشون وتصوّتون منو تعدمون. الشعب يفوز إذا انكشفت كل المافيا، والمافيا تفوز إذا صار عددهم يساوي الباقين.',
  letters:'كل واحد ياخذ ورقة وقلم. الحظ يختار حرف، وتكتبون اسم وحيوان ونبات وجماد وبلاد تبدي بيه قبل لا يخلص الوقت. ١٠ نقاط للكلمة اللي محد كتبها، ٥ للمكررة.',
@@ -413,6 +440,16 @@ const HOWTO={
  likely:'يطلع سؤال "مين أكثر واحد ممكن..."، تعدّون ٣ ٢ ١ وكلكم تأشّرون على واحد بنفس الوقت 😂',
  td:'الحظ يختار واحد، وهو يختار صراحة لو تحدي ويتحمّل النتيجة 🔥',
  wheel:'لفّه للخسران وشوف شنو عقابه 😈',
+ dict:'كل واحد بدوره تطلعله كلمة عراقية وأربع معاني، ويختار المعنى الصح. وبعدها تحدي إضافي: يستخدمها بجملة تضحّك، والشلة تقرر إذا يستاهل نقطة.',
+ iqact:'واحد يشوف شخصية عراقية بالسر (سايق كيا، أبو المولدة، خالة بالعرس...) ويمثّلها ٤٥ ثانية، والباقين يحزرون. اللي يعرفها أول والممثل ياخذون نقطة.',
+ gen:'كل واحد بدوره يسحب أمبيرات من المولدة ويجمعها. بس كل سحبة ممكن تطفي المولدة ويروح كل اللي جمعته بالدور! تكدر تكتفي وتحفظ بأي وقت. أول واحد يوصل للهدف يفوز.',
+ city:'تطلع تلميحات عن مدينة عراقية واحد ورا الثاني. اللي يعرفها أول ياخذ ٣ نقاط بأول تلميح، ٢ بالثاني، و١ بالثالث.',
+ mom:'أمك تعاتبك بجملة عراقية مشهورة، وعندك ١٠ ثواني تجاوبها بعذر. الشلة تقيّم: ضحّكنا +٢، مقنع +١، أو تستاهل نعال 🩴',
+ fake:'الكل يشوف الكلمة إلا الفنان المزيف (يشوف الفئة بس). كل واحد يرسم خط واحد بدوره، جولتين. بعدين تصوّتون منو المزيف. إذا انكشف، عنده فرصة يحزر الكلمة.',
+ split:'الحظ يختار ثنين وكنز نقاط. يتفاهمون ٣٠ ثانية، وبعدين كل واحد يختار بالسر: نتقاسم لو أخونه. الاثنين تقاسموا ياخذون النص، الخاين ياخذ الكل، والاثنين خانوا محد ياخذ.',
+ wave:'الوسيط يشوف مكان سري على شريط بين شيئين (مثل بارد ⟷ حار)، ويگول كلمة وحدة تدل عليه. الباقين كل واحد يحدد المكان بالسر، والأقرب ياخذ نقاط أكثر.',
+ auction:'كل واحد عنده ١٠٠ دينار. يطلع ٦ أغراض مضحكة، وكل واحد يزايد بالسر. قيمة الغرض مخفية: يمكن كنز ويمكن مقلب بنقاط سالبة! الأغنى بالنهاية يفوز.',
+ mind:'سؤال مثل "شي تلكاه بثلاجة كل بيت عراقي". كل واحد يكتب جوابه بالسر، وتاخذ نقطة عن كل واحد كتب نفس جوابك. لازم تفكر مثل الشلة!',
  mafpro:'نسخة المحترفين: ١٢ دور (العرّاب، الكاتم، السفّاح، المهرج، الحارس، الشرطي، القنّاص، العمدة...). الراوي الذكي يحل كل تفاعلات الليل: الحبس، الحماية، التضحية، الطلقة الوحيدة. المواطنين يصوّتون على شكوكهم كل ليلة، والراوي يعطي تلميحات حسب الصعوبة. تصويت سري، إعادة عند التعادل، كلمة أخيرة، وسجل كامل لأسرار الليل بالنهاية.',
  lie:'واحد ياخذ موضوع بالسر، والتلفون يكله: احچي قصة حقيقية لو اكذب! يحچي القصة، والباقين يصوّتون صدق لو كذب. اللي يصيب +١، والحكواتي ياخذ نقطة عن كل واحد ضحك عليه.',
  bomb:'يطلع موضوع، واللي ماسك التلفون يقول كلمة منه ويمرره بسرعة. القنبلة تنفجر بوقت سري، واللي تنفجر بإيده يخسر 💥',
@@ -467,6 +504,15 @@ const PROVERBS=[['اللي ما يعرف الصقر','يشويه'],['الطول 
 const FIVE=['اذكر ٣ ماركات سيارات','اذكر ٣ أكلات عراقية','اذكر ٣ لاعبين كرة','اذكر ٣ حيوانات تعيش بالبحر','اذكر ٣ أشياء بالمطبخ','اذكر ٣ دول أوروبية','اذكر ٣ فواكه لونها أحمر','اذكر ٣ أشياء تلبسها بالشتاء','اذكر ٣ تطبيقات بالتلفون','اذكر ٣ مدن عراقية','اذكر ٣ أنواع حلويات','اذكر ٣ أشياء بالمدرسة','اذكر ٣ مهن يلبسون زي رسمي','اذكر ٣ أشياء تطير','اذكر ٣ أشياء لونها أصفر','اذكر ٣ رياضات بيها كرة','اذكر ٣ أشياء تلكاها بالحمام','اذكر ٣ مسلسلات أو أفلام','اذكر ٣ أسماء تبدي بحرف الميم','اذكر ٣ أشياء باردة','اذكر ٣ أشياء حارة','اذكر ٣ عواصم عربية','اذكر ٣ أنواع مشروبات','اذكر ٣ أشياء بالسيارة','اذكر ٣ أنواع خضرة','اذكر ٣ أشياء بالعرس','اذكر ٣ أنواع طيور','اذكر ٣ أشياء تسويها الصبح','اذكر ٣ مغنيين','اذكر ٣ أشياء مدوّرة','اذكر ٣ أنواع حشرات','اذكر ٣ أشياء بالجنطة','اذكر ٣ أشياء تنكسر بسهولة','اذكر ٣ أسماء بنات','اذكر ٣ أشياء ريحتها حلوة','اذكر ٣ أشياء تلكاها بالبحر','اذكر ٣ ألعاب أطفال','اذكر ٣ أنواع أجبان','اذكر ٣ أشياء تحتاجها بالسفر','اذكر ٣ كلمات إنكليزية تستخدمها كل يوم','اذكر ٣ أشياء تخوّف','اذكر ٣ أشياء بيها أرقام','اذكر ٣ أشياء تشتغل بالكهرباء','اذكر ٣ أنواع رقص'];
 const BOMB_EXTRA=['قول اسم لاعب كرة','قول اسم أغنية','قول ماركة سيارة','قول اسم مسلسل أو فلم','قول شي لونه أحمر','قول شي تلكاه بالمطبخ','قول اسم بنت','قول اسم ولد','قول شي يطير','قول شي ينأكل','قول شي يشتغل بالكهرباء','قول كلمة إنكليزية'];
 const CARD_V=['آص','٢','٣','٤','٥','٦','٧','٨','٩','١٠','ولد','بنت','شايب'];const SUITS=['♥','♦','♠','♣'];
+const DICT=[['هواية','كثير',['هواية بالرسم','شوية','بعيد']],['شكو ماكو؟','شنو الأخبار؟',['وين رايح؟','شكد الساعة؟','منو هذا؟']],['هسه','الآن',['بعدين','أمس','أبداً']],['باچر','غداً',['اليوم','أمس','الأسبوع الجاي']],['شوكت؟','متى؟',['كيف؟','وين؟','ليش؟']],['اشلونك؟','كيف حالك؟',['وين انت؟','شنو اسمك؟','شكد عمرك؟']],['خوش','زين / حلو',['خايس','بطيء','غالي']],['قنفة','كنبة',['قنينة','مخدة','طاولة']],['پانكة','مروحة سقفية',['بنك','بطانية','مكنسة']],['استكان','كوب الشاي الصغير',['ملعقة','صحن','إبريق']],['قوري','إبريق الشاي',['قدر','كتلي كهرباء','ترمس']],['خاشوگة','ملعقة',['شوكة','سكين','صينية']],['چرپاية','سرير',['كرسي','دولاب','سجادة']],['زولية','سجادة',['بطانية','ستارة','مخدة']],['جادة','شارع',['حديقة','سوق','بيت']],['بايسكل','دراجة هوائية',['سيارة','باص','دراجة نارية']],['گاع','أرض',['سقف','حايط','باب']],['يمعود!','يا رجل! (تعجّب)',['تعال!','روح!','اسكت!']],['أغاتي','حبيبي / سيدي',['عدوّي','غريب','جاري']],['خطيّة','مسكين',['خطير','غلطان','زعلان']],['مخبّل','مجنون',['مخبّأ','نعسان','جوعان']],['زعطوط','طفل صغير مشاكس',['شايب','قطة','عصفور']],['فشّار','كذّاب ويبالغ',['طباخ','بخيل','كريم']],['بطران','مدلّل ومرتاح زيادة',['مريض','فقير','عصبي']],['لگف','مسك الشي بالهوا بسرعة',['رمى','كسر','نام']],['دزّ','أرسل',['دفع','نام','ضحك']],['صفن','سرح وفكّر بعمق',['صفّق','صفّر','ركض']],['بطّل','توقف عن الشي',['صار بطل','بدأ','ربح']],['چا','لعد / إذن',['شاي','لا','هسه']],['كشخة','أناقة ولبس حلو',['زعل','كسل','جوع']],['ترس','مليان',['فارغ','مكسور','بارد']],['طرگاعة','مصيبة',['مفاجأة حلوة','لعبة','أكلة']],['سرسري','أزعر ومستهتر',['محترم','شاطر','خجول']],['گلاص','كأس',['نظارة','شباك','مراية']],['عيوني','كلمة دلع (حبيبي)',['شتيمة','عيون حقيقية','نظارة']]];
+const IQCHARS=[['👩‍👦','أم عراقية تعاتب ابنها لأنه تأخر بالليل'],['🚐','سايق كيا يصيّح على الركاب'],['🍲','بياع لبلبي بليلة شتا باردة'],['⚡','أبو المولدة يحچي ويا المشتركين'],['👮','شرطي مرور يوقف سيارة مخالفة'],['💍','خالة بالعرس تسأل "شوكت نفرح بيك؟"'],['💈','حلاق يحچي سياسة وهو يحلق'],['📚','مدرّس عربي يصحح دفتر مليان أغلاط'],['👵','جدّة تحچي قصة من أيام زمان'],['🍦','طفل يريد آيس كريم من أبوه'],['🗂️','موظف دائرة يگول "تعال باچر"'],['🛍️','بياع بالشورجة يساوم زبون'],['⚽','لاعب كرة يدّعي إصابة'],['🌡️','مذيع نشرة جوية والحرارة ٥٠'],['📞','واحد يحچي بالتلفون بصوت عالي بالباص'],['🤵','عريس متوتر بليلة العرس'],['👨‍🍳','طبّاخ يذوق الطبخة وتعجبه هواية'],['🛋️','ضيف ما يريد يمشي'],['🗺️','واحد ضايع بالكرادة يسأل عن الطريق'],['🇮🇶','مشجع كرة بعد ما فاز المنتخب'],['🧾','أبو البيت والفاتورة جت غالية'],['📸','مصوّر عرس يرتّب الناس للصورة'],['👂','جارة فضولية تتنصّت ورا الحايط'],['😴','واحد گعد من النوم الساعة ٣ العصر'],['🫖','بياع شاي بالكورنيش']];
+const GEN_OK=['الوطنية رجعت! ⚡','أبو المولدة رضى عليك 😎','شغّل المبردة يمعود 🥶','الثلاجة اشتغلت 🧊','شغّلنا الغسالة 🧺','حتى السبلت اشتغل! 🌬️','الماطور يشتغل عدل 💪'];
+const GEN_OFF=['طفت المولدة! أبو المولدة راح يتغدى 😤','الگاز خلص! 🛢️','انقطعت الوطنية والمولدة سوا 🔌💀','أبو المولدة: "انتو ما دافعين الاشتراك!" 😠','سحبت هواية أمبيرات والخط احترگ 🔥','الجطلة طفت والبيت صار ظلام 🕯️'];
+const CITIES=[{n:'البصرة',c:['تنسمّى "فينيسيا الشرق" لأن بيها هواية أنهار','مدينة الشاعر بدر شاكر السياب','بيها شط العرب ونخيل التمر البرحي 🌴']},{n:'الموصل',c:['تنسمّى أم الربيعين 🌸','بيها المنارة الحدباء','مشهورة بالكبة الموصلية 😋']},{n:'أربيل',c:['بيها قلعة من أقدم المدن المسكونة بالعالم 🏰','عاصمة إقليم كوردستان','مشهورة بالمولات والمصايف القريبة منها']},{n:'سامراء',c:['بيها مئذنة حلزونية 🌀','الملوية مالتها مشهورة بكل العالم','كانت عاصمة الدولة العباسية فترة']},{n:'الحلة',c:['قريبة من آثار مدينة قديمة جداً 🏛️','قريبة من أسد بابل','مركز محافظة بابل']},{n:'الناصرية',c:['قريبة منها زقورة أور 🏛️','مركز محافظة ذي قار','الأهوار والجبايش قريبة منها 🛶']},{n:'كركوك',c:['بيها نار ما تنطفي اسمها بابا گرگر 🔥','مشهورة بالنفط','بيها قلعة على تل بنص المدينة']},{n:'بعقوبة',c:['تنسمّى مدينة البرتقال 🍊','مركز محافظة ديالى','شمال شرق بغداد']},{n:'الكوت',c:['بيها سدّة على دجلة','مركز محافظة واسط','صار بيها حصار مشهور بالحرب العالمية الأولى']},{n:'هيت',c:['مشهورة بالنواعير القديمة 🎡','على نهر الفرات بالأنبار','مشهورة بعيون القير من زمان']},{n:'الفلوجة',c:['تنسمّى مدينة المساجد 🕌','بالأنبار على الفرات','مشهورة بالكباب 🍢']},{n:'السليمانية',c:['تنسمّى مدينة الثقافة بكوردستان 📚','بيها جبل گويژة','مشهورة بالجو البارد والمصايف ❄️']},{n:'العمارة',c:['على نهر دجلة بالجنوب','بيها أهوار وقصب 🛶','مركز محافظة ميسان']},{n:'دهوك',c:['بأقصى شمال العراق ⛰️','قريبة من الحدود التركية','بيها سد مشهور باسمها']},{n:'الرمادي',c:['على نهر الفرات','مركز أكبر محافظة بالعراق بالمساحة','مركز محافظة الأنبار']},{n:'بغداد',c:['بيها شارع المتنبي للكتب 📚','بيها نصب الحرية','عاصمة العراق 🇮🇶']},{n:'النجف',c:['بيها منخفض واسع اسمه "البحر"','بيها مقبرة وادي السلام، من أكبر المقابر بالعالم','قريبة منها الكوفة']},{n:'كربلاء',c:['قريبة منها بحيرة الرزازة','مشهورة بالزيارات المليونية','بيها مرقد الإمام الحسين']}];
+const MOM=['شنو هالهدوم المذبوبة على الگاع؟ 😠','يمه لا تشرب ماي بارد وانت حار، تمرض!','ابن خالتك أخذ ٩٩ بالامتحان... وانت؟','شوكت رجعت البارحة؟ لا تجذب علي!','طفّي الضوء! الكهرباء مو ببلاش 💡','التلفون وياك حتى بالحمام؟ 📱','ليش ما أكلت؟ مو طابخة إلك خصوصي!','من أموت تعرف قيمتي 😢','روح افتح الباب... ليش أنا دائماً؟','گوم صلّح الستلايت، ماكو قنوات!','الخطّار جايين، روح البس شي عدل!','شنو هالشعر؟ روح احلگ!','انت ليش ما تسولف ويانا؟ بس بالتلفون!','منو أكل الكيك اللي بالثلاجة؟ 🎂','ليش ما رديت على تلفوني ١٠ مرات؟','لبست قمصلة؟ برّا برد! 🧥','شوكت نفرح بيك ونشوف عرسك؟ 💍','الساعة ٢ بالليل وبعدك صاحي؟!','جيبلي ماي... هسه هسه!','ليش وجهك أصفر؟ ما تاكل زين؟','صرفت راتبك بأسبوع؟ 💸','ليش اشتريت هذا؟ عدنا منه بالبيت!','منو گلك تطلع بدون ما تگلي؟','غسلت إيدك قبل الأكل؟ 🧼','ليش ما تنام بوكت مثل الناس؟','تعال اگعد ويا الخطّار وسولف!','وين صار الريموت؟ منو أخذه؟','نزّل صوت الأغاني! الجيران! 🔊','ليش تأخرت؟ گلت رايح خمس دقايق!','صوّرت الأكل قبل لا تاكله؟ 📸'];
+const SPECS=[['بارد 🧊','حار 🔥'],['ممل 😴','ممتع 🤩'],['رخيص 🪙','غالي 💎'],['شي عراقي 🇮🇶','شي أجنبي 🌍'],['مخيف 👻','لطيف 🧸'],['صحي 🥗','مضر 🍟'],['سهل','صعب'],['قديم 🏺','حديث 📱'],['صغير 🐜','كبير 🐘'],['تافه','مهم'],['ريحته خايسة 🤢','ريحته حلوة 🌹'],['للأطفال 🧸','للكبار 🧓'],['يناسب العزيمة','ما يناسب العزيمة'],['يضحّك 😂','يبچّي 😭'],['شتوي ❄️','صيفي ☀️'],['ثقيل على المعدة','خفيف على المعدة'],['أمي تحبه 👩','أمي تكرهه 😠'],['لازم بالبيت','ما نحتاجه أبداً'],['مشهور جداً','محد يعرفه'],['يرفع الضغط 😤','يريّح الأعصاب 😌'],['أكلة صبح','أكلة ليل'],['غبي 🤪','ذكي 🧠'],['رومانسي 💘','مو رومانسي 🧱'],['هادئ 🤫','مزعج 📢'],['نظيف ✨','وصخ 🦠'],['ينلبس بالعرس','ينلبس بالبيت'],['بطولي 🦸','جبان 🐔'],['حلو 🍬','مر 🍋'],['بطيء 🐢','سريع 🚀'],['شي عتيگ','شي ترند']];
+const AUC_ITEMS=[{e:'📺',n:'ريموت التلفزيون للأبد'},{e:'🥶',n:'مكان جنب المبردة بالصيف'},{e:'🍲',n:'آخر صحن باجة'},{e:'📟',n:'موبايل أبو الأزرار'},{e:'⛰️',n:'سفرة لدهوك'},{e:'🍟',n:'كيس شيبس فارغ'},{e:'💳',n:'كارت شحن منتهي'},{e:'🧥',n:'قمصلة جدّك'},{e:'🧊',n:'گلاص ماي بارد بتموز'},{e:'⚡',n:'اشتراك مولدة ٥ أمبير'},{e:'🪑',n:'كرسي بلاستك أبيض'},{e:'🤳',n:'سيلفي ويا مشهور'},{e:'🧴',n:'عطر مقلّد'},{e:'🍪',n:'كعك بالهيل'},{e:'🃏',n:'شدّة ورق ناقصة'},{e:'🛵',n:'ستوتة مستعملة'}];
+const MIND=['شي تلكاه بثلاجة كل بيت عراقي','أكلة تنطبخ يوم الجمعة','شي تاخذه وياك للكشتة','أول شي تسويه من تگعد من النوم','لون التكسي ببغداد','شي يزعّل الأم العراقية','لعبة تلعبها بالعيد','مشروب بالصيف','اسم ولد منتشر بالعراق','اسم بنت منتشر بالعراق','حيوان تشوفه بالشارع','شي تشتريه من الشورجة','مكان تطلعون بيه يوم الجمعة','فاكهة الصيف','شي تسويه من تنطفي الكهرباء','شي تلكاه بجيب الأب','كلمة يگولها المدرّس دائماً','أكلة رمضان','حلويات العيد','سبب تأخرك المشهور','شي تحطه بالشاي','رياضة يحبها العراقيين','شي تخاف منه بالليل','هدية تنطيها للأم','مكان تسافر له العائلة العراقية','شي تشوفه بكل عرس عراقي','شي يسويه الضيف','كلمة تگولها من تعصب','شي لونه أخضر','أكلة تطلبها دلفري','شي ما يخلص بالمطبخ','تطبيق تفتحه أول الصبح','شي ينسرق من البيت دائماً 😂','أطيب شي بالشتا','مهنة يحلم بيها الأهل لابنهم'];
 const AVATARS = ['😎','🤠','🥸','🤡','👻','🐸','🐵','🦁','🐼','🦊','🐯','🐨','🤖','👽','🧔','👩','🧕','👳','🥷','🧙','🦄','🐙','🍉','🌶️','🐧','🦖','👑','🍕'];
 
 /* ============================ UTIL ============================ */
@@ -546,10 +592,10 @@ function closeModal(){const o=$('#ov');if(o)o.remove()}
 /* ============================ ROUTER ============================ */
 let screen='home',R=null,timers=[],raf=0,TMP={};
 const IN_ROUND=['pick','reveal','qintro','questions','qend','vote','voteRes','unmask','guess'];
-const GUARDED=IN_ROUND.concat(['mpRole','mpNight','mpMorning','mpDay','mpVote','mpTally','mpLast','mpElim','bombPlay','tbPlay','lieVote','fastPlay','boomPlay','memPlay','hlPlay','tenPlay','mafRole','mafNight','mafMorning','mafDay','mafVote','mafElim','clsGuess','frIntro','frGuess','drawPlay','letPlay','charPlay']);
+const GUARDED=IN_ROUND.concat(['iqactPlay','fakeReveal','fakeDraw','waveGuess','aucBid','splitChoose','mindAns','mpRole','mpNight','mpMorning','mpDay','mpVote','mpTally','mpLast','mpElim','bombPlay','tbPlay','lieVote','fastPlay','boomPlay','memPlay','hlPlay','tenPlay','mafRole','mafNight','mafMorning','mafDay','mafVote','mafElim','clsGuess','frIntro','frGuess','drawPlay','letPlay','charPlay']);
 let lastRender=0;
 function titleFor(s){if(s==='home')return '';if(IN_ROUND.includes(s)||['setup','results','final'].includes(s))return '🤡 برّا السالفة';
- const m={maf:'🔪 المافيا',let:'🔤 اسم حيوان نبات',cls:'🎯 مين الأقرب؟',fr:'💞 شكد تعرف ربعك؟',draw:'✏️ ارسمها!',char:'🎭 مثّلها!',likely:'👉 مين الأكثر؟',td:'🔥 صراحة لو تحدي',wheel:'🎡 دولاب العقاب',bomb:'💣 القنبلة',mp:'🎩 المافيا الكبرى',tb:'🗣️ وصّفها',lie:'🤥 مين الكذاب؟',fast:'⚡ أسرع إصبع',boom:'7️⃣ بوم!',wyr:'🤔 لو خيروك',prov:'📜 كمّل المثل',mem:'🛒 سوق الذاكرة',hl:'🃏 أعلى لو أوطى',ten:'⏱️ ١٠ ثواني',five:'🖐️ ٥ ثواني'};
+ const m={maf:'🔪 المافيا',let:'🔤 اسم حيوان نبات',cls:'🎯 مين الأقرب؟',fr:'💞 شكد تعرف ربعك؟',draw:'✏️ ارسمها!',char:'🎭 مثّلها!',likely:'👉 مين الأكثر؟',td:'🔥 صراحة لو تحدي',wheel:'🎡 دولاب العقاب',bomb:'💣 القنبلة',mp:'🎩 المافيا الكبرى',dict:'📖 قاموس عراقي',iqact:'🎭 مثّل الشخصية',gen:'⚡ أبو المولدة',city:'🗺️ خمّن المدينة',mom:'👩‍👦 عتاب أمك',fake:'🎨 الفنان المزيف',split:'🗡️ تقاسم لو خيانة',wave:'📡 على نفس الموجة',auc:'💰 المزاد السري',mind:'🧠 عقل الشلة',tb:'🗣️ وصّفها',lie:'🤥 مين الكذاب؟',fast:'⚡ أسرع إصبع',boom:'7️⃣ بوم!',wyr:'🤔 لو خيروك',prov:'📜 كمّل المثل',mem:'🛒 سوق الذاكرة',hl:'🃏 أعلى لو أوطى',ten:'⏱️ ١٠ ثواني',five:'🖐️ ٥ ثواني'};
  for(const k in m)if(s.startsWith(k))return m[k];return '🎉 شلة الجودة'}
 function T(fn,ms){const t=setTimeout(fn,ms);timers.push(t);return t}
 function I(fn,ms){const t=setInterval(fn,ms);timers.push(t);return t}
@@ -573,7 +619,7 @@ V.home=()=>`
  <button class="feature" data-a="start"><span class="e">🤡</span><span><b>برّا السالفة</b><small>اللعبة الأساسية • منو منكم ما يدري شنو السالفة؟</small></span><span class="go">⬅️</span></button>
  ${match&&!match.done&&match.round>0&&players.length>=3?`<button class="btn small ghost" data-a="startRound">▶️ كمّل مباراة برّا السالفة (الجولة ${match.round+1}${match.len?' من '+match.len:''})</button>`:''}
  <div class="row" style="align-items:center"><h3 style="flex:1">🎮 ألعاب الشلة (${GAMES.length+1} لعبة)</h3><button class="btn small primary" style="flex:none;width:auto" data-a="surprise">🎲 فاجئني</button></div>
- ${SECS.map(([k,t])=>`<h3 class="sec-h">${t}</h3><div class="mgrid home">${GAMES.filter(g=>g.sec===k).map(g=>`<button class="mini" style="background:${g.bg};${g.ink?'color:'+g.ink:''}" data-a="game" data-v="${g.id}"><span class="e">${g.e}</span><b>${g.n}</b><small>${g.d}${g.min>1?` • 👥 ${'٠١٢٣٤٥٦٧٨٩'[g.min]}+`:''}</small></button>`).join('')}</div>`).join('')}
+ ${SECS.map(([k,t])=>`<h3 class="sec-h">${t}</h3><div class="mgrid home">${GAMES.filter(g=>g.sec===k).map(g=>`<button class="mini" style="background:${g.bg};${g.ink?'color:'+g.ink:''}" data-a="game" data-v="${g.id}"><span class="e">${g.e}</span><b>${g.n}</b><small>${g.d}${g.min>1?` • 👥 ${'٠١٢٣٤٥٦٧٨٩'[g.min]} وأكثر`:''}</small></button>`).join('')}</div>`).join('')}
  <div class="row4">
   <button class="btn small" data-a="gang">👥 الشلة</button>
   <button class="btn small" data-a="go" data-v="howto">📖 الشرح</button>
@@ -1432,6 +1478,214 @@ V.mpEnd=()=>{const S=MP();const [e,t,sub]=WIN_T[S.win]||WIN_T.town;const nm=id=>
  <button class="btn big primary" data-a="go" data-v="mpSetup">🔁 لعبة جديدة</button><button class="btn pink" data-a="wheelFor" data-v="">🎡 دولاب العقاب للخسرانين</button>`};
 M.mpEnd=()=>{sfx('win');confetti(180,[WIN_T[MP().win][0],'🏆','🎉'])};
 
+/* ============================ v8 HELPERS ============================ */
+function pickFresh(o,arr){o.used=o.used||[];let idx=arr.map((_,i)=>i).filter(i=>!o.used.includes(i));if(!idx.length){o.used=[];idx=arr.map((_,i)=>i)}const i=rnd(idx);o.used.push(i);return arr[i]}
+function nextP(o){o.rot=(o.rot||[]).filter(pById);if(!o.rot.length)o.rot=shuffle(players.map(p=>p.id));return o.rot.shift()}
+const turnH=(p,sub)=>`<div class="card center"><div style="font-size:56px">${p.av}</div><h2>دور ${esc(p.name)}</h2>${sub?`<p class="muted">${sub}</p>`:''}</div>`;
+const arNum=s=>String(s).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+const drumM=(o,flag,after)=>{if(!o[flag]){sfx('drum');T(()=>{o[flag]=true;render()},2300)}else after&&after()};
+
+/* ============================ 📖 DICT ============================ */
+INIT.dict=()=>{const D=TMP.dict||(TMP.dict={});D.p=nextP(D);D.w=pickFresh(D,DICT);D.opts=shuffle([D.w[1],...D.w[2]]);D.ans=null};
+V.dict=()=>{const D=TMP.dict;const p=pById(D.p);const ok=D.ans===D.w[1];
+ return turnH(p,'شنو معنى هالكلمة العراقية؟ 🤔')+`<div class="charword" style="min-height:110px">${esc(D.w[0])}</div>
+ <div class="vgrid">${D.opts.map(o=>{let cls='';if(D.ans!==null){if(o===D.w[1])cls='right';else if(o===D.ans)cls='wrong'}return `<button class="gbtn ${cls}" data-a="dictAns" data-v="${esc(o)}" ${D.ans!==null?'disabled':''}>${esc(o)}</button>`}).join('')}</div>
+ ${D.ans!==null?`<div class="verdict center ${ok?'good':'bad'}">${ok?rnd(['عفية عليك! عراقي أصلي 🇮🇶','بطل! +١ 👏','ما يغلبك أحد 😎']):rnd(['لا يمعود! 😂','شنو هذا؟ انت من وين؟ 🤨','خطيّة، غلط 🥲'])}</div>
+ <div class="card center"><p style="font-weight:800">🎤 تحدي إضافي: استخدم «${esc(D.w[0])}» بجملة عراقية تضحّك!</p><div class="row" style="margin-top:8px"><button class="btn green" data-a="dictNext" data-v="1">😂 جملته حلوة +١</button><button class="btn" data-a="dictNext" data-v="0">⬅️ التالي</button></div></div>`:''}
+ ${boardIf('dict')}`};
+A.dictAns=w=>{const D=TMP.dict;if(D.ans!==null)return;D.ans=w;if(w===D.w[1]){sAdd('dict',D.p,1,1);sfx('win');confetti(50,['🇮🇶','📖'])}else{sfx('fail');vib(150)}save();render()};
+A.dictNext=v=>{if(+v){sAdd('dict',TMP.dict.p,1,1);save();sfx('pop')}INIT.dict();render()};
+
+/* ============================ 🎭 IRAQI CHARACTERS ============================ */
+INIT.iqact=()=>{const X=TMP.iqact||(TMP.iqact={});X.p=nextP(X);X.c=pickFresh(X,IQCHARS);X.seen=false};
+V.iqactPass=()=>{const X=TMP.iqact;const p=pById(X.p);
+ if(!X.seen)return passH(p,`🎭 دور ${esc(p.name)} يمثّل`,'الباقين لا يباوعون على الشاشة 🙈','','iqactSee',`أنا ${esc(p.name)}، وريني الشخصية 👀`)+boardIf('iqact');
+ return `<div class="secret"><small>مثّل هالشخصية بدون ما تگول اسمها</small><div style="font-size:60px">${X.c[0]}</div><div class="word" style="font-size:28px;line-height:1.4">${esc(X.c[1])}</div></div>
+ <p class="center muted">تكدر تحچي وتسوي أصوات وحركات، بس لا تگول الشخصية نفسها! 🤐 عندك ٤٥ ثانية</p>
+ <button class="btn big primary" data-a="go" data-v="iqactPlay">🎬 خبّيت، ابدأ التمثيل</button><button class="btn small ghost" data-a="iqactSkip">🔀 شخصية ثانية</button>`};
+A.iqactSee=()=>{TMP.iqact.seen=true;sfx('flip');render()};
+A.iqactSkip=()=>{const X=TMP.iqact;X.c=pickFresh(X,IQCHARS);render()};
+V.iqactPlay=()=>{const p=pById(TMP.iqact.p);return `<div class="center"><div class="bigav">${p.av}</div><h2>${esc(p.name)} يمثّل! 🎭</h2><p class="muted">صيحوا الجواب أول ما تعرفوه!</p></div>${ringH(45)}<button class="btn big green" data-a="go" data-v="iqactWho">✅ واحد عرفها!</button>`};
+M.iqactPlay=()=>ringTimer(45,()=>T(()=>go('iqactWho'),900));
+V.iqactWho=()=>{const X=TMP.iqact;return `<h2>منو عرفها أول؟</h2><p class="center">الشخصية: <b>${X.c[0]} ${esc(X.c[1])}</b></p>`+gridH(players.filter(p=>p.id!==X.p),'iqactWin',`<button class="btn ghost" data-a="iqactWin" data-v="">😭 محد عرفها</button>`)};
+A.iqactWin=id=>{const X=TMP.iqact;if(id){sAdd('iqact',id,1,1);sAdd('iqact',X.p,1,1);sfx('win');confetti(70,['🎭','👏']);toast(`👏 ${pById(id).name} و${pById(X.p).name} +١`)}else{sfx('fail');toast('😂 تمثيلك يحتاج كورس')}save();INIT.iqact();go('iqactPass')};
+
+/* ============================ ⚡ GENERATOR (push your luck) ============================ */
+INIT.gen=()=>{const G=TMP.gen||(TMP.gen={target:30});Object.assign(G,{order:shuffle(players.map(p=>p.id)),i:0,tot:{},turn:0,last:null,msg:'',winner:null,started:false})};
+V.gen=()=>{const G=TMP.gen;
+ if(G.winner){const w=pById(G.winner);return `<div class="unmask card"><div class="who">${w.av}</div><h2>${esc(w.name)} شغّل البيت كله! ⚡</h2><p>صار هو أبو المولدة الجديد 😎</p></div><h3>🏆 الفوز</h3>${sBoard('gen')}<button class="btn big primary" data-a="genNew">🔁 لعبة جديدة</button>`}
+ const p=pById(G.order[G.i]);
+ return `${!G.started?`<div class="card opt"><label>🎯 الهدف</label><div class="seg">${[20,30,50].map(v=>`<button class="${G.target===v?'on':''}" data-a="genTarget" data-v="${v}">${v} أمبير</button>`).join('')}</div></div>`:''}
+ <div class="row" style="align-items:center"><span class="pill" style="flex:none">${p.av} دور ${esc(p.name)}</span><div style="flex:1"></div><span class="pill" style="flex:none">💾 ${G.tot[p.id]||0} / ${G.target}</span></div>
+ <div class="gen ${G.last==='off'?'off':''}"><span class="g">${G.last==='off'?'🔌':'⚡'}</span><b>${G.turn}</b><small>أمبير بهالدور</small></div>
+ ${G.msg?`<p class="center" style="font-weight:800;font-size:18px">${G.msg}</p>`:'<p class="center muted">كل سحبة تجيب ١-٥ أمبير... بس إذا طفت المولدة يروح كل اللي جمعته بهالدور 😱</p>'}
+ ${G.last==='off'?`<button class="btn big primary" data-a="genNext">⬅️ الدور للي بعده</button>`:`<div class="row"><button class="btn big green" data-a="genPull">⚡ اسحب</button><button class="btn big cyan" data-a="genBank" ${G.turn?'':'disabled'}>💾 اكتفي</button></div>`}
+ <div class="lb">${G.order.filter(pById).map(id=>{const q=pById(id);const t=G.tot[id]||0;return `<div class="lbi ${id===p.id?'first':''}"><span class="a">${q.av}</span><span class="n">${esc(q.name)}<div class="progress" style="margin-top:4px"><i style="width:${Math.min(100,t/G.target*100)}%"></i></div></span><span class="s">${t}</span></div>`}).join('')}</div>`};
+A.genTarget=v=>{TMP.gen.target=+v;render()};
+A.genPull=()=>{const G=TMP.gen;G.started=true;const r=1+Math.floor(Math.random()*6);
+ if(r===1){G.turn=0;G.last='off';G.msg=rnd(GEN_OFF);sfx('fail');vib([200,80,200])}else{const a=r-1;G.turn+=a;G.last='ok';G.msg=`+${a} ⚡ ${rnd(GEN_OK)}`;sfx(a>=4?'win':'pop');vib(30)}render()};
+A.genBank=()=>{const G=TMP.gen;const id=G.order[G.i];G.tot[id]=(G.tot[id]||0)+G.turn;sfx('honk');
+ if(G.tot[id]>=G.target){G.winner=id;sAdd('gen',id,3,2);save();confetti(160,['⚡','💡','🏆']);sfx('win');render();return}toast(`💾 ${pById(id).name} حفظ ${G.turn} أمبير`);A.genNext()};
+A.genNext=()=>{const G=TMP.gen;G.i=(G.i+1)%G.order.length;G.turn=0;G.last=null;G.msg='';render()};
+A.genNew=()=>{INIT.gen();render()};
+
+/* ============================ 🗺️ CITY ============================ */
+INIT.city=()=>{const C=TMP.city||(TMP.city={});C.c=pickFresh(C,CITIES);C.k=1;C.done=false;C.win=null};
+V.city=()=>{const C=TMP.city;const pts=4-C.k;
+ return `<h2>🗺️ خمّن المدينة العراقية</h2>${C.done?'':`<p class="center muted">اللي يعرفها يصيح أول! هسه تسوى <b style="color:var(--pri)">${pts}</b> ${pts>1?'نقاط':'نقطة'}</p>`}
+ <div class="card clue">${C.c.c.slice(0,C.k).map((x,i)=>`<p>💡 ${i+1}. ${esc(x)}</p>`).join('')}</div>
+ ${C.done?`<div class="secret"><small>المدينة هي</small><div class="word">${esc(C.c.n)}</div></div>${C.win?`<p class="center" style="font-weight:800">👏 ${esc(pById(C.win).name)} +${C.wp}</p>`:'<p class="center muted">محد عرفها 🥲 لازم تسافرون أكثر!</p>'}<button class="btn big primary" data-a="cityNext">🔁 مدينة ثانية</button>`:
+ `<h3 class="center">منو عرفها صح؟</h3>${gridH(players,'cityWin')}${C.k<3?`<button class="btn" data-a="cityMore">💡 تلميح ثاني</button>`:`<button class="btn ghost" data-a="cityWin" data-v="">🤷 محد عرفها، اكشف</button>`}`}
+ ${boardIf('city')}`};
+A.cityMore=()=>{TMP.city.k++;sfx('pop');render()};
+A.cityWin=id=>{const C=TMP.city;C.done=true;C.win=id||null;C.wp=4-C.k;if(id){sAdd('city',id,C.wp,1);sfx('win');confetti(60,['🇮🇶','🗺️'])}else sfx('fail');save();render()};
+A.cityNext=()=>{INIT.city();render()};
+
+/* ============================ 👩‍👦 MOM ============================ */
+INIT.mom=()=>{const X=TMP.mom||(TMP.mom={});X.p=nextP(X);X.l=pickFresh(X,MOM);X.state='ready'};
+V.mom=()=>{const X=TMP.mom;const p=pById(X.p);
+ if(X.state==='ready')return turnH(p,'أمك راح تعاتبك... وعندك ١٠ ثواني تجاوبها بعذر مقنع! 😅')+`<button class="btn big primary" data-a="momGo">👩‍👦 يلا، خلّي أمي تحچي</button>${boardIf('mom')}`;
+ if(X.state==='run')return `<div class="card bigcard" style="background:linear-gradient(160deg,#ff4fa3,#a3164f)"><span style="font-size:60px">👩‍👦</span><span style="font-size:24px">«${esc(X.l)}»</span></div>${ringH(10)}<p class="center muted">${esc(p.name)} جاوب هسه! ⏱️ (إذا ضحكت تخسر 😂)</p><button class="btn big" data-a="momStop">✋ خلص جوابي</button>`;
+ return `<div class="card bigcard" style="min-height:100px"><span>«${esc(X.l)}»</span></div><h2>شلون كان عذر ${esc(p.name)}؟</h2>
+ <div class="vgrid"><button class="vbtn" data-a="momRate" data-v="2"><span class="a">😂</span>ضحّكنا +٢</button><button class="vbtn" data-a="momRate" data-v="1"><span class="a">👍</span>مقنع +١</button><button class="vbtn" data-a="momRate" data-v="0"><span class="a">👎</span>فاشل</button><button class="vbtn" data-a="momRate" data-v="-1"><span class="a">🩴</span>يستاهل نعال!</button></div>`};
+A.momGo=()=>{TMP.mom.state='run';go('mom')};
+M.mom=()=>{if(TMP.mom.state==='run')ringTimer(10,()=>T(()=>{if(screen==='mom'&&TMP.mom.state==='run'){TMP.mom.state='rate';go('mom')}},900))};
+A.momStop=()=>{TMP.mom.state='rate';go('mom')};
+A.momRate=v=>{const X=TMP.mom;const n=+v;if(n>0){sAdd('mom',X.p,n,1);sfx('win');confetti(50,['😂','👩‍👦'])}else if(n<0){sfx('boing');confetti(50,['🩴']);toast('🩴🩴 النعال طار!')}else sfx('fail');save();INIT.mom();go('mom')};
+
+/* ============================ 🎨 FAKE ARTIST ============================ */
+const FAKE_COLS=['#e53935','#1e88e5','#43a047','#8b5cf6','#ff8a3d','#ec4899','#0891b2','#a16207','#111827','#65a30d','#db2777','#4f46e5'];
+INIT.fake=()=>{const cat=rnd(CATS);const F={cat,word:rnd(cat.words),fake:rnd(players).id,order0:players.map(p=>p.id),ri:0,shown:false,col:{},turns:[],ti:0,strokes:[],lock:false};
+ shuffle(players.map(p=>p.id)).forEach((id,i)=>F.col[id]=FAKE_COLS[i%FAKE_COLS.length]);const o=shuffle(players.map(p=>p.id));F.turns=o.concat(o);TMP.fake=F};
+V.fakeReveal=()=>{const F=TMP.fake;const p=pById(F.order0[F.ri]);const isF=p.id===F.fake;
+ if(!F.shown)return `<div class="pass card"><div class="bigav">${p.av}</div><h2>مرّر الجهاز لـ ${esc(p.name)}</h2><p class="muted">شوف كلمتك بالسر 🤫</p><p class="pill" style="margin-top:8px">${F.ri+1} / ${F.order0.length}</p></div><div class="flip" data-a="fakeFlip"><div class="flip-inner"><div class="face back"><span class="q">🎨</span>اضغط وشوف</div><div class="face front"></div></div></div>`;
+ return `<div class="flip on"><div class="flip-inner"><div class="face back"></div>${isF?`<div class="face front out"><span class="emo">🎨🤡</span><div class="word">انت الفنان المزيف!</div><p>الفئة: <b>${F.cat.emoji} ${esc(F.cat.name)}</b></p><p>ما تعرف الكلمة... ارسم خط يخليك تبيّن فاهم 😏</p></div>`:`<div class="face front"><span class="pill" style="color:#2a1300">${F.cat.emoji} ${esc(F.cat.name)}</span><div class="word">${esc(F.word)}</div><p>بدورك ارسم خط واحد بس يدل عليها، لا توضّح هواية حتى المزيف ما يعرفها!</p></div>`}</div></div>
+ <button class="btn big primary" data-a="fakeNext">🙈 خبّيتها، ${F.ri+1<F.order0.length?'التالي':'يلا نرسم 🎨'}</button>`};
+A.fakeFlip=()=>{const F=TMP.fake;if(F.shown)return;F.shown=true;sfx('flip');vib(40);render()};
+A.fakeNext=()=>{const F=TMP.fake;F.shown=false;F.ri++;if(F.ri>=F.order0.length)go('fakeDraw');else render()};
+V.fakeDraw=()=>{const F=TMP.fake;const p=pById(F.turns[F.ti]);const n=F.turns.length/2;
+ return `<div class="row" style="align-items:center"><span class="pill" style="flex:none">الجولة ${F.ti<n?'١':'٢'} من ٢</span><div class="progress"><i style="width:${F.ti/F.turns.length*100}%"></i></div></div>
+ <div class="card center" style="padding:10px"><h3><span class="dotc" style="background:${F.col[p.id]}"></span>دور ${esc(p.name)} ${p.av}: ارسم <b>خط واحد</b> بدون ما ترفع إصبعك</h3></div>
+ <canvas id="pad" class="pad"></canvas><p class="center muted">الفئة: ${F.cat.emoji} ${esc(F.cat.name)}</p>`};
+M.fakeDraw=()=>{const F=TMP.fake;const c=$('#pad');const r=c.getBoundingClientRect();const dpr=window.devicePixelRatio||1;c.width=Math.round(r.width*dpr);c.height=Math.round(r.height*dpr);const x=c.getContext('2d');x.scale(dpr,dpr);
+ const W=r.width,H=r.height;const draw=()=>{x.fillStyle='#fff7ea';x.fillRect(0,0,W,H);x.lineCap='round';x.lineJoin='round';x.lineWidth=6;
+  F.strokes.forEach(s=>{x.strokeStyle=s.c;x.beginPath();s.pts.forEach((pt,i)=>i?x.lineTo(pt[0]*W,pt[1]*H):x.moveTo(pt[0]*W,pt[1]*H));if(s.pts.length===1)x.lineTo(s.pts[0][0]*W+.5,s.pts[0][1]*H+.5);x.stroke()})};draw();
+ let cur=null;const me=F.turns[F.ti];const pos=e=>{const b=c.getBoundingClientRect();return [(e.clientX-b.left)/b.width,(e.clientY-b.top)/b.height]};
+ c.addEventListener('pointerdown',e=>{if(cur||F.lock)return;e.preventDefault();try{c.setPointerCapture(e.pointerId)}catch(_){}cur={c:F.col[me],pts:[pos(e)]};F.strokes.push(cur);draw()});
+ c.addEventListener('pointermove',e=>{if(!cur)return;cur.pts.push(pos(e));draw()});
+ const up=()=>{if(!cur)return;cur=null;F.lock=true;sfx('pop');T(()=>{F.lock=false;F.ti++;if(F.ti>=F.turns.length){try{F.img=c.toDataURL('image/png')}catch(_){}go('fakeVote')}else go('fakeDraw')},700)};
+ c.addEventListener('pointerup',up);c.addEventListener('pointercancel',up)};
+V.fakeVote=()=>{const F=TMP.fake;return `<h2>🕵️ منو الفنان المزيف؟</h2>${F.img?`<img class="drawimg" src="${F.img}" alt="الرسمة">`:''}
+ <div class="chips cc">${players.map(p=>`<span class="chip"><span class="dotc" style="background:${F.col[p.id]}"></span>${esc(p.name)}</span>`).join('')}</div><p class="center muted">تناقشوا وبعدين اضغطوا على المتهم 👇</p>`+gridH(players,'fakeAccuse')};
+A.fakeAccuse=id=>{const F=TMP.fake;F.acc=id;F.caught=id===F.fake;F.g=undefined;F.pts={};F.shown2=false;
+ if(F.caught){F.opts=shuffle([...shuffle(F.cat.words.filter(w=>w!==F.word)).slice(0,7),F.word])}else{F.pts[F.fake]=3;sAdd('fake',F.fake,3,1);save()}go('fakeRes')};
+A.fakeGuess=w=>{const F=TMP.fake;if(F.g!==undefined)return;F.g=w===F.word;if(F.g){F.pts[F.fake]=2;sAdd('fake',F.fake,2,1);sfx('fail')}else{players.forEach(p=>{if(p.id!==F.fake){F.pts[p.id]=1;sAdd('fake',p.id,1,1)}});sfx('win');confetti(100,['🎨','👏'])}save();render()};
+V.fakeRes=()=>{const F=TMP.fake;const f=pById(F.fake);if(!F.shown2)return drumH('🎨','الفنان المزيف كان...');
+ const head=`<div class="unmask card"><div class="who">${f.av}</div><h2>${esc(f.name)}</h2><p>الكلمة كانت: <b>${esc(F.word)}</b></p></div>`;
+ if(!F.caught)return head+`<div class="verdict center bad">🎨🤡 المزيف فلت! اتهمتوا ${esc(pById(F.acc).name)} المسكين</div>${sBoard('fake',F.pts)}<button class="btn big primary" data-a="fakeAgain">🔁 جولة جديدة</button>`;
+ if(F.g===undefined)return head+`<div class="verdict center good">🚨 انكشف!</div><h3 class="center">${esc(f.name)}، عندك فرصة أخيرة: شنو الكلمة؟</h3><div class="ggrid">${F.opts.map(o=>`<button class="gbtn" data-a="fakeGuess" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div>`;
+ return head+`<div class="verdict center ${F.g?'bad':'good'}">${F.g?'😱 انكشف بس عرف الكلمة! فاز بشطارته':'✅ انكشف وما عرف الكلمة! الشلة فازت'}</div>${sBoard('fake',F.pts)}<button class="btn big primary" data-a="fakeAgain">🔁 جولة جديدة</button>`};
+M.fakeRes=()=>{const F=TMP.fake;drumM(F,'shown2',()=>{if(F.g===undefined){if(F.caught){sfx('win');confetti(80,['🚨'])}else{sfx('fail');confetti(60,['🤡','🎨'])}}})};
+A.fakeAgain=()=>{INIT.fake();go('fakeReveal')};
+
+/* ============================ 🗡️ SPLIT OR STEAL ============================ */
+INIT.split=()=>{const X=TMP.split||(TMP.split={});const ids=shuffle(players.map(p=>p.id));Object.assign(X,{a:ids[0],b:ids[1],pot:4+Math.floor(Math.random()*7),ch:{},step:0,ready:false,shown:false,pts:{}})};
+V.splitSetup=()=>{const X=TMP.split;const a=pById(X.a),b=pById(X.b);return `<div class="card"><p>الحظ اختار ثنين، وبالنص كنز من <b style="color:var(--pri)">${X.pot}</b> نقاط 💰 تتفاهمون ٣٠ ثانية، وبعدين كل واحد يختار بالسر: 🤝 <b>نتقاسم</b> لو 🗡️ <b>أخونه</b></p><p class="muted" style="font-size:14px">الاثنين تقاسموا: كل واحد ياخذ النص • واحد خان: الخاين ياخذ الكل 😈 • الاثنين خانوا: محد ياخذ شي 🔥</p></div>
+ <div class="row" style="align-items:center"><div class="card center"><div style="font-size:50px">${a.av}</div><b>${esc(a.name)}</b></div><b style="flex:none;font-size:26px">💰${X.pot}</b><div class="card center"><div style="font-size:50px">${b.av}</div><b>${esc(b.name)}</b></div></div>
+ ${ringH(30)}<button class="btn big primary" data-a="splitGo">🤫 خلصنا تفاهم، نختار بالسر</button><button class="btn small ghost" data-a="splitShuffle">🔀 ثنين غيرهم</button>${boardIf('split')}`};
+M.splitSetup=()=>ringTimer(30,()=>toast('خلص وقت التفاهم! ⏰'));
+A.splitShuffle=()=>{INIT.split();go('splitSetup')};
+A.splitGo=()=>{const X=TMP.split;X.step=0;X.ready=false;X.ch={};go('splitChoose')};
+V.splitChoose=()=>{const X=TMP.split;const p=pById(X.step===0?X.a:X.b);
+ if(!X.ready)return passH(p,`دور ${esc(p.name)} يختار`,'محد يباوع! حتى صاحبك 👀','','splitReady',`أنا ${esc(p.name)} 🫡`);
+ return `<h2>${p.av} شتختار؟</h2><div class="row"><button class="btn big green" style="min-height:150px" data-a="splitPick" data-v="s">🤝<br>نتقاسم</button><button class="btn big red" style="min-height:150px" data-a="splitPick" data-v="x">🗡️<br>أخونه</button></div>`};
+A.splitReady=()=>{TMP.split.ready=true;render()};
+A.splitPick=v=>{const X=TMP.split;X.ch[X.step===0?X.a:X.b]=v;sfx('pop');vib(40);X.step++;X.ready=false;if(X.step<2){render();return}
+ const a=X.ch[X.a],b=X.ch[X.b];X.pts={};if(a==='s'&&b==='s'){const h=Math.ceil(X.pot/2);X.pts[X.a]=h;X.pts[X.b]=h}else if(a==='x'&&b==='s')X.pts[X.a]=X.pot;else if(b==='x'&&a==='s')X.pts[X.b]=X.pot;
+ Object.entries(X.pts).forEach(([id,n])=>sAdd('split',id,n,1));save();X.shown=false;go('splitRes')};
+V.splitRes=()=>{const X=TMP.split;if(!X.shown)return drumH('🗡️','وشنو اختاروا...');const a=X.ch[X.a],b=X.ch[X.b];
+ const t=a==='s'&&b==='s'?['good','🤝 الاثنين تقاسموا! صداقة حقيقية ❤️']:a==='x'&&b==='x'?['bad','🔥 الاثنين خانوا! محد أخذ شي 😂']:['bad',`🗡️ ${esc(pById(a==='x'?X.a:X.b).name)} خان صاحبه وأخذ الكنز كله! 😈`];
+ return `<div class="row">${[[X.a,a],[X.b,b]].map(([id,c])=>`<div class="card center"><div style="font-size:50px">${pById(id).av}</div><b>${esc(pById(id).name)}</b><div style="font-size:44px">${c==='s'?'🤝':'🗡️'}</div></div>`).join('')}</div><div class="verdict center ${t[0]}">${t[1]}</div>${sBoard('split',X.pts)}<button class="btn big primary" data-a="splitShuffle">🔁 ثنين جداد</button>`};
+M.splitRes=()=>{const X=TMP.split;drumM(X,'shown',()=>{const a=X.ch[X.a],b=X.ch[X.b];if(a==='s'&&b==='s'){sfx('win');confetti(90,['🤝','❤️'])}else{sfx('boom');confetti(60,['🗡️','😈'])}})};
+
+/* ============================ 📡 WAVELENGTH ============================ */
+INIT.wave=()=>{const W=TMP.wave||(TMP.wave={});W.p=nextP(W);W.s=pickFresh(W,SPECS);W.target=8+Math.floor(Math.random()*85);W.seen=false;W.g={};W.order=shuffle(players.filter(p=>p.id!==W.p).map(p=>p.id));W.idx=0;W.ready=false;W.shown=false;W.pts={}};
+const specBar=(W,marks)=>`<div class="spec"><div class="bar" dir="ltr">${marks}</div><div class="ends" dir="ltr"><span>${esc(W.s[0])}</span><span>${esc(W.s[1])}</span></div></div>`;
+V.wavePass=()=>{const W=TMP.wave;const p=pById(W.p);
+ if(!W.seen)return passH(p,`🔮 ${esc(p.name)} هو الوسيط`,'الباقين لا يباوعون!','','waveSee',`أنا ${esc(p.name)}، وريني المكان`)+boardIf('wave');
+ return `<h2>🔮 الهدف بالسر</h2>${specBar(W,`<i class="tgt" style="left:${W.target}%"></i>`)}
+ <div class="card"><p>گول للشلة <b>كلمة أو شي واحد</b> يقع بهالمكان بين «${esc(W.s[0])}» و«${esc(W.s[1])}». مثلاً إذا الهدف قريب من «${esc(W.s[1])}» گول شي يبيّن هواية ${esc(W.s[1])} 😏</p></div>
+ <button class="btn big primary" data-a="go" data-v="waveGuess">🙈 خبّيت، يلا يخمّنون</button><button class="btn small ghost" data-a="waveSkip">🔀 شريط ثاني</button>`};
+A.waveSee=()=>{TMP.wave.seen=true;sfx('flip');render()};
+A.waveSkip=()=>{const W=TMP.wave;W.s=pickFresh(W,SPECS);W.target=8+Math.floor(Math.random()*85);render()};
+V.waveGuess=()=>{const W=TMP.wave;const p=pById(W.order[W.idx]);
+ if(!W.ready)return passH(p,`دور ${esc(p.name)} يخمّن`,`حسب كلمة ${esc(pById(W.p).name)}، وين الهدف؟ 🤔`,`${W.idx+1} / ${W.order.length}`,'waveReady',`أنا ${esc(p.name)} 🫡`);
+ return `<h2>${p.av} وين الهدف؟</h2>${specBar(W,`<i class="gs" id="wgm" style="left:50%"></i>`)}<input type="range" id="wr" min="0" max="100" value="50" dir="ltr" class="wrange" aria-label="مكان التخمين"><button class="btn big primary" data-a="waveSubmit">✅ هنا!</button>`};
+M.waveGuess=()=>{const r=$('#wr');if(r)r.addEventListener('input',()=>{const m=$('#wgm');if(m)m.style.left=r.value+'%'})};
+A.waveReady=()=>{TMP.wave.ready=true;render()};
+A.waveSubmit=()=>{const W=TMP.wave;W.g[W.order[W.idx]]=+$('#wr').value;sfx('pop');W.idx++;W.ready=false;if(W.idx<W.order.length){render();return}
+ W.pts={};let sum=0;Object.entries(W.g).forEach(([id,v])=>{const d=Math.abs(v-W.target);sum+=d;const n=d<=5?3:d<=12?2:d<=20?1:0;if(n){W.pts[id]=n;sAdd('wave',id,n,1)}});
+ if(sum/W.order.length<=15){W.pts[W.p]=2;sAdd('wave',W.p,2,1)}save();W.shown=false;go('waveRes')};
+V.waveRes=()=>{const W=TMP.wave;if(!W.shown)return drumH('📡','نشوف منو على نفس الموجة...');
+ const marks=`<i class="tgt" style="left:${W.target}%"></i>`+Object.entries(W.g).map(([id,v])=>`<span class="gm" style="left:${v}%">${pById(id).av}</span>`).join('');
+ return `<h2>📡 النتيجة</h2>${specBar(W,marks)}<div class="lb">${Object.keys(W.g).filter(pById).sort((a,b)=>Math.abs(W.g[a]-W.target)-Math.abs(W.g[b]-W.target)).map(id=>{const p=pById(id);return `<div class="lbi ${W.pts[id]?'first':''}"><span class="a">${p.av}</span><span class="n">${esc(p.name)}<br><span class="rk">بعيد ${Math.abs(W.g[id]-W.target)} عن الهدف</span></span>${W.pts[id]?`<span class="d">+${W.pts[id]}</span>`:''}</div>`}).join('')}</div>
+ ${W.pts[W.p]?`<p class="center" style="font-weight:800">🔮 ${esc(pById(W.p).name)} وصّلها صح! +٢</p>`:`<p class="center muted">🔮 ${esc(pById(W.p).name)} لازم يحسّن تلميحاته 😅</p>`}
+ <h3>🏆 المجموع</h3>${sBoard('wave')}<button class="btn big primary" data-a="waveNext">🔮 الوسيط الجاي</button>`};
+M.waveRes=()=>drumM(TMP.wave,'shown',()=>{sfx('win');confetti(70,['📡','🔮'])});
+A.waveNext=()=>{INIT.wave();go('wavePass')};
+
+/* ============================ 💰 AUCTION ============================ */
+const aucHint=v=>v>=6?rnd(['يلمع شوية ✨','ريحته غالي 💎','الكل يباوع عليه 👀']):v<0?rnd(['شكله مريب 🤨','ريحته مو طيبة 🫢','يلمع شوية ✨']):rnd(['عادي... يمكن 🤷','ما معروف 🎁','ريحته غالي 💎']);
+INIT.auction=()=>{const X={coins:{},pts:{},ri:0};players.forEach(p=>{X.coins[p.id]=100;X.pts[p.id]=0});const vals=shuffle([8,6,5,4,3,2,-2,-4,7,1]);
+ X.items=shuffle(AUC_ITEMS).slice(0,6).map((it,i)=>({...it,v:vals[i],h:aucHint(vals[i])}));TMP.auc=X};
+V.aucSetup=()=>`<h2>💰 المزاد السري</h2><div class="card"><p>كل واحد عنده <b>١٠٠ دينار</b> للعبة كلها 💵 يطلع ٦ أغراض بالمزاد، وكل واحد يزايد بالسر. الأعلى ياخذ الغرض ويدفع... بس قيمة الغرض الحقيقية مخفية: يمكن كنز 💎 ويمكن مقلب بنقاط سالبة 😈</p><p class="muted" style="margin-top:6px">بالنهاية: نقاط الأغراض + نقطة عن كل ٢٥ دينار باقية</p></div><button class="btn big primary" data-a="aucStart">🔨 افتح المزاد</button>${boardIf('auction','🏆 الفوز')}`;
+A.aucStart=()=>{INIT.auction();go('aucItem')};
+V.aucItem=()=>{const X=TMP.auc;const it=X.items[X.ri];return `<div class="row" style="align-items:center"><span class="pill" style="flex:none">الغرض ${X.ri+1} من ${X.items.length}</span><div class="progress"><i style="width:${X.ri/X.items.length*100}%"></i></div></div>
+ <div class="card bigcard"><span style="font-size:80px">${it.e}</span><span style="font-size:26px">${esc(it.n)}</span><span class="pill">🔍 ${it.h}</span></div>
+ <div class="lb">${players.map(p=>`<div class="lbi"><span class="a">${p.av}</span><span class="n">${esc(p.name)}<br><span class="rk">💵 ${X.coins[p.id]??0} دينار</span></span><span class="s">${X.pts[p.id]??0}⭐</span></div>`).join('')}</div>
+ <button class="btn big primary" data-a="aucBidStart">🤫 زايدوا بالسر</button>`};
+A.aucBidStart=()=>{const X=TMP.auc;X.bids={};X.order=shuffle(players.map(p=>p.id).filter(id=>id in X.coins));X.idx=0;X.ready=false;go('aucBid')};
+V.aucBid=()=>{const X=TMP.auc;const p=pById(X.order[X.idx]);const it=X.items[X.ri];
+ if(!X.ready)return passH(p,`دور ${esc(p.name)} يزايد`,'محد يباوع 👀',`${X.idx+1} / ${X.order.length}`,'aucReady',`أنا ${esc(p.name)} 🫡`);
+ return `<div class="card center"><span style="font-size:50px">${it.e}</span><h3>${esc(it.n)}</h3><p class="muted">عندك 💵 ${X.coins[p.id]} دينار</p></div><div class="addrow"><input id="aucIn" type="text" inputmode="numeric" placeholder="مزايدتك (٠ إذا ما تريد)" autocomplete="off"><button class="btn primary" data-a="aucSubmit">✅</button></div>`};
+M.aucBid=()=>{const i=$('#aucIn');if(i){i.addEventListener('keydown',e=>{if(e.key==='Enter')A.aucSubmit()});i.focus()}};
+A.aucReady=()=>{TMP.auc.ready=true;render()};
+A.aucSubmit=()=>{const X=TMP.auc;const id=X.order[X.idx];const v=parseInt(arNum(($('#aucIn').value||'').trim()||'0'),10);
+ if(isNaN(v)||v<0){toast('اكتب رقم 🔢');sfx('honk');return}if(v>X.coins[id]){toast(`ما عندك غير ${X.coins[id]} دينار 😅`);sfx('honk');return}
+ X.bids[id]=v;sfx('pop');X.idx++;X.ready=false;if(X.idx<X.order.length){render();return}
+ const mx=Math.max(0,...Object.values(X.bids));X.win=null;X.tie=false;if(mx>0){const tops=Object.keys(X.bids).filter(k=>X.bids[k]===mx);X.tie=tops.length>1;X.win=rnd(tops);X.coins[X.win]-=mx;X.pts[X.win]+=X.items[X.ri].v}X.paid=mx;X.shown=false;go('aucRes')};
+V.aucRes=()=>{const X=TMP.auc;const it=X.items[X.ri];if(!X.shown)return drumH('🔨','بيع! وقيمته الحقيقية...');const w=X.win?pById(X.win):null;
+ return `<div class="card bigcard"><span style="font-size:70px">${it.e}</span><span>${esc(it.n)}</span><div class="verdict ${it.v>0?'good':'bad'}" dir="ltr">${it.v>0?'+':''}${it.v} ⭐</div></div>
+ ${w?`<p class="center" style="font-weight:800;font-size:20px">${w.av} ${esc(w.name)} اشتراه بـ ${X.paid} دينار ${X.tie?'(بالقرعة 🎲)':''} ${it.v<0?'... انضحك عليه 😂':it.v>=6?'... صفقة العمر 🤑':''}</p>`:'<p class="center muted">محد زايد 🤷 الغرض راح للمخزن</p>'}
+ <div class="lb">${Object.keys(X.bids).filter(pById).sort((a,b)=>X.bids[b]-X.bids[a]).map(id=>`<div class="lbi ${id===X.win?'first':''}"><span class="a">${pById(id).av}</span><span class="n">${esc(pById(id).name)}</span><span class="s">💵${X.bids[id]}</span></div>`).join('')}</div>
+ <button class="btn big primary" data-a="aucNext">${X.ri+1<X.items.length?'🔨 الغرض الجاي':'🏆 النتيجة النهائية'}</button>`};
+M.aucRes=()=>{const X=TMP.auc;drumM(X,'shown',()=>{if(X.win){const v=X.items[X.ri].v;sfx(v>0?'win':'fail');confetti(60,v>0?['💎','💵']:['😈','🤡'])}})};
+A.aucNext=()=>{const X=TMP.auc;X.ri++;if(X.ri<X.items.length)return go('aucItem');X.final={};Object.keys(X.coins).forEach(id=>X.final[id]=X.pts[id]+Math.floor(X.coins[id]/25));
+ const mx=Math.max(...Object.values(X.final));Object.keys(X.final).forEach(id=>{if(X.final[id]===mx)sAdd('auction',id,3,2)});save();go('aucEnd')};
+V.aucEnd=()=>{const X=TMP.auc;const ids=Object.keys(X.final).filter(pById).sort((a,b)=>X.final[b]-X.final[a]);
+ return `<h2>🏆 نتيجة المزاد</h2><div class="lb">${ids.map((id,i)=>{const p=pById(id);return `<div class="lbi ${i===0?'first':''}"><span class="r">${i===0?'👑':i+1}</span><span class="a">${p.av}</span><span class="n">${esc(p.name)}<br><span class="rk">أغراض ${X.pts[id]}⭐ • باقي 💵${X.coins[id]}</span></span><span class="s">${X.final[id]}</span></div>`}).join('')}</div><button class="btn big primary" data-a="aucStart">🔁 مزاد جديد</button>`};
+M.aucEnd=()=>{sfx('win');confetti(150,['💰','🏆'])};
+
+/* ============================ 🧠 HIVE MIND ============================ */
+const norm=s=>String(s).trim().replace(/[\u064B-\u0652\u0640]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/گ/g,'ك').replace(/چ/g,'ج').replace(/پ/g,'ب').replace(/ڤ/g,'ف').replace(/[^\u0600-\u06FFa-zA-Z0-9]/g,'').replace(/^ال/,'').toLowerCase();
+INIT.mind=()=>{const X=TMP.mind||(TMP.mind={});X.q=pickFresh(X,MIND);X.a={};X.order=shuffle(players.map(p=>p.id));X.idx=0;X.ready=false;X.shown=false;X.pts={}};
+V.mindQ=()=>{const X=TMP.mind;return `<div class="card bigcard"><span style="font-size:56px">🧠</span><span>${esc(X.q)}</span></div><p class="center muted">كل واحد يكتب جواب بالسر... وتاخذ نقطة عن كل واحد كتب نفس جوابك! فكّر شنو يكتبون الشلة 🤔</p><button class="btn big primary" data-a="mindStart">✍️ يلا نكتب</button><button class="btn small ghost" data-a="mindSkip">🔀 سؤال ثاني</button>${boardIf('mind')}`};
+A.mindSkip=()=>{INIT.mind();render()};
+A.mindStart=()=>{const X=TMP.mind;X.a={};X.order=shuffle(players.map(p=>p.id));X.idx=0;X.ready=false;go('mindAns')};
+V.mindAns=()=>{const X=TMP.mind;const p=pById(X.order[X.idx]);if(!X.ready)return passH(p,`دور ${esc(p.name)} يكتب`,'محد يباوع 🙈',`${X.idx+1} / ${X.order.length}`,'mindReady',`أنا ${esc(p.name)} 🫡`);
+ return `<div class="card bigcard" style="min-height:100px"><span>${esc(X.q)}</span></div><div class="addrow"><input id="mindIn" maxlength="24" placeholder="جوابك بكلمة أو كلمتين..." autocomplete="off"><button class="btn primary" data-a="mindSubmit">✅</button></div>`};
+M.mindAns=()=>{const i=$('#mindIn');if(i){i.addEventListener('keydown',e=>{if(e.key==='Enter')A.mindSubmit()});i.focus()}};
+A.mindReady=()=>{TMP.mind.ready=true;render()};
+A.mindSubmit=()=>{const X=TMP.mind;const v=($('#mindIn').value||'').trim();if(!v){toast('اكتب جواب ✍️');sfx('honk');return}X.a[X.order[X.idx]]=v;sfx('pop');X.idx++;X.ready=false;if(X.idx<X.order.length){render();return}
+ const groups={};Object.entries(X.a).forEach(([id,t])=>{const k=norm(t)||t;(groups[k]=groups[k]||{t,ids:[]}).ids.push(id)});X.groups=Object.values(groups).sort((a,b)=>b.ids.length-a.ids.length);X.pts={};
+ X.groups.forEach(g=>{if(g.ids.length>1)g.ids.forEach(id=>{X.pts[id]=g.ids.length-1;sAdd('mind',id,g.ids.length-1,1)})});save();X.shown=false;go('mindRes')};
+V.mindRes=()=>{const X=TMP.mind;if(!X.shown)return drumH('🧠','نشوف عقل الشلة...');const top=X.groups[0];
+ return `<div class="card bigcard" style="min-height:90px"><span>${esc(X.q)}</span></div>${X.groups.map(g=>`<div class="card ${g.ids.length>1?'clue':''}"><h3>${esc(g.t)} ${g.ids.length>1?`<span class="pill">×${g.ids.length}</span>`:''}</h3><div class="chips">${g.ids.filter(pById).map(id=>`<span class="chip">${pTag(pById(id))}</span>`).join('')}</div></div>`).join('')}
+ ${top&&top.ids.length>1?`<p class="center" style="font-weight:800">🧠 عقل الشلة گال: «${esc(top.t)}»</p>`:'<p class="center muted">😂 كلكم بعالم ثاني! محد اتفق ويا أحد</p>'}
+ <h3>🏆 المجموع</h3>${sBoard('mind',X.pts)}<button class="btn big primary" data-a="mindNext">🔁 سؤال جديد</button>`};
+M.mindRes=()=>drumM(TMP.mind,'shown',()=>{const t=TMP.mind.groups[0];if(t&&t.ids.length>1){sfx('win');confetti(90,['🧠','🤝'])}else sfx('fail')});
+A.mindNext=()=>{INIT.mind();go('mindQ')};
+
 /* ============================ ACTIONS ============================ */
 A.go=v=>go(v);
 A.home=()=>{if(GUARDED.includes(screen)){modal(`<h3 class="center">🚪 تطلع من اللعبة؟</h3><p class="center muted">الجولة الحالية راح تنلغي</p><div class="row"><button class="btn red" data-a="confirmHome">إي، اطلع</button><button class="btn" data-a="closeModal">لا، كمّل</button></div>`)}else go('home')};
@@ -1441,7 +1695,7 @@ A.toggleSound=()=>{settings.sound=!settings.sound;save();const b=document.queryS
 A.start=()=>{TMP.after=null;go('players')};
 A.gang=()=>{TMP.after='home';go('players')};
 A.playersNext=()=>{const t=TMP.after;TMP.after=null;if(t==='home')return go('home');const g=t&&GAMES.find(x=>x.id===t);if(g)return startGame(g);go('setup')};
-A.game=id=>{const g=GAMES.find(x=>x.id===id);if(!g)return;if(players.length<g.min){TMP.after=g.id;toast(`${g.n} تحتاج ${g.min} لاعبين أو أكثر 👥`);go('players');return}startGame(g)};
+A.game=id=>{const g=GAMES.find(x=>x.id===id);if(!g)return;if(players.length<g.min){TMP.after=g.id;toast(`${g.n} تحتاج ${'٠١٢٣٤٥٦٧٨٩'[g.min]} لاعبين أو أكثر 👥`);go('players');return}startGame(g)};
 function startGame(g){if(INIT[g.id])INIT[g.id]();if(g.id==='wheel')TMP.victim=null;if(g.id==='closest')clsNew();if(g.id==='friends')frNew();if(g.id==='draw')drawNew();go(g.go)}
 A.clearPlayers=()=>modal(`<h3 class="center">🧹 لاعبين جدد؟</h3><p class="center muted">راح تنمسح الأسماء الحالية حتى تدخل أسماء جديدة</p><div class="row"><button class="btn red" data-a="confirmClearPlayers">إي، امسح</button><button class="btn" data-a="closeModal">لا</button></div>`);
 A.confirmClearPlayers=()=>{players=[];match=null;save();closeModal();go('players')};
